@@ -24,29 +24,10 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // willymarket.grannis.xyz → proxy to Genevieve Vercel app
-  if (hostname.startsWith("willymarket.")) {
-    return NextResponse.rewrite(
-      new URL(pathname + request.nextUrl.search, "https://family-betting-market.vercel.app")
-    );
-  }
-
-  // connections.grannis.xyz → proxy to Connections Squared Vercel app
-  if (hostname.startsWith("connections.")) {
-    return NextResponse.rewrite(
-      new URL(pathname + request.nextUrl.search, "https://connections-squared.vercel.app")
-    );
-  }
-
-  // rri.grannis.xyz → proxy to Railroad Ink host
-  if (hostname.startsWith("rri.")) {
-    const rriHost = process.env.RRI_HOST;
-    if (rriHost) {
-      return NextResponse.rewrite(
-        new URL(pathname + request.nextUrl.search, rriHost)
-      );
-    }
-  }
+  // These subdomains are handled by their own Vercel projects directly:
+  // - willymarket.grannis.xyz → family-betting-market project
+  // - connections.grannis.xyz → connections-squared project
+  // - rri.grannis.xyz → railroad-ink (once deployed)
 
   return NextResponse.next();
 }
