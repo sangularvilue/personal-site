@@ -9,6 +9,7 @@ interface Post {
   title: string;
   excerpt: string;
   content: string;
+  coverImage: string;
   tags: string[];
   published: boolean;
 }
@@ -36,6 +37,7 @@ export default function EditPost() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         title: form.get("title"),
+        coverImage: form.get("coverImage") || "",
         excerpt: form.get("excerpt"),
         content: form.get("content"),
         tags: (form.get("tags") as string)
@@ -79,6 +81,12 @@ export default function EditPost() {
           defaultValue={post.title}
           required
           className="w-full px-4 py-3 bg-surface border border-border rounded-lg text-text font-serif text-lg focus:outline-none focus:border-sand/50 transition-colors"
+        />
+        <input
+          name="coverImage"
+          defaultValue={post.coverImage}
+          placeholder="Cover image URL (optional)"
+          className="w-full px-4 py-3 bg-surface border border-border rounded-lg text-text-soft text-sm font-mono focus:outline-none focus:border-sand/50 transition-colors"
         />
         <input
           name="excerpt"

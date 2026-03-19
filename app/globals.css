@@ -113,3 +113,31 @@ body::before {
   border-top: 1px solid var(--color-border);
   margin: 2em 0;
 }
+
+/* Embedded videos (YouTube) */
+.embed-video {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  margin: 1.5em 0;
+  border-radius: 8px;
+}
+.embed-video iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+
+/* Embedded tweets */
+.embed-tweet {
+  margin: 1.5em 0;
+  display: flex;
+  justify-content: center;
+}
+.embed-tweet .twitter-tweet {
+  margin: 0 !important;
+}

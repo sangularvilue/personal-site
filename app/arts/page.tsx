@@ -77,33 +77,42 @@ export default async function Arts({
             <Link
               key={post.id}
               href={`/arts/${post.slug}`}
-              className="block py-5 border-b border-border/40 hover:pl-2 transition-all duration-200 group"
+              className="flex gap-4 py-5 border-b border-border/40 hover:pl-2 transition-all duration-200 group"
             >
-              <span className="text-[0.72rem] uppercase tracking-widest text-sand-dim font-semibold">
-                {new Date(post.createdAt).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </span>
-              <h3 className="font-serif text-xl font-medium text-text mt-1 mb-2 group-hover:text-sand transition-colors">
-                {post.title}
-              </h3>
-              <p className="text-sm text-text-soft leading-relaxed font-serif italic">
-                {post.excerpt}
-              </p>
-              {post.tags.length > 0 && (
-                <div className="flex gap-2 mt-2">
-                  {post.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-[0.65rem] text-sand-dim tracking-wide"
-                    >
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
+              {post.coverImage && (
+                <img
+                  src={post.coverImage}
+                  alt=""
+                  className="w-20 h-20 rounded-lg object-cover flex-shrink-0 mt-1"
+                />
               )}
+              <div className="flex-1 min-w-0">
+                <span className="text-[0.72rem] uppercase tracking-widest text-sand-dim font-semibold">
+                  {new Date(post.createdAt).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </span>
+                <h3 className="font-serif text-xl font-medium text-text mt-1 mb-2 group-hover:text-sand transition-colors">
+                  {post.title}
+                </h3>
+                <p className="text-sm text-text-soft leading-relaxed font-serif italic">
+                  {post.excerpt}
+                </p>
+                {post.tags.length > 0 && (
+                  <div className="flex gap-2 mt-2">
+                    {post.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-[0.65rem] text-sand-dim tracking-wide"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
             </Link>
           ))}
         </div>

@@ -8,10 +8,22 @@ const projects = [
     href: "https://apps.apple.com/us/app/forklift-workout-tracker/id6760603494",
   },
   {
+    name: "Connections²",
+    tag: "next.js · react 19",
+    desc: "A new spin on the word puzzle format. In progress.",
+    href: "https://connections.grannis.xyz",
+  },
+  {
     name: "Willymarket",
     tag: "next.js · redis · vercel",
     desc: "Family prediction exchange. Three market types, real-time order matching, position tracking, and margin calculations.",
     href: "https://willymarket.grannis.xyz",
+  },
+  {
+    name: "Railroad Ink",
+    tag: "python · fastapi · websockets",
+    desc: "Online multiplayer Railroad Ink. Real-time tile placement, rotation, scoring, and an in-app rules reference.",
+    href: "https://rri.grannis.xyz",
   },
   {
     name: "Even Backgammon",
@@ -36,18 +48,6 @@ const projects = [
     tag: "vite · even g2 smart glasses",
     desc: "Classic Battleship for the Even G2 smart glasses.",
     href: "https://github.com/sangularvilue/Battleship",
-  },
-  {
-    name: "Connections²",
-    tag: "next.js · react 19",
-    desc: "A new spin on the word puzzle format. In progress.",
-    href: "https://connections.grannis.xyz",
-  },
-  {
-    name: "Railroad Ink",
-    tag: "python · fastapi · websockets",
-    desc: "Online multiplayer Railroad Ink. Real-time tile placement, rotation, scoring, and an in-app rules reference.",
-    href: "https://rri.grannis.xyz",
   },
 ];
 

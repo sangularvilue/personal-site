@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { getPostBySlug, getAllPosts } from "@/lib/posts";
-import { marked } from "marked";
+import { getPostBySlug } from "@/lib/posts";
+import { renderMarkdown } from "@/lib/markdown";
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
@@ -14,7 +14,7 @@ export default async function PostPage({
   const post = await getPostBySlug(slug);
   if (!post) notFound();
 
-  const html = await marked(post.content);
+  const html = await renderMarkdown(post.content);
 
   return (
     <main className="min-h-screen px-[clamp(1.5rem,5vw,4rem)] py-12 max-w-[720px] mx-auto animate-rise">
@@ -26,6 +26,16 @@ export default async function PostPage({
       </Link>
 
       <article>
+        {post.coverImage && (
+          <div className="mb-8 -mx-4 sm:-mx-8">
+            <img
+              src={post.coverImage}
+              alt={post.title}
+              className="w-full rounded-xl object-cover max-h-[400px]"
+            />
+          </div>
+        )}
+
         <header className="mb-8 pb-6 border-b border-border">
           <span className="text-[0.72rem] uppercase tracking-widest text-sand-dim font-semibold">
             {new Date(post.createdAt).toLocaleDateString("en-US", {

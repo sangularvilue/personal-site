@@ -6,6 +6,7 @@ export interface Post {
   title: string;
   excerpt: string;
   content: string;
+  coverImage: string;
   tags: string[];
   published: boolean;
   createdAt: number;
@@ -46,7 +47,7 @@ export async function getPostById(id: string): Promise<Post | null> {
 }
 
 export async function createPost(
-  data: Pick<Post, "title" | "content" | "excerpt" | "tags" | "published">
+  data: Pick<Post, "title" | "content" | "excerpt" | "coverImage" | "tags" | "published">
 ): Promise<Post> {
   const redis = getRedis();
   const id = crypto.randomUUID();
@@ -57,6 +58,7 @@ export async function createPost(
     title: data.title,
     excerpt: data.excerpt,
     content: data.content,
+    coverImage: data.coverImage || "",
     tags: data.tags,
     published: data.published,
     createdAt: now,
@@ -69,7 +71,7 @@ export async function createPost(
 
 export async function updatePost(
   id: string,
-  data: Partial<Pick<Post, "title" | "content" | "excerpt" | "tags" | "published">>
+  data: Partial<Pick<Post, "title" | "content" | "excerpt" | "coverImage" | "tags" | "published">>
 ): Promise<Post | null> {
   const redis = getRedis();
   const existing = await redis.get<Post>(postKey(id));
