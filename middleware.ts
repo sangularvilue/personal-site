@@ -15,8 +15,12 @@ export async function middleware(request: NextRequest) {
         ? "/admin"
         : `/admin${pathname}`;
 
-    const isLoginPage =
-      adminPath === "/admin/login" || adminPath.startsWith("/api/");
+    // Let /api/* routes pass through without rewrite or auth
+    if (pathname.startsWith("/api/")) {
+      return NextResponse.next();
+    }
+
+    const isLoginPage = adminPath === "/admin/login";
 
     if (!isLoginPage) {
       const token = request.cookies.get("admin_token")?.value;
