@@ -10,7 +10,37 @@ const SECTIONS = [
   { key: "stories", label: "Stories" },
 ] as const;
 
-function PostCard({ post }: { post: Post }) {
+function PostTile({ post }: { post: Post }) {
+  return (
+    <Link
+      href={`/arts/${post.slug}`}
+      className="block p-4 border border-border rounded-xl transition-all duration-250 hover:border-sand/30 hover:bg-sand/[0.04] hover:-translate-y-px group"
+    >
+      {post.coverImage && (
+        <img
+          src={post.coverImage}
+          alt=""
+          className="w-full h-32 rounded-lg object-cover mb-3"
+        />
+      )}
+      <span className="text-[0.65rem] uppercase tracking-widest text-sand-dim font-semibold">
+        {new Date(post.createdAt).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        })}
+      </span>
+      <h3 className="font-serif text-base font-medium text-text mt-1 mb-1.5 group-hover:text-sand transition-colors leading-snug">
+        {post.title}
+      </h3>
+      <p className="text-xs text-text-soft leading-relaxed font-serif italic line-clamp-2">
+        {post.excerpt}
+      </p>
+    </Link>
+  );
+}
+
+function PostRow({ post }: { post: Post }) {
   return (
     <Link
       href={`/arts/${post.slug}`}
@@ -95,7 +125,7 @@ export default async function Arts({
   );
 
   return (
-    <main className="min-h-screen px-[clamp(1.5rem,5vw,4rem)] py-12 max-w-[720px] mx-auto animate-rise">
+    <main className="min-h-screen px-[clamp(1.5rem,5vw,4rem)] py-12 max-w-[1100px] mx-auto animate-rise">
       <header className="mb-12 pb-6 border-b border-border">
         <Link
           href="/"
@@ -153,19 +183,21 @@ export default async function Arts({
       {/* Content */}
       {isFiltering ? (
         // Flat list when filtering
-        filteredPosts.length === 0 ? (
-          <div className="py-8">
-            <p className="text-text-soft font-serif italic">
-              No posts found.
-            </p>
-          </div>
-        ) : (
-          <div>
-            {filteredPosts.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </div>
-        )
+        <div className="max-w-[720px]">
+          {filteredPosts.length === 0 ? (
+            <div className="py-8">
+              <p className="text-text-soft font-serif italic">
+                No posts found.
+              </p>
+            </div>
+          ) : (
+            <div>
+              {filteredPosts.map((post) => (
+                <PostRow key={post.id} post={post} />
+              ))}
+            </div>
+          )}
+        </div>
       ) : allPosts.length === 0 ? (
         <div className="py-8">
           <p className="text-text-soft font-serif italic">
@@ -173,27 +205,21 @@ export default async function Arts({
           </p>
         </div>
       ) : (
-        // Sectioned view
-        <div className="space-y-12">
-          {sections.map(({ key, label, posts }) => (
-            <section key={key}>
-              <h3 className="font-serif text-sand text-lg font-medium mb-1 pb-3 border-b border-border/60">
-                {label}
-              </h3>
-              {posts.map((post) => (
-                <PostCard key={post.id} post={post} />
-              ))}
-            </section>
-          ))}
-          {uncategorized.length > 0 && (
-            <section>
-              <h3 className="font-serif text-sand text-lg font-medium mb-1 pb-3 border-b border-border/60">
-                Other
-              </h3>
-              {uncategorized.map((post) => (
-                <PostCard key={post.id} post={post} />
-              ))}
-            </section>
+        // Column layout — each section is a column with tiles
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
+          {[...sections, ...(uncategorized.length > 0 ? [{ key: "other", label: "Other", posts: uncategorized }] : [])].map(
+            ({ key, label, posts }) => (
+              <div key={key}>
+                <h3 className="font-serif text-sand text-base font-medium mb-4 pb-2 border-b border-border/60">
+                  {label}
+                </h3>
+                <div className="space-y-3">
+                  {posts.map((post) => (
+                    <PostTile key={post.id} post={post} />
+                  ))}
+                </div>
+              </div>
+            )
           )}
         </div>
       )}
