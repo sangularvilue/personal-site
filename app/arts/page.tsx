@@ -1,23 +1,98 @@
 import Link from "next/link";
-import { getAllPosts, getAllTags } from "@/lib/posts";
+import { getAllPosts, getAllTags, Post } from "@/lib/posts";
 
 export const dynamic = "force-dynamic";
+
+const SECTIONS = [
+  { key: "poetry", label: "Poetry" },
+  { key: "satire", label: "News Satire" },
+  { key: "opinion", label: "Opinion" },
+  { key: "stories", label: "Stories" },
+] as const;
+
+function PostCard({ post }: { post: Post }) {
+  return (
+    <Link
+      href={`/arts/${post.slug}`}
+      className="flex gap-4 py-5 border-b border-border/40 hover:pl-2 transition-all duration-200 group"
+    >
+      {post.coverImage && (
+        <img
+          src={post.coverImage}
+          alt=""
+          className="w-20 h-20 rounded-lg object-cover flex-shrink-0 mt-1"
+        />
+      )}
+      <div className="flex-1 min-w-0">
+        <span className="text-[0.72rem] uppercase tracking-widest text-sand-dim font-semibold">
+          {new Date(post.createdAt).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </span>
+        <h3 className="font-serif text-xl font-medium text-text mt-1 mb-2 group-hover:text-sand transition-colors">
+          {post.title}
+        </h3>
+        <p className="text-sm text-text-soft leading-relaxed font-serif italic">
+          {post.excerpt}
+        </p>
+        {post.tags.length > 0 && (
+          <div className="flex gap-2 mt-2">
+            {post.tags.map((tag) => (
+              <span
+                key={tag}
+                className="text-[0.65rem] text-sand-dim tracking-wide"
+              >
+                #{tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+    </Link>
+  );
+}
 
 export default async function Arts({
   searchParams,
 }: {
-  searchParams: Promise<{ tag?: string }>;
+  searchParams: Promise<{ tag?: string; q?: string }>;
 }) {
   const params = await searchParams;
   const allPosts = await getAllPosts();
   const tags = await getAllTags();
   const activeTag = params.tag;
+  const query = params.q?.toLowerCase();
 
-  const posts = activeTag
+  const isFiltering = activeTag || query;
+
+  let filteredPosts = activeTag
     ? allPosts.filter((p) => p.tags.includes(activeTag))
     : allPosts;
 
-  const recents = allPosts.slice(0, 5);
+  if (query) {
+    filteredPosts = filteredPosts.filter(
+      (p) =>
+        p.title.toLowerCase().includes(query) ||
+        p.excerpt.toLowerCase().includes(query) ||
+        p.content.toLowerCase().includes(query) ||
+        p.tags.some((t) => t.toLowerCase().includes(query))
+    );
+  }
+
+  // Group posts by section (a post appears in the first matching section)
+  const sections = SECTIONS.map(({ key, label }) => ({
+    key,
+    label,
+    posts: allPosts.filter((p) => p.tags.includes(key)),
+  })).filter((s) => s.posts.length > 0);
+
+  // Posts that don't match any section
+  const sectionKeys = new Set<string>(SECTIONS.map((s) => s.key));
+  const uncategorized = allPosts.filter(
+    (p) => !p.tags.some((t) => sectionKeys.has(t))
+  );
 
   return (
     <main className="min-h-screen px-[clamp(1.5rem,5vw,4rem)] py-12 max-w-[720px] mx-auto animate-rise">
@@ -33,6 +108,17 @@ export default async function Arts({
         </h2>
         <p className="text-sm text-text-soft tracking-wide">things I write</p>
       </header>
+
+      {/* Search */}
+      <form action="/arts" method="GET" className="mb-6">
+        <input
+          name="q"
+          defaultValue={query}
+          placeholder="Search posts..."
+          className="w-full px-4 py-2.5 bg-surface border border-border rounded-lg text-text text-sm font-serif focus:outline-none focus:border-sand/50 transition-colors placeholder:text-text-soft/50"
+        />
+        {activeTag && <input type="hidden" name="tag" value={activeTag} />}
+      </form>
 
       {/* Tags */}
       {tags.length > 0 && (
@@ -64,75 +150,51 @@ export default async function Arts({
         </div>
       )}
 
-      {/* Posts */}
-      {posts.length === 0 ? (
+      {/* Content */}
+      {isFiltering ? (
+        // Flat list when filtering
+        filteredPosts.length === 0 ? (
+          <div className="py-8">
+            <p className="text-text-soft font-serif italic">
+              No posts found.
+            </p>
+          </div>
+        ) : (
+          <div>
+            {filteredPosts.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </div>
+        )
+      ) : allPosts.length === 0 ? (
         <div className="py-8">
           <p className="text-text-soft font-serif italic">
             Nothing here yet. Check back soon.
           </p>
         </div>
       ) : (
-        <div className="space-y-0">
-          {posts.map((post) => (
-            <Link
-              key={post.id}
-              href={`/arts/${post.slug}`}
-              className="flex gap-4 py-5 border-b border-border/40 hover:pl-2 transition-all duration-200 group"
-            >
-              {post.coverImage && (
-                <img
-                  src={post.coverImage}
-                  alt=""
-                  className="w-20 h-20 rounded-lg object-cover flex-shrink-0 mt-1"
-                />
-              )}
-              <div className="flex-1 min-w-0">
-                <span className="text-[0.72rem] uppercase tracking-widest text-sand-dim font-semibold">
-                  {new Date(post.createdAt).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </span>
-                <h3 className="font-serif text-xl font-medium text-text mt-1 mb-2 group-hover:text-sand transition-colors">
-                  {post.title}
-                </h3>
-                <p className="text-sm text-text-soft leading-relaxed font-serif italic">
-                  {post.excerpt}
-                </p>
-                {post.tags.length > 0 && (
-                  <div className="flex gap-2 mt-2">
-                    {post.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-[0.65rem] text-sand-dim tracking-wide"
-                      >
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </Link>
+        // Sectioned view
+        <div className="space-y-12">
+          {sections.map(({ key, label, posts }) => (
+            <section key={key}>
+              <h3 className="font-serif text-sand text-lg font-medium mb-1 pb-3 border-b border-border/60">
+                {label}
+              </h3>
+              {posts.map((post) => (
+                <PostCard key={post.id} post={post} />
+              ))}
+            </section>
           ))}
-        </div>
-      )}
-
-      {/* Recent sidebar (shown inline on mobile, could be sidebar on desktop) */}
-      {recents.length > 0 && activeTag && (
-        <div className="mt-12 pt-8 border-t border-border">
-          <h4 className="text-xs uppercase tracking-widest text-sand-dim font-semibold mb-4">
-            Recent
-          </h4>
-          {recents.map((post) => (
-            <Link
-              key={post.id}
-              href={`/arts/${post.slug}`}
-              className="block py-2 text-sm text-text-soft hover:text-sand transition-colors font-serif"
-            >
-              {post.title}
-            </Link>
-          ))}
+          {uncategorized.length > 0 && (
+            <section>
+              <h3 className="font-serif text-sand text-lg font-medium mb-1 pb-3 border-b border-border/60">
+                Other
+              </h3>
+              {uncategorized.map((post) => (
+                <PostCard key={post.id} post={post} />
+              ))}
+            </section>
+          )}
         </div>
       )}
 

@@ -4,6 +4,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Will Grannis",
   description: "Arts & Crafts",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
