@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 const SECTIONS = [
   { key: "poetry", label: "Poetry" },
-  { key: "satire", label: "News Satire" },
+  { key: "satire", label: "Satire" },
   { key: "opinion", label: "Opinion" },
   { key: "stories", label: "Stories" },
 ] as const;
