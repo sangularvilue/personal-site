@@ -23,6 +23,7 @@ export default function PostEditor({ initial, postId }: EditorProps) {
   const [preview, setPreview] = useState(false);
   const [previewHtml, setPreviewHtml] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState("");
   const [coverImage, setCoverImage] = useState(initial?.coverImage || "");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -57,7 +58,7 @@ export default function PostEditor({ initial, postId }: EditorProps) {
 
     if (res.ok) {
       const { url } = await res.json();
-      // Insert markdown image at cursor position
+      setUploadError("");
       const textarea = textareaRef.current;
       if (textarea) {
         const pos = textarea.selectionStart;
@@ -66,6 +67,9 @@ export default function PostEditor({ initial, postId }: EditorProps) {
         const imgMd = `![${file.name}](${url})`;
         setContent(before + imgMd + after);
       }
+    } else {
+      const err = await res.text();
+      setUploadError(`Upload failed: ${err}`);
     }
     setUploading(false);
     e.target.value = "";
@@ -87,6 +91,10 @@ export default function PostEditor({ initial, postId }: EditorProps) {
     if (res.ok) {
       const { url } = await res.json();
       setCoverImage(url);
+      setUploadError("");
+    } else {
+      const err = await res.text();
+      setUploadError(`Upload failed: ${err}`);
     }
     setUploading(false);
     e.target.value = "";
@@ -163,6 +171,9 @@ export default function PostEditor({ initial, postId }: EditorProps) {
               />
             </label>
           </div>
+          {uploadError && (
+            <p className="text-red-400 text-xs font-mono">{uploadError}</p>
+          )}
           {coverImage && (
             <img
               src={coverImage}
