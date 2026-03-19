@@ -1,35 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
-import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
+import { put } from "@vercel/blob";
 import { isAuthenticated } from "@/lib/auth";
 
+export const runtime = "edge";
+
 export async function POST(request: NextRequest) {
-  const body = (await request.json()) as HandleUploadBody;
+  if (!(await isAuthenticated())) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   try {
-    const jsonResponse = await handleUpload({
-      body,
-      request,
-      onBeforeGenerateToken: async () => {
-        // Auth check only on token generation (browser request with cookies)
-        // The completion callback comes from Vercel servers without cookies
-        if (!(await isAuthenticated())) {
-          throw new Error("Unauthorized");
-        }
-        return {
-          allowedContentTypes: [
-            "image/jpeg",
-            "image/png",
-            "image/gif",
-            "image/webp",
-            "image/svg+xml",
-          ],
-          maximumSizeInBytes: 20 * 1024 * 1024,
-        };
-      },
-      onUploadCompleted: async () => {},
+    const filename = request.headers.get("x-filename") || "upload";
+    const contentType = request.headers.get("content-type") || "image/png";
+
+    const blob = await put(filename, request.body!, {
+      access: "public",
+      contentType,
     });
 
-    return NextResponse.json(jsonResponse);
+    return NextResponse.json({ url: blob.url });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err);
     return NextResponse.json({ error: message }, { status: 500 });

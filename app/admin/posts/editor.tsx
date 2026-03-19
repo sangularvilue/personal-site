@@ -2,8 +2,24 @@
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { upload } from "@vercel/blob/client";
 import Link from "next/link";
+
+async function uploadFile(file: File): Promise<string> {
+  const res = await fetch("/api/upload", {
+    method: "POST",
+    headers: {
+      "content-type": file.type,
+      "x-filename": file.name,
+    },
+    body: file,
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({ error: res.statusText }));
+    throw new Error(data.error || "Upload failed");
+  }
+  const { url } = await res.json();
+  return url;
+}
 
 interface EditorProps {
   initial?: {
@@ -51,16 +67,13 @@ export default function PostEditor({ initial, postId }: EditorProps) {
     setUploadError("");
 
     try {
-      const blob = await upload(file.name, file, {
-        access: "public",
-        handleUploadUrl: "/api/upload",
-      });
+      const url = await uploadFile(file);
       const textarea = textareaRef.current;
       if (textarea) {
         const pos = textarea.selectionStart;
         const before = content.slice(0, pos);
         const after = content.slice(pos);
-        const imgMd = `![${file.name}](${blob.url})`;
+        const imgMd = `![${file.name}](${url})`;
         setContent(before + imgMd + after);
       }
     } catch (err: unknown) {
@@ -77,11 +90,8 @@ export default function PostEditor({ initial, postId }: EditorProps) {
     setUploadError("");
 
     try {
-      const blob = await upload(file.name, file, {
-        access: "public",
-        handleUploadUrl: "/api/upload",
-      });
-      setCoverImage(blob.url);
+      const url = await uploadFile(file);
+      setCoverImage(url);
     } catch (err: unknown) {
       setUploadError(`Upload failed: ${err instanceof Error ? err.message : "unknown error"}`);
     }
