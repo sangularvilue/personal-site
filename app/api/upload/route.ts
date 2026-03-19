@@ -1,12 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { put } from "@vercel/blob";
-import { isAuthenticated } from "@/lib/auth";
+import { jwtVerify } from "jose";
 
 export const runtime = "edge";
 
+const SECRET = new TextEncoder().encode(
+  process.env.ADMIN_SECRET || "change-me-in-production"
+);
+
 export async function POST(request: NextRequest) {
-  if (!(await isAuthenticated())) {
+  // Auth: read cookie directly from request (edge runtime can't use next/headers cookies())
+  const token = request.cookies.get("admin_token")?.value;
+  if (!token) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  try {
+    await jwtVerify(token, SECRET);
+  } catch {
+    return NextResponse.json({ error: "Invalid token" }, { status: 401 });
   }
 
   try {
