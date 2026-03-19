@@ -1,0 +1,372 @@
+/* ── Reset ── */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ── Tokens ── */
+:root {
+  --bg:        #0f1419;
+  --bg-warm:   #141210;
+  --surface:   #1a1f26;
+  --border:    #2d3846;
+  --text:      #e7edf5;
+  --text-soft: #8a99ab;
+  --sand:      #d4c5a9;
+  --sand-dim:  #a89b80;
+  --teal:      #49a6b5;
+  --teal-dim:  rgba(73, 166, 181, 0.12);
+  --cyan:      #49a6ff;
+
+  --font-serif: 'Fraunces', Georgia, serif;
+  --font-sans:  'Manrope', system-ui, -apple-system, sans-serif;
+  --font-mono:  'JetBrains Mono', 'SFMono-Regular', Menlo, monospace;
+
+  --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Noise texture overlay ── */
+.noise {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* ── Landing ── */
+.landing {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(73, 166, 181, 0.04) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 50%, rgba(212, 197, 169, 0.03) 0%, transparent 60%),
+    var(--bg);
+}
+
+.landing-content {
+  text-align: center;
+  animation: rise-in 600ms var(--ease) both;
+}
+
+.landing-name {
+  font-family: var(--font-sans);
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin-bottom: 3.5rem;
+}
+
+.landing-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.nav-ampersand {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.4rem;
+  color: var(--text-soft);
+  opacity: 0.5;
+  user-select: none;
+}
+
+.nav-door {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 1.6rem 2.8rem;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 280ms var(--ease);
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-door::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 280ms var(--ease);
+  border-radius: 16px;
+}
+
+.door-arts::before {
+  background: radial-gradient(ellipse at center, rgba(212, 197, 169, 0.08), transparent 70%);
+}
+
+.door-crafts::before {
+  background: radial-gradient(ellipse at center, rgba(73, 166, 181, 0.08), transparent 70%);
+}
+
+.nav-door:hover::before {
+  opacity: 1;
+}
+
+.nav-door:hover {
+  border-color: var(--text-soft);
+  transform: translateY(-2px);
+}
+
+.door-label {
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  position: relative;
+}
+
+.door-arts .door-label {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 1.5rem;
+  color: var(--sand);
+}
+
+.door-crafts .door-label {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 1.2rem;
+  color: var(--teal);
+}
+
+.door-sub {
+  font-size: 0.78rem;
+  color: var(--text-soft);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+/* ── Pages (Arts & Crafts) ── */
+.page {
+  min-height: 100vh;
+  padding: 3rem clamp(1.5rem, 5vw, 4rem);
+  max-width: 720px;
+  margin: 0 auto;
+  animation: rise-in 500ms var(--ease) both;
+}
+
+.page-header {
+  margin-bottom: 3rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.back-link {
+  display: inline-block;
+  font-size: 0.82rem;
+  color: var(--text-soft);
+  text-decoration: none;
+  margin-bottom: 1.5rem;
+  transition: color 200ms;
+  font-family: var(--font-sans);
+}
+
+.back-link:hover {
+  color: var(--text);
+}
+
+.section-title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+
+.arts-title {
+  font-family: var(--font-serif);
+  color: var(--sand);
+  font-weight: 500;
+}
+
+.crafts-title {
+  font-family: var(--font-mono);
+  color: var(--teal);
+  font-weight: 500;
+}
+
+.section-sub {
+  font-size: 0.88rem;
+  color: var(--text-soft);
+  letter-spacing: 0.02em;
+}
+
+/* ── Arts pieces ── */
+.piece {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid rgba(45, 56, 70, 0.4);
+}
+
+.piece:last-child {
+  border-bottom: none;
+}
+
+.piece-date {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--sand-dim);
+  font-family: var(--font-sans);
+  font-weight: 600;
+}
+
+.piece-title {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 500;
+  margin: 0.4rem 0 0.6rem;
+  color: var(--text);
+}
+
+.piece-excerpt {
+  font-size: 0.92rem;
+  color: var(--text-soft);
+  line-height: 1.65;
+  font-family: var(--font-serif);
+  font-style: italic;
+}
+
+/* ── Crafts projects ── */
+.project {
+  display: block;
+  padding: 1.3rem 1.4rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 0.9rem;
+  transition: all 250ms var(--ease);
+  text-decoration: none;
+  color: inherit;
+  background: transparent;
+}
+
+.project:hover {
+  border-color: rgba(73, 166, 181, 0.3);
+  background: var(--teal-dim);
+  transform: translateY(-1px);
+}
+
+a.project:hover {
+  cursor: pointer;
+}
+
+.project-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.project-name {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.project-tag {
+  font-size: 0.7rem;
+  color: var(--text-soft);
+  font-family: var(--font-mono);
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.project-desc {
+  font-size: 0.86rem;
+  color: var(--text-soft);
+  line-height: 1.55;
+}
+
+/* ── Animations ── */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Section visibility (hash-based navigation) ── */
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+.landing {
+  display: flex;
+}
+
+.landing.hidden {
+  display: none;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #2d3846;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* ── Responsive ── */
+@media (max-width: 520px) {
+  .landing-nav {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .nav-ampersand {
+    display: none;
+  }
+
+  .nav-door {
+    width: 100%;
+    max-width: 240px;
+    padding: 1.3rem 2rem;
+  }
+
+  .project-header {
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+}
