@@ -14,10 +14,28 @@ const projects = [
     href: "https://willymarket.grannis.xyz",
   },
   {
-    name: "Even Apps",
-    tag: "vite · smart glasses",
-    desc: "Multi-app platform for Even G2 smart glasses. Chess, transit, weather, epub reader, and more — plus a custom launcher and dev environment.",
-    href: "https://github.com/sangularvilue/even-apps",
+    name: "Even Backgammon",
+    tag: "vite · even g2 smart glasses",
+    desc: "Backgammon for the Even G2 smart glasses. Full game logic with AI opponent, rendered on a waveguide display.",
+    href: "https://github.com/sangularvilue/Even-Backgammon",
+  },
+  {
+    name: "Waveguide World",
+    tag: "vite · even g2 smart glasses",
+    desc: "Platformer game built for the Even G2 waveguide display. Pixel art, physics, and level design on a heads-up screen.",
+    href: "https://github.com/sangularvilue/Waveguide-World",
+  },
+  {
+    name: "Even LotH",
+    tag: "express · even g2 smart glasses",
+    desc: "Liturgy of the Hours on Even G2 smart glasses. Scrapes daily prayers and displays them on the waveguide.",
+    href: "https://github.com/sangularvilue/Even-LotH",
+  },
+  {
+    name: "Battleship",
+    tag: "vite · even g2 smart glasses",
+    desc: "Classic Battleship for the Even G2 smart glasses.",
+    href: "https://github.com/sangularvilue/Battleship",
   },
   {
     name: "Connections²",
