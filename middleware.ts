@@ -5,16 +5,28 @@ export async function middleware(request: NextRequest) {
   const hostname = request.headers.get("host") || "";
   const { pathname } = request.nextUrl;
 
-  // admin.grannis.xyz → rewrite to /admin routes
+  // admin.grannis.xyz → rewrite to /admin routes (with auth)
   if (hostname.startsWith("admin.")) {
+    const adminPath = pathname === "/" ? "/admin" : `/admin${pathname}`;
+    const isLoginPage = adminPath === "/admin/login";
+
+    if (!isLoginPage) {
+      const token = request.cookies.get("admin_token")?.value;
+      if (!token || !(await verifyToken(token))) {
+        const loginUrl = request.nextUrl.clone();
+        loginUrl.pathname = "/admin/login";
+        return NextResponse.redirect(loginUrl);
+      }
+    }
+
     if (pathname === "/" || !pathname.startsWith("/admin")) {
       const url = request.nextUrl.clone();
-      url.pathname = pathname === "/" ? "/admin" : `/admin${pathname}`;
+      url.pathname = adminPath;
       return NextResponse.rewrite(url);
     }
   }
 
-  // Protect /admin routes (except login and API)
+  // Protect /admin routes accessed directly (not via subdomain)
   if (pathname.startsWith("/admin") && !pathname.startsWith("/admin/login")) {
     const token = request.cookies.get("admin_token")?.value;
     if (!token || !(await verifyToken(token))) {
