@@ -5,7 +5,7 @@ const projects = [
     name: "ForkLift",
     tag: "ios · swift",
     desc: "Workout tracker for iOS. Log sets, reps, and weight with minimal taps. Tracks personal records, visualizes progress over time, and builds routines you can reuse.",
-    href: "https://apps.apple.com/app/forklift-workout-tracker/id6504765752",
+    href: "https://apps.apple.com/us/app/forklift-workout-tracker/id6760603494",
   },
   {
     name: "Willymarket",

@@ -24,21 +24,27 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // willymarket.grannis.xyz → redirect to Genevieve Vercel app
+  // willymarket.grannis.xyz → proxy to Genevieve Vercel app
   if (hostname.startsWith("willymarket.")) {
-    return NextResponse.redirect("https://family-betting-market.vercel.app" + pathname, 307);
+    return NextResponse.rewrite(
+      new URL(pathname + request.nextUrl.search, "https://family-betting-market.vercel.app")
+    );
   }
 
-  // connections.grannis.xyz → redirect to Connections Squared Vercel app
+  // connections.grannis.xyz → proxy to Connections Squared Vercel app
   if (hostname.startsWith("connections.")) {
-    return NextResponse.redirect("https://connections-squared.vercel.app" + pathname, 307);
+    return NextResponse.rewrite(
+      new URL(pathname + request.nextUrl.search, "https://connections-squared.vercel.app")
+    );
   }
 
-  // rri.grannis.xyz → redirect to Railroad Ink host
+  // rri.grannis.xyz → proxy to Railroad Ink host
   if (hostname.startsWith("rri.")) {
     const rriHost = process.env.RRI_HOST;
     if (rriHost) {
-      return NextResponse.redirect(rriHost + pathname, 307);
+      return NextResponse.rewrite(
+        new URL(pathname + request.nextUrl.search, rriHost)
+      );
     }
   }
 
