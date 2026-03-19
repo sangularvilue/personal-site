@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getAllPosts, getAllTags, Post } from "@/lib/posts";
+import GlassCard from "../components/glass-card";
 
 export const dynamic = "force-dynamic";
 
@@ -12,31 +13,30 @@ const SECTIONS = [
 
 function PostTile({ post }: { post: Post }) {
   return (
-    <Link
-      href={`/arts/${post.slug}`}
-      className="block p-4 glass glass-shimmer transition-all duration-400 hover:bg-glass-hover hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(212,197,169,0.07),inset_0_1px_0_rgba(255,255,255,0.1)] group"
-    >
-      {post.coverImage && (
-        <img
-          src={post.coverImage}
-          alt=""
-          className="w-full h-32 rounded-lg object-cover mb-3"
-        />
-      )}
-      <span className="text-[0.65rem] uppercase tracking-widest text-sand-dim font-semibold">
-        {new Date(post.createdAt).toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        })}
-      </span>
-      <h3 className="font-serif text-base font-medium text-text mt-1 mb-1.5 group-hover:text-sand transition-colors leading-snug">
-        {post.title}
-      </h3>
-      <p className="text-xs text-text-soft leading-relaxed font-serif italic line-clamp-2">
-        {post.excerpt}
-      </p>
-    </Link>
+    <GlassCard href={`/arts/${post.slug}`} className="cursor-pointer group">
+      <div className="p-4">
+        {post.coverImage && (
+          <img
+            src={post.coverImage}
+            alt=""
+            className="w-full h-32 rounded-xl object-cover mb-3"
+          />
+        )}
+        <span className="text-[0.65rem] uppercase tracking-widest text-sand-dim font-semibold">
+          {new Date(post.createdAt).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          })}
+        </span>
+        <h3 className="font-serif text-base font-medium text-text mt-1 mb-1.5 group-hover:text-sand transition-colors leading-snug">
+          {post.title}
+        </h3>
+        <p className="text-xs text-text-soft leading-relaxed font-serif italic line-clamp-2">
+          {post.excerpt}
+        </p>
+      </div>
+    </GlassCard>
   );
 }
 

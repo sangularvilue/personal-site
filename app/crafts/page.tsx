@@ -1,4 +1,5 @@
 import Link from "next/link";
+import GlassCard from "../components/glass-card";
 
 const projects = [
   {
@@ -69,23 +70,25 @@ export default function Crafts() {
 
       <div className="space-y-3">
         {projects.map((p) => (
-          <a
+          <GlassCard
             key={p.name}
             href={p.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="block p-5 glass glass-shimmer transition-all duration-400 hover:bg-glass-hover hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(73,166,181,0.08),inset_0_1px_0_rgba(255,255,255,0.1)] group"
+            className="cursor-pointer group"
           >
-            <div className="flex items-baseline justify-between gap-4 mb-2 flex-wrap max-sm:flex-col max-sm:gap-0.5">
-              <h3 className="font-mono text-base font-medium text-text group-hover:text-teal transition-colors">
-                {p.name}
-              </h3>
-              <span className="text-[0.7rem] text-text-soft/60 font-mono tracking-wide whitespace-nowrap">
-                {p.tag}
-              </span>
+            <div className="p-5">
+              <div className="flex items-baseline justify-between gap-4 mb-2 flex-wrap max-sm:flex-col max-sm:gap-0.5">
+                <h3 className="font-mono text-base font-medium text-text group-hover:text-teal transition-colors">
+                  {p.name}
+                </h3>
+                <span className="text-[0.7rem] text-text-soft/60 font-mono tracking-wide whitespace-nowrap">
+                  {p.tag}
+                </span>
+              </div>
+              <p className="text-sm text-text-soft leading-relaxed">{p.desc}</p>
             </div>
-            <p className="text-sm text-text-soft leading-relaxed">{p.desc}</p>
-          </a>
+          </GlassCard>
         ))}
       </div>
     </main>
