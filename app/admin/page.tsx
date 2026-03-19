@@ -9,7 +9,7 @@ export default async function AdminDashboard() {
 
   return (
     <main className="min-h-screen px-[clamp(1.5rem,5vw,4rem)] py-12 max-w-[720px] mx-auto animate-rise">
-      <header className="flex items-center justify-between mb-8 pb-6 border-b border-border">
+      <header className="flex items-center justify-between mb-8 pb-6 border-b border-glass-border">
         <div>
           <h1 className="font-mono text-teal text-2xl font-medium">admin</h1>
           <p className="text-xs text-text-soft mt-1">manage your writing</p>
@@ -23,7 +23,7 @@ export default async function AdminDashboard() {
           </Link>
           <Link
             href="/admin/posts/new"
-            className="px-4 py-2 bg-sand/15 border border-sand/30 rounded-lg text-sand text-sm font-mono hover:bg-sand/25 transition-colors"
+            className="px-4 py-2 bg-sand/10 border border-sand/20 rounded-xl text-sand text-sm font-mono hover:bg-sand/20 transition-all backdrop-blur-sm"
           >
             + new post
           </Link>
@@ -39,7 +39,7 @@ export default async function AdminDashboard() {
           {posts.map((post) => (
             <div
               key={post.id}
-              className="flex items-center justify-between py-4 border-b border-border/40 group"
+              className="flex items-center justify-between py-4 border-b border-glass-border group"
             >
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
@@ -50,7 +50,7 @@ export default async function AdminDashboard() {
                     {post.title}
                   </Link>
                   {!post.published && (
-                    <span className="text-[0.6rem] px-2 py-0.5 rounded-full border border-border text-text-soft">
+                    <span className="text-[0.6rem] px-2 py-0.5 rounded-full border border-glass-border text-text-soft">
                       draft
                     </span>
                   )}

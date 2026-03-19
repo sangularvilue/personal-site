@@ -14,7 +14,7 @@ function PostTile({ post }: { post: Post }) {
   return (
     <Link
       href={`/arts/${post.slug}`}
-      className="block p-4 border border-border rounded-xl transition-all duration-250 hover:border-sand/30 hover:bg-sand/[0.04] hover:-translate-y-px group"
+      className="block p-4 glass transition-all duration-300 hover:bg-glass-hover hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(212,197,169,0.05)] group"
     >
       {post.coverImage && (
         <img
@@ -126,7 +126,7 @@ export default async function Arts({
 
   return (
     <main className="min-h-screen px-[clamp(1.5rem,5vw,4rem)] py-12 max-w-[1100px] mx-auto animate-rise">
-      <header className="mb-12 pb-6 border-b border-border">
+      <header className="mb-12 pb-6 border-b border-glass-border">
         <Link
           href="/"
           className="text-sm text-text-soft hover:text-text transition-colors mb-6 inline-block"
@@ -145,7 +145,7 @@ export default async function Arts({
           name="q"
           defaultValue={query}
           placeholder="Search posts..."
-          className="w-full px-4 py-2.5 bg-surface border border-border rounded-lg text-text text-sm font-serif focus:outline-none focus:border-sand/50 transition-colors placeholder:text-text-soft/50"
+          className="w-full px-4 py-2.5 glass-input rounded-xl text-text text-sm font-serif focus:outline-none focus:border-sand/30 transition-all placeholder:text-text-soft/40"
         />
         {activeTag && <input type="hidden" name="tag" value={activeTag} />}
       </form>
@@ -157,8 +157,8 @@ export default async function Arts({
             href="/arts"
             className={`text-xs px-3 py-1 rounded-full border transition-colors ${
               !activeTag
-                ? "border-sand/40 text-sand bg-sand/10"
-                : "border-border text-text-soft hover:border-sand/30 hover:text-sand"
+                ? "border-sand/30 text-sand bg-sand/10 backdrop-blur-sm"
+                : "border-glass-border text-text-soft hover:border-sand/25 hover:text-sand backdrop-blur-sm"
             }`}
           >
             all
@@ -169,8 +169,8 @@ export default async function Arts({
               href={`/arts?tag=${encodeURIComponent(tag)}`}
               className={`text-xs px-3 py-1 rounded-full border transition-colors ${
                 activeTag === tag
-                  ? "border-sand/40 text-sand bg-sand/10"
-                  : "border-border text-text-soft hover:border-sand/30 hover:text-sand"
+                  ? "border-sand/30 text-sand bg-sand/10 backdrop-blur-sm"
+                  : "border-glass-border text-text-soft hover:border-sand/25 hover:text-sand backdrop-blur-sm"
               }`}
             >
               {tag}
@@ -210,7 +210,7 @@ export default async function Arts({
           {[...sections, ...(uncategorized.length > 0 ? [{ key: "other", label: "Other", posts: uncategorized }] : [])].map(
             ({ key, label, posts }) => (
               <div key={key}>
-                <h3 className="font-serif text-sand text-base font-medium mb-4 pb-2 border-b border-border/60">
+                <h3 className="font-serif text-sand text-base font-medium mb-4 pb-2 border-b border-glass-border">
                   {label}
                 </h3>
                 <div className="space-y-3">
@@ -225,7 +225,7 @@ export default async function Arts({
       )}
 
       {/* RSS link */}
-      <div className="mt-12 pt-6 border-t border-border">
+      <div className="mt-12 pt-6 border-t border-glass-border">
         <a
           href="/rss.xml"
           className="text-xs text-text-soft hover:text-teal transition-colors font-mono"

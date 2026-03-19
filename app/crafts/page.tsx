@@ -54,7 +54,7 @@ const projects = [
 export default function Crafts() {
   return (
     <main className="min-h-screen px-[clamp(1.5rem,5vw,4rem)] py-12 max-w-[720px] mx-auto animate-rise">
-      <header className="mb-12 pb-6 border-b border-border">
+      <header className="mb-12 pb-6 border-b border-glass-border">
         <Link
           href="/"
           className="text-sm text-text-soft hover:text-text transition-colors mb-6 inline-block"
@@ -67,20 +67,20 @@ export default function Crafts() {
         <p className="text-sm text-text-soft tracking-wide">things I build</p>
       </header>
 
-      <div className="space-y-3.5">
+      <div className="space-y-3">
         {projects.map((p) => (
           <a
             key={p.name}
             href={p.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="block p-5 border border-border rounded-xl transition-all duration-250 hover:border-teal/30 hover:bg-teal-dim hover:-translate-y-px"
+            className="block p-5 glass transition-all duration-300 hover:bg-glass-hover hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(73,166,181,0.06)] group"
           >
             <div className="flex items-baseline justify-between gap-4 mb-2 flex-wrap max-sm:flex-col max-sm:gap-0.5">
-              <h3 className="font-mono text-base font-medium text-text">
+              <h3 className="font-mono text-base font-medium text-text group-hover:text-teal transition-colors">
                 {p.name}
               </h3>
-              <span className="text-[0.7rem] text-text-soft font-mono tracking-wide whitespace-nowrap">
+              <span className="text-[0.7rem] text-text-soft/60 font-mono tracking-wide whitespace-nowrap">
                 {p.tag}
               </span>
             </div>

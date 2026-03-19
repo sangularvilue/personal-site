@@ -30,10 +30,11 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center">
+    <main className="min-h-screen flex items-center justify-center relative overflow-hidden">
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[400px] h-[400px] rounded-full bg-teal/[0.03] blur-[100px] pointer-events-none" />
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-xs animate-rise"
+        className="w-full max-w-xs animate-rise glass p-8"
       >
         <h1 className="font-mono text-teal text-xl font-medium mb-8 text-center">
           admin
@@ -44,7 +45,7 @@ export default function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="password"
           autoFocus
-          className="w-full px-4 py-3 bg-surface border border-border rounded-lg text-text font-mono text-sm focus:outline-none focus:border-teal/50 transition-colors mb-3"
+          className="w-full px-4 py-3 glass-input rounded-xl text-text font-mono text-sm focus:outline-none focus:border-teal/30 transition-all mb-3"
         />
         {error && (
           <p className="text-red-400 text-xs mb-3 font-mono">{error}</p>
@@ -52,7 +53,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3 bg-teal/20 border border-teal/30 rounded-lg text-teal font-mono text-sm hover:bg-teal/30 transition-colors disabled:opacity-50"
+          className="w-full py-3 bg-teal/15 border border-teal/20 rounded-xl text-teal font-mono text-sm hover:bg-teal/25 transition-all disabled:opacity-50 backdrop-blur-sm"
         >
           {loading ? "..." : "log in"}
         </button>

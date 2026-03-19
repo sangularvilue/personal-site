@@ -141,7 +141,7 @@ export default function PostEditor({ initial, postId }: EditorProps) {
           defaultValue={initial?.title}
           placeholder="Title"
           required
-          className="w-full px-4 py-3 bg-surface border border-border rounded-lg text-text font-serif text-lg focus:outline-none focus:border-sand/50 transition-colors"
+          className="w-full px-4 py-3 glass-input rounded-xl text-text font-serif text-lg focus:outline-none focus:border-sand/30 transition-all"
         />
 
         {/* Cover image */}
@@ -151,9 +151,9 @@ export default function PostEditor({ initial, postId }: EditorProps) {
               value={coverImage}
               onChange={(e) => setCoverImage(e.target.value)}
               placeholder="Cover image URL (optional)"
-              className="flex-1 px-4 py-3 bg-surface border border-border rounded-lg text-text-soft text-sm font-mono focus:outline-none focus:border-sand/50 transition-colors"
+              className="flex-1 px-4 py-3 glass-input rounded-xl text-text-soft text-sm font-mono focus:outline-none focus:border-sand/30 transition-all"
             />
-            <label className="px-4 py-3 bg-surface border border-border rounded-lg text-text-soft text-sm font-mono cursor-pointer hover:border-sand/50 transition-colors whitespace-nowrap">
+            <label className="px-4 py-3 glass-input rounded-xl text-text-soft text-sm font-mono cursor-pointer hover:border-sand/50 transition-colors whitespace-nowrap">
               {uploading ? "..." : "upload"}
               <input
                 type="file"
@@ -176,7 +176,7 @@ export default function PostEditor({ initial, postId }: EditorProps) {
           name="excerpt"
           defaultValue={initial?.excerpt}
           placeholder="Short excerpt..."
-          className="w-full px-4 py-3 bg-surface border border-border rounded-lg text-text-soft text-sm focus:outline-none focus:border-sand/50 transition-colors font-serif italic"
+          className="w-full px-4 py-3 glass-input rounded-xl text-text-soft text-sm focus:outline-none focus:border-sand/30 transition-all font-serif italic"
         />
 
         {/* Content editor with preview toggle and image upload */}
@@ -207,7 +207,7 @@ export default function PostEditor({ initial, postId }: EditorProps) {
 
           {preview ? (
             <div
-              className="prose min-h-[400px] p-4 bg-surface border border-border rounded-lg overflow-auto"
+              className="prose min-h-[400px] p-5 glass overflow-auto"
               dangerouslySetInnerHTML={{ __html: previewHtml }}
             />
           ) : (
@@ -218,7 +218,7 @@ export default function PostEditor({ initial, postId }: EditorProps) {
               placeholder="Write in markdown..."
               rows={20}
               required
-              className="w-full px-4 py-3 bg-surface border border-border rounded-lg text-text font-mono text-sm focus:outline-none focus:border-sand/50 transition-colors resize-y leading-relaxed"
+              className="w-full px-4 py-3 glass-input rounded-xl text-text font-mono text-sm focus:outline-none focus:border-sand/30 transition-all resize-y leading-relaxed"
             />
           )}
         </div>
@@ -227,7 +227,7 @@ export default function PostEditor({ initial, postId }: EditorProps) {
           name="tags"
           defaultValue={initial?.tags}
           placeholder="Tags (comma-separated)"
-          className="w-full px-4 py-3 bg-surface border border-border rounded-lg text-text-soft text-sm font-mono focus:outline-none focus:border-sand/50 transition-colors"
+          className="w-full px-4 py-3 glass-input rounded-xl text-text-soft text-sm font-mono focus:outline-none focus:border-sand/30 transition-all"
         />
         <div className="flex items-center justify-between pt-2">
           <label className="flex items-center gap-2 text-sm text-text-soft font-mono cursor-pointer">

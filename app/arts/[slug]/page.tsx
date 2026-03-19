@@ -31,12 +31,12 @@ export default async function PostPage({
             <img
               src={post.coverImage}
               alt={post.title}
-              className="w-full rounded-xl object-cover max-h-[400px]"
+              className="w-full rounded-2xl object-cover max-h-[400px] shadow-[0_8px_40px_rgba(0,0,0,0.3)]"
             />
           </div>
         )}
 
-        <header className="mb-8 pb-6 border-b border-border">
+        <header className="mb-8 pb-6 border-b border-glass-border">
           <span className="text-[0.72rem] uppercase tracking-widest text-sand-dim font-semibold">
             {new Date(post.createdAt).toLocaleDateString("en-US", {
               year: "numeric",
@@ -53,7 +53,7 @@ export default async function PostPage({
                 <Link
                   key={tag}
                   href={`/arts?tag=${encodeURIComponent(tag)}`}
-                  className="text-xs px-3 py-1 rounded-full border border-border text-text-soft hover:border-sand/30 hover:text-sand transition-colors"
+                  className="text-xs px-3 py-1 rounded-full border border-glass-border text-text-soft hover:border-sand/25 hover:text-sand transition-colors backdrop-blur-sm"
                 >
                   #{tag}
                 </Link>
