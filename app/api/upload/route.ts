@@ -1,15 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { put } from "@vercel/blob";
 import { jwtVerify } from "jose";
-
-export const runtime = "edge";
 
 const SECRET = new TextEncoder().encode(
   process.env.ADMIN_SECRET || "change-me-in-production"
 );
 
+// Returns a signed upload token that the client uses to upload directly to Blob
 export async function POST(request: NextRequest) {
-  // Auth
   const token = request.cookies.get("admin_token")?.value;
   if (!token) {
     return NextResponse.json({ error: "No auth cookie" }, { status: 401 });
@@ -20,33 +17,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid token" }, { status: 401 });
   }
 
-  const filename = request.headers.get("x-filename") || "upload";
-  const contentType = request.headers.get("content-type") || "image/png";
-
-  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+  // Just return the blob token — client uploads directly to Vercel Blob
+  const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
+  if (!blobToken) {
     return NextResponse.json(
       { error: "BLOB_READ_WRITE_TOKEN not set" },
       { status: 500 }
     );
   }
 
-  if (!request.body) {
-    return NextResponse.json({ error: "No body" }, { status: 400 });
-  }
-
-  try {
-    const blob = await put(filename, request.body, {
-      access: "public",
-      contentType,
-      token: process.env.BLOB_READ_WRITE_TOKEN,
-    });
-
-    return NextResponse.json({ url: blob.url });
-  } catch (err: unknown) {
-    const message =
-      err instanceof Error
-        ? `${err.name}: ${err.message}`
-        : JSON.stringify(err);
-    return NextResponse.json({ error: message }, { status: 500 });
-  }
+  return NextResponse.json({ token: blobToken });
 }

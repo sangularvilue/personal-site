@@ -5,20 +5,35 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 async function uploadFile(file: File): Promise<string> {
-  const res = await fetch("/api/upload", {
-    method: "POST",
-    headers: {
-      "content-type": file.type,
-      "x-filename": file.name,
-    },
-    body: file,
-  });
-  if (!res.ok) {
-    const data = await res.json().catch(() => ({ error: res.statusText }));
-    throw new Error(data.error || "Upload failed");
+  // Step 1: Get the blob token from our authenticated API
+  const tokenRes = await fetch("/api/upload", { method: "POST" });
+  if (!tokenRes.ok) {
+    const data = await tokenRes.json().catch(() => ({}));
+    throw new Error(data.error || "Auth failed");
   }
-  const { url } = await res.json();
-  return url;
+  const { token } = await tokenRes.json();
+
+  // Step 2: Upload directly to Vercel Blob (bypasses serverless payload limit)
+  const blobRes = await fetch(
+    `https://blob.vercel-storage.com/${encodeURIComponent(file.name)}`,
+    {
+      method: "PUT",
+      headers: {
+        authorization: `Bearer ${token}`,
+        "x-content-type": file.type,
+        "x-api-version": "7",
+      },
+      body: file,
+    }
+  );
+
+  if (!blobRes.ok) {
+    const text = await blobRes.text().catch(() => blobRes.statusText);
+    throw new Error(`Blob upload failed: ${text}`);
+  }
+
+  const blob = await blobRes.json();
+  return blob.url;
 }
 
 interface EditorProps {
