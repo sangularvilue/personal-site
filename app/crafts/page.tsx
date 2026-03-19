@@ -74,7 +74,7 @@ export default function Crafts() {
             href={p.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="block p-5 glass transition-all duration-300 hover:bg-glass-hover hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(73,166,181,0.06)] group"
+            className="block p-5 glass glass-shimmer transition-all duration-400 hover:bg-glass-hover hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(73,166,181,0.08),inset_0_1px_0_rgba(255,255,255,0.1)] group"
           >
             <div className="flex items-baseline justify-between gap-4 mb-2 flex-wrap max-sm:flex-col max-sm:gap-0.5">
               <h3 className="font-mono text-base font-medium text-text group-hover:text-teal transition-colors">

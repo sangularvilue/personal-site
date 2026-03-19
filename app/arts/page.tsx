@@ -14,7 +14,7 @@ function PostTile({ post }: { post: Post }) {
   return (
     <Link
       href={`/arts/${post.slug}`}
-      className="block p-4 glass transition-all duration-300 hover:bg-glass-hover hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(212,197,169,0.05)] group"
+      className="block p-4 glass glass-shimmer transition-all duration-400 hover:bg-glass-hover hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(212,197,169,0.07),inset_0_1px_0_rgba(255,255,255,0.1)] group"
     >
       {post.coverImage && (
         <img
