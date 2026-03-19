@@ -7,8 +7,16 @@ export async function middleware(request: NextRequest) {
 
   // admin.grannis.xyz → rewrite to /admin routes (with auth)
   if (hostname.startsWith("admin.")) {
-    const adminPath = pathname === "/" ? "/admin" : `/admin${pathname}`;
-    const isLoginPage = adminPath === "/admin/login";
+    // Map subdomain paths to /admin/* paths
+    // If already prefixed with /admin (e.g. after redirect), don't double-prefix
+    const adminPath = pathname.startsWith("/admin")
+      ? pathname
+      : pathname === "/"
+        ? "/admin"
+        : `/admin${pathname}`;
+
+    const isLoginPage =
+      adminPath === "/admin/login" || adminPath.startsWith("/api/");
 
     if (!isLoginPage) {
       const token = request.cookies.get("admin_token")?.value;
@@ -19,11 +27,14 @@ export async function middleware(request: NextRequest) {
       }
     }
 
-    if (pathname === "/" || !pathname.startsWith("/admin")) {
+    // Rewrite to the /admin path if not already there
+    if (!pathname.startsWith("/admin")) {
       const url = request.nextUrl.clone();
       url.pathname = adminPath;
       return NextResponse.rewrite(url);
     }
+
+    return NextResponse.next();
   }
 
   // Protect /admin routes accessed directly (not via subdomain)
@@ -35,11 +46,6 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(loginUrl);
     }
   }
-
-  // These subdomains are handled by their own Vercel projects directly:
-  // - willymarket.grannis.xyz → family-betting-market project
-  // - connections.grannis.xyz → connections-squared project
-  // - rri.grannis.xyz → railroad-ink (once deployed)
 
   return NextResponse.next();
 }
