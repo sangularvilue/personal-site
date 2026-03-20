@@ -21,10 +21,10 @@ const projects = [
     href: "https://willymarket.grannis.xyz",
   },
   {
-    name: "Railroad Ink",
+    name: "Railroad Tiles",
     tag: "python · fastapi · websockets",
-    desc: "Online multiplayer Railroad Ink. Real-time tile placement, rotation, scoring, and an in-app rules reference.",
-    href: "https://rri.grannis.xyz",
+    desc: "Online multiplayer Railroad Tiles. Real-time tile placement, rotation, scoring, and an in-app rules reference.",
+    href: "https://rrt.grannis.xyz",
   },
   {
     name: "Even Backgammon",

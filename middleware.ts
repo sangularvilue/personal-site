@@ -5,6 +5,11 @@ export async function middleware(request: NextRequest) {
   const hostname = request.headers.get("host") || "";
   const { pathname } = request.nextUrl;
 
+  // rrt.grannis.xyz → redirect to Railroad Tiles on Render
+  if (hostname.startsWith("rrt.")) {
+    return NextResponse.redirect("https://railroad-ink.onrender.com" + pathname);
+  }
+
   // admin.grannis.xyz → rewrite to /admin routes (with auth)
   if (hostname.startsWith("admin.")) {
     // Map subdomain paths to /admin/* paths
