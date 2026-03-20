@@ -24,10 +24,6 @@ export default function GlassCard({
   const ref = useRef<HTMLDivElement>(null);
   const [isTouch, setIsTouch] = useState(false);
   const [style, setStyle] = useState<React.CSSProperties>({});
-  const [glintStyle, setGlintStyle] = useState<React.CSSProperties>({
-    opacity: 0,
-  });
-
   useEffect(() => {
     setIsTouch(isTouchDevice());
   }, []);
@@ -48,11 +44,6 @@ export default function GlassCard({
         transform: `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.01)`,
       });
 
-      const angle = Math.atan2(y - 0.5, x - 0.5) * (180 / Math.PI);
-      setGlintStyle({
-        opacity: 1,
-        background: `conic-gradient(from ${angle + 180}deg at ${x * 100}% ${y * 100}%, rgba(255,255,255,0.3) 0deg, transparent 35deg, transparent 325deg, rgba(255,255,255,0.3) 360deg)`,
-      });
     },
     [isTouch],
   );
@@ -62,10 +53,6 @@ export default function GlassCard({
     setStyle({
       transform: "perspective(800px) rotateX(0deg) rotateY(0deg) scale(1)",
       transition: "transform 400ms ease-out",
-    });
-    setGlintStyle({
-      opacity: 0,
-      transition: "opacity 400ms ease-out",
     });
   }, []);
 
@@ -85,21 +72,6 @@ export default function GlassCard({
         className="glass-tilt-inner relative"
         style={style}
       >
-        {/* Border glint */}
-        <div
-          className="absolute -inset-[1px] rounded-[19px] pointer-events-none"
-          style={{
-            opacity: 0,
-            padding: "1.5px",
-            maskImage:
-              "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-            maskComposite: "exclude",
-            WebkitMaskImage:
-              "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-            WebkitMaskComposite: "xor",
-            ...glintStyle,
-          }}
-        />
         {children}
       </div>
     </Tag>
