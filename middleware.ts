@@ -5,14 +5,14 @@ export async function middleware(request: NextRequest) {
   const hostname = request.headers.get("host") || "";
   const { pathname } = request.nextUrl;
 
-  // rrt.grannis.xyz → redirect to Railroad Tiles on Render
+  // rrt.grannis.xyz → proxy Railroad Tiles from Render
   if (hostname.startsWith("rrt.")) {
-    return NextResponse.redirect("https://railroad-ink.onrender.com" + pathname);
+    return NextResponse.rewrite(new URL("https://railroad-ink.onrender.com" + pathname));
   }
 
-  // tictactoe.grannis.xyz → redirect to Hyper Tic Tac Toe on Firebase
+  // tictactoe.grannis.xyz → proxy Hyper Tic Tac Toe from Firebase
   if (hostname.startsWith("tictactoe.")) {
-    return NextResponse.redirect("https://hypertictactoe-60d85.web.app" + pathname);
+    return NextResponse.rewrite(new URL("https://hypertictactoe-60d85.web.app" + pathname));
   }
 
   // admin.grannis.xyz → rewrite to /admin routes (with auth)
