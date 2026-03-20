@@ -27,6 +27,12 @@ const projects = [
     href: "https://rrt.grannis.xyz",
   },
   {
+    name: "Hyper Tic Tac Toe",
+    tag: "firebase · multiplayer",
+    desc: "Ultimate tic tac toe with online multiplayer. Create or join a game and play a friend over the internet.",
+    href: "https://tictactoe.grannis.xyz",
+  },
+  {
     name: "Even Backgammon",
     tag: "vite · even g2 smart glasses",
     desc: "Backgammon for the Even G2 smart glasses. Full game logic with AI opponent, rendered on a waveguide display.",

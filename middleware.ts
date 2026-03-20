@@ -10,6 +10,11 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect("https://railroad-ink.onrender.com" + pathname);
   }
 
+  // tictactoe.grannis.xyz → redirect to Hyper Tic Tac Toe on Firebase
+  if (hostname.startsWith("tictactoe.")) {
+    return NextResponse.redirect("https://hypertictactoe-60d85.web.app" + pathname);
+  }
+
   // admin.grannis.xyz → rewrite to /admin routes (with auth)
   if (hostname.startsWith("admin.")) {
     // Map subdomain paths to /admin/* paths
