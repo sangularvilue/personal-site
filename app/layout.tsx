@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { GlassEdgeProvider } from "./components/glass-edge-layer";
 
 export const metadata: Metadata = {
   title: "Will Grannis",
@@ -35,9 +34,7 @@ export default function RootLayout({
           href="/rss.xml"
         />
       </head>
-      <body>
-        <GlassEdgeProvider>{children}</GlassEdgeProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
