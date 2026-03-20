@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getAllPosts, getAllTags, Post } from "@/lib/posts";
 import GlassCard from "../components/glass-card";
+import AmbientImage from "../components/ambient-image";
 
 export const dynamic = "force-dynamic";
 
@@ -16,11 +17,15 @@ function PostTile({ post }: { post: Post }) {
     <GlassCard href={`/arts/${post.slug}`} className="cursor-pointer group">
       <div className="p-4">
         {post.coverImage && (
-          <img
-            src={post.coverImage}
-            alt=""
-            className="w-full h-32 rounded-xl object-cover mb-3"
-          />
+          <div className="mb-3 overflow-hidden rounded-xl">
+            <AmbientImage
+              src={post.coverImage}
+              className="w-full h-32 rounded-xl object-cover"
+              spread={20}
+              blur={32}
+              intensity={0.5}
+            />
+          </div>
         )}
         <span className="text-[0.65rem] uppercase tracking-widest text-sand-dim font-semibold">
           {new Date(post.createdAt).toLocaleDateString("en-US", {
@@ -47,11 +52,15 @@ function PostRow({ post }: { post: Post }) {
       className="flex gap-4 py-5 border-b border-border/40 hover:pl-2 transition-all duration-200 group"
     >
       {post.coverImage && (
-        <img
-          src={post.coverImage}
-          alt=""
-          className="w-20 h-20 rounded-lg object-cover flex-shrink-0 mt-1"
-        />
+        <div className="flex-shrink-0 mt-1 overflow-hidden rounded-lg">
+          <AmbientImage
+            src={post.coverImage}
+            className="w-20 h-20 rounded-lg object-cover"
+            spread={12}
+            blur={24}
+            intensity={0.45}
+          />
+        </div>
       )}
       <div className="flex-1 min-w-0">
         <span className="text-[0.72rem] uppercase tracking-widest text-sand-dim font-semibold">

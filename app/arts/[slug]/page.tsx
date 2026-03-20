@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getPostBySlug } from "@/lib/posts";
 import { renderMarkdown } from "@/lib/markdown";
 import { notFound } from "next/navigation";
+import AmbientImage from "@/app/components/ambient-image";
 
 export const dynamic = "force-dynamic";
 
@@ -27,11 +28,14 @@ export default async function PostPage({
 
       <article>
         {post.coverImage && (
-          <div className="mb-8 -mx-4 sm:-mx-8">
-            <img
+          <div className="mb-8 -mx-4 sm:-mx-8 overflow-hidden rounded-2xl">
+            <AmbientImage
               src={post.coverImage}
               alt={post.title}
               className="w-full rounded-2xl object-cover max-h-[400px] shadow-[0_8px_40px_rgba(0,0,0,0.3)]"
+              spread={32}
+              blur={48}
+              intensity={0.6}
             />
           </div>
         )}
