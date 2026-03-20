@@ -36,6 +36,11 @@ async function uploadFile(file: File): Promise<string> {
   return blob.url;
 }
 
+interface UploadedImage {
+  url: string;
+  name: string;
+}
+
 interface EditorProps {
   initial?: {
     title: string;
@@ -57,11 +62,11 @@ export default function PostEditor({ initial, postId }: EditorProps) {
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const [coverImage, setCoverImage] = useState(initial?.coverImage || "");
+  const [imageTray, setImageTray] = useState<UploadedImage[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   async function togglePreview() {
     if (!preview) {
-      // Render markdown for preview
       const res = await fetch("/api/preview", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -96,6 +101,54 @@ export default function PostEditor({ initial, postId }: EditorProps) {
     }
     setUploading(false);
     e.target.value = "";
+  }
+
+  async function handleTrayUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+    if (!files?.length) return;
+    setUploading(true);
+    setUploadError("");
+
+    try {
+      for (const file of Array.from(files)) {
+        const url = await uploadFile(file);
+        setImageTray((prev) => [...prev, { url, name: file.name }]);
+      }
+    } catch (err: unknown) {
+      setUploadError(`Upload failed: ${err instanceof Error ? err.message : "unknown error"}`);
+    }
+    setUploading(false);
+    e.target.value = "";
+  }
+
+  function insertAsAside(img: UploadedImage) {
+    const textarea = textareaRef.current;
+    const pos = textarea ? textarea.selectionStart : content.length;
+    const before = content.slice(0, pos);
+    const after = content.slice(pos);
+    const asideMd = `:::aside 300\n![${img.name}](${img.url})\n:::\n`;
+    setContent(before + asideMd + after);
+    // Focus back on textarea
+    setTimeout(() => {
+      if (textarea) {
+        textarea.focus();
+        const newPos = pos + asideMd.length;
+        textarea.setSelectionRange(newPos, newPos);
+      }
+    }, 0);
+  }
+
+  function insertInline(img: UploadedImage) {
+    const textarea = textareaRef.current;
+    const pos = textarea ? textarea.selectionStart : content.length;
+    const before = content.slice(0, pos);
+    const after = content.slice(pos);
+    const imgMd = `![${img.name}](${img.url})`;
+    setContent(before + imgMd + after);
+  }
+
+  function removeTrayImage(url: string) {
+    setImageTray((prev) => prev.filter((img) => img.url !== url));
   }
 
   async function handleCoverUpload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -203,6 +256,62 @@ export default function PostEditor({ initial, postId }: EditorProps) {
           placeholder="Short excerpt..."
           className="w-full px-4 py-3 glass-input rounded-xl text-text-soft text-sm focus:outline-none focus:border-sand/30 transition-all font-serif italic"
         />
+
+        {/* Image tray */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-mono text-text-soft">image tray</span>
+            <label className="text-xs font-mono text-text-soft hover:text-teal transition-colors cursor-pointer">
+              {uploading ? "uploading..." : "+ upload images"}
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleTrayUpload}
+                className="hidden"
+              />
+            </label>
+          </div>
+          {imageTray.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {imageTray.map((img) => (
+                <div
+                  key={img.url}
+                  className="group relative glass-subtle p-1.5 rounded-lg"
+                >
+                  <img
+                    src={img.url}
+                    alt={img.name}
+                    className="w-20 h-20 object-cover rounded-md"
+                  />
+                  <div className="absolute inset-0 rounded-lg bg-bg/80 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() => insertAsAside(img)}
+                      className="text-[0.6rem] font-mono text-sand hover:text-text transition-colors"
+                    >
+                      aside
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => insertInline(img)}
+                      className="text-[0.6rem] font-mono text-teal hover:text-text transition-colors"
+                    >
+                      inline
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => removeTrayImage(img.url)}
+                      className="text-[0.6rem] font-mono text-text-soft hover:text-red-400 transition-colors"
+                    >
+                      remove
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
         {/* Content editor with preview toggle and image upload */}
         <div>

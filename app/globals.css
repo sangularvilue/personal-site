@@ -262,6 +262,38 @@ body::before {
   margin: 2em 0;
 }
 
+/* Aside image — floats right alongside text */
+.prose .text-aside {
+  float: right;
+  clear: right;
+  margin: 0 0 1em 1.5em;
+  max-width: 45%;
+}
+.prose .text-aside img {
+  max-height: var(--aside-max, 300px);
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  margin: 0;
+}
+/* Clear float after the aside section */
+.prose .text-aside + p::after,
+.prose .text-aside + blockquote::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+/* On small screens, go full-width above the text */
+@media (max-width: 640px) {
+  .prose .text-aside {
+    float: none;
+    max-width: 100%;
+    margin: 1em 0;
+  }
+}
+
 /* Embedded videos (YouTube) */
 .embed-video {
   position: relative;

@@ -31,8 +31,27 @@ renderer.paragraph = function ({ tokens }) {
 
 marked.use({ renderer });
 
+/**
+ * Preprocess :::aside directives into HTML before marked parses them.
+ *
+ * Syntax:
+ *   :::aside 300
+ *   ![alt](url)
+ *   :::
+ *
+ * The number is the max-height in px. The image floats to the right of
+ * the following text, vertically centered on the adjacent paragraph.
+ */
+function preprocessAsides(md: string): string {
+  return md.replace(
+    /:::aside\s+(\d+)\s*\n!\[([^\]]*)\]\(([^)]+)\)\s*\n:::/g,
+    (_match, maxH, alt, src) =>
+      `<figure class="text-aside" style="--aside-max:${maxH}px"><img src="${src}" alt="${alt}"></figure>`,
+  );
+}
+
 export async function renderMarkdown(content: string): Promise<string> {
-  const html = await marked(content);
+  const html = await marked(preprocessAsides(content));
 
   // If the content includes any twitter embeds, append the widget script
   const hasTwitterEmbed = html.includes("twitter-tweet");
