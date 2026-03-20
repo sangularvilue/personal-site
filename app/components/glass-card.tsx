@@ -27,6 +27,9 @@ export default function GlassCard({
   const [glareStyle, setGlareStyle] = useState<React.CSSProperties>({
     opacity: 0,
   });
+  const [glintStyle, setGlintStyle] = useState<React.CSSProperties>({
+    opacity: 0,
+  });
 
   useEffect(() => {
     setIsTouch(isTouchDevice());
@@ -53,6 +56,16 @@ export default function GlassCard({
         background: `radial-gradient(circle at ${x * 100}% ${y * 100}%, rgba(255,255,255,0.3), transparent 55%)`,
         transition: "opacity 120ms ease-out",
       });
+
+      // Border glint — bright spot that follows the cursor along the edge.
+      // Uses a conic-gradient so the glint sits on the border nearest the cursor,
+      // with a tight falloff so it reads as a small specular highlight.
+      const angle = Math.atan2(y - 0.5, x - 0.5) * (180 / Math.PI);
+      setGlintStyle({
+        opacity: 1,
+        background: `conic-gradient(from ${angle + 180}deg at ${x * 100}% ${y * 100}%, rgba(255,255,255,0.35) 0deg, transparent 40deg, transparent 320deg, rgba(255,255,255,0.35) 360deg)`,
+        transition: "opacity 150ms ease-out",
+      });
     },
     [isTouch],
   );
@@ -63,6 +76,10 @@ export default function GlassCard({
       transition: "transform 500ms ease-out",
     });
     setGlareStyle({
+      opacity: 0,
+      transition: "opacity 500ms ease-out",
+    });
+    setGlintStyle({
       opacity: 0,
       transition: "opacity 500ms ease-out",
     });
@@ -84,6 +101,21 @@ export default function GlassCard({
         className="glass-tilt-inner relative"
         style={style}
       >
+        {/* Border glint — specular highlight on the edge nearest the cursor */}
+        <div
+          className="absolute -inset-[1px] rounded-[19px] pointer-events-none"
+          style={{
+            opacity: 0,
+            padding: "1.5px",
+            maskImage:
+              "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+            maskComposite: "exclude",
+            WebkitMaskImage:
+              "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+            WebkitMaskComposite: "xor",
+            ...glintStyle,
+          }}
+        />
         {/* Glare overlay */}
         <div
           className="absolute inset-0 rounded-[inherit] pointer-events-none z-10"
