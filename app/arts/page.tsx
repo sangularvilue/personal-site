@@ -6,6 +6,7 @@ import AmbientImage from "../components/ambient-image";
 export const dynamic = "force-dynamic";
 
 const SECTIONS = [
+  { key: "favorites", label: "My Favorites" },
   { key: "poetry", label: "Poetry" },
   { key: "satire", label: "Satire" },
   { key: "opinion", label: "Opinion" },

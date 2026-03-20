@@ -24,9 +24,6 @@ export default function GlassCard({
   const ref = useRef<HTMLDivElement>(null);
   const [isTouch, setIsTouch] = useState(false);
   const [style, setStyle] = useState<React.CSSProperties>({});
-  const [glareStyle, setGlareStyle] = useState<React.CSSProperties>({
-    opacity: 0,
-  });
   const [glintStyle, setGlintStyle] = useState<React.CSSProperties>({
     opacity: 0,
   });
@@ -46,42 +43,29 @@ export default function GlassCard({
       const rotateX = (y - 0.5) * -6;
       const rotateY = (x - 0.5) * 6;
 
+      // No transition — tilt is a direct function of cursor position
       setStyle({
         transform: `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.01)`,
-        transition: "transform 300ms ease-out",
       });
 
-      setGlareStyle({
-        opacity: 0.12,
-        background: `radial-gradient(circle at ${x * 100}% ${y * 100}%, rgba(255,255,255,0.2), transparent 60%)`,
-        transition: "opacity 300ms ease-out",
-      });
-
-      // Border glint — bright spot that follows the cursor along the edge.
-      // Uses a conic-gradient so the glint sits on the border nearest the cursor,
-      // with a tight falloff so it reads as a small specular highlight.
       const angle = Math.atan2(y - 0.5, x - 0.5) * (180 / Math.PI);
       setGlintStyle({
         opacity: 1,
-        background: `conic-gradient(from ${angle + 180}deg at ${x * 100}% ${y * 100}%, rgba(255,255,255,0.35) 0deg, transparent 40deg, transparent 320deg, rgba(255,255,255,0.35) 360deg)`,
-        transition: "opacity 150ms ease-out",
+        background: `conic-gradient(from ${angle + 180}deg at ${x * 100}% ${y * 100}%, rgba(255,255,255,0.3) 0deg, transparent 35deg, transparent 325deg, rgba(255,255,255,0.3) 360deg)`,
       });
     },
     [isTouch],
   );
 
   const reset = useCallback(() => {
+    // Transition only on leave — smooth return to rest
     setStyle({
-      transform: "perspective(500px) rotateX(0deg) rotateY(0deg) scale(1)",
-      transition: "transform 500ms ease-out",
-    });
-    setGlareStyle({
-      opacity: 0,
-      transition: "opacity 500ms ease-out",
+      transform: "perspective(800px) rotateX(0deg) rotateY(0deg) scale(1)",
+      transition: "transform 400ms ease-out",
     });
     setGlintStyle({
       opacity: 0,
-      transition: "opacity 500ms ease-out",
+      transition: "opacity 400ms ease-out",
     });
   }, []);
 
@@ -101,7 +85,7 @@ export default function GlassCard({
         className="glass-tilt-inner relative"
         style={style}
       >
-        {/* Border glint — specular highlight on the edge nearest the cursor */}
+        {/* Border glint */}
         <div
           className="absolute -inset-[1px] rounded-[19px] pointer-events-none"
           style={{
@@ -115,11 +99,6 @@ export default function GlassCard({
             WebkitMaskComposite: "xor",
             ...glintStyle,
           }}
-        />
-        {/* Glare overlay */}
-        <div
-          className="absolute inset-0 rounded-[inherit] pointer-events-none z-10"
-          style={glareStyle}
         />
         {children}
       </div>
