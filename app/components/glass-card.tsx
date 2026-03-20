@@ -27,9 +27,6 @@ export default function GlassCard({
   const [glareStyle, setGlareStyle] = useState<React.CSSProperties>({
     opacity: 0,
   });
-  const [borderStyle, setBorderStyle] = useState<React.CSSProperties>({
-    opacity: 0,
-  });
   const [refractionShadow, setRefractionShadow] = useState("none");
 
   useEffect(() => {
@@ -58,14 +55,6 @@ export default function GlassCard({
         transition: "opacity 120ms ease-out",
       });
 
-      // Prismatic border — angle follows cursor position
-      const angle = Math.atan2(y - 0.5, x - 0.5) * (180 / Math.PI) + 180;
-      setBorderStyle({
-        opacity: 1,
-        background: `conic-gradient(from ${angle}deg, rgba(255,120,120,0.45), rgba(255,200,100,0.35), rgba(120,255,180,0.45), rgba(100,180,255,0.45), rgba(180,120,255,0.45), rgba(255,120,200,0.35), rgba(255,120,120,0.45))`,
-        transition: "opacity 200ms ease-out",
-      });
-
       // Chromatic refraction — offset RGB shadows based on tilt
       const offsetX = (x - 0.5) * 6;
       const offsetY = (y - 0.5) * 6;
@@ -82,10 +71,6 @@ export default function GlassCard({
       transition: "transform 500ms ease-out",
     });
     setGlareStyle({
-      opacity: 0,
-      transition: "opacity 500ms ease-out",
-    });
-    setBorderStyle({
       opacity: 0,
       transition: "opacity 500ms ease-out",
     });
@@ -108,28 +93,29 @@ export default function GlassCard({
         className="glass-tilt-inner relative"
         style={{
           ...style,
-          boxShadow: refractionShadow !== "none"
-            ? `inset 0 1px 0 0 rgba(255,255,255,0.12), inset 0 0 20px 0 rgba(140,170,210,0.06), 0 4px 24px -4px rgba(0,0,0,0.3), ${refractionShadow}`
-            : undefined,
+          boxShadow:
+            refractionShadow !== "none"
+              ? `inset 0 1px 0 0 rgba(255,255,255,0.12), inset 0 0 20px 0 rgba(140,170,210,0.06), 0 4px 24px -4px rgba(0,0,0,0.3), ${refractionShadow}`
+              : undefined,
           transition: style.transition
             ? `${style.transition}, box-shadow 200ms ease-out`
             : "box-shadow 200ms ease-out",
         }}
       >
-        {/* Prismatic border layer */}
+        {/* Refractive edge — picks up and intensifies colors from behind */}
         <div
-          className="absolute -inset-[1px] rounded-[19px] pointer-events-none"
+          className="absolute -inset-[1px] rounded-[19px] pointer-events-none z-0"
           style={{
-            opacity: borderStyle.opacity ?? 0,
-            background: borderStyle.background,
-            transition: borderStyle.transition,
+            padding: "2px",
             maskImage:
               "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
             maskComposite: "exclude",
             WebkitMaskImage:
               "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
             WebkitMaskComposite: "xor",
-            padding: "1.5px",
+            backdropFilter: "blur(30px) saturate(4) brightness(1.8)",
+            WebkitBackdropFilter: "blur(30px) saturate(4) brightness(1.8)",
+            background: "rgba(255,255,255,0.06)",
           }}
         />
         {/* Glare overlay */}
