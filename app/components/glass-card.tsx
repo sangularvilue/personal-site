@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState, useCallback, useEffect } from "react";
+import { useRef, useState, useCallback, useEffect, useId } from "react";
+import { useGlassEdge } from "./glass-edge-layer";
 
 interface GlassCardProps {
   children: React.ReactNode;
@@ -21,7 +22,7 @@ export default function GlassCard({
   target,
   rel,
 }: GlassCardProps) {
-  const ref = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
   const [isTouch, setIsTouch] = useState(false);
   const [style, setStyle] = useState<React.CSSProperties>({});
   const [glareStyle, setGlareStyle] = useState<React.CSSProperties>({
@@ -29,14 +30,24 @@ export default function GlassCard({
   });
   const [refractionShadow, setRefractionShadow] = useState("none");
 
+  const edgeCtx = useGlassEdge();
+  const id = useId();
+
   useEffect(() => {
     setIsTouch(isTouchDevice());
   }, []);
 
+  // Register with the shared edge layer
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el || !edgeCtx) return;
+    return edgeCtx.register(id, el);
+  }, [id, edgeCtx]);
+
   const handleMove = useCallback(
     (e: React.MouseEvent) => {
       if (isTouch) return;
-      const el = ref.current;
+      const el = innerRef.current;
       if (!el) return;
       const rect = el.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width;
@@ -86,7 +97,7 @@ export default function GlassCard({
       style={{ transformStyle: "preserve-3d" }}
     >
       <div
-        ref={ref}
+        ref={innerRef}
         onMouseMove={handleMove}
         onMouseLeave={reset}
         className="glass-tilt-inner relative"
@@ -101,28 +112,6 @@ export default function GlassCard({
             : "box-shadow 200ms ease-out",
         }}
       >
-        {/*
-          Refractive glass edge: extends 16px beyond the card on each side
-          so backdrop-filter samples the ACTUAL surroundings (not the card
-          interior). Masked to a 2px ring at the card boundary. Uses low
-          blur so surrounding colors come through clearly — the contrast
-          with the heavily frosted card center creates the beveled-edge look.
-        */}
-        <div
-          className="absolute pointer-events-none"
-          style={{
-            inset: "-16px",
-            borderRadius: "34px",
-            backdropFilter: "blur(3px) saturate(3) brightness(1.6)",
-            WebkitBackdropFilter: "blur(3px) saturate(3) brightness(1.6)",
-            background: "rgba(255,255,255,0.03)",
-            /* Clip to only a 2px ring at the card boundary (16px inward) */
-            clipPath: `polygon(
-              0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%,
-              16px 16px, 16px calc(100% - 16px), calc(100% - 16px) calc(100% - 16px), calc(100% - 16px) 16px, 16px 16px
-            )`,
-          }}
-        />
         {/* Glare overlay */}
         <div
           className="absolute inset-0 rounded-[inherit] pointer-events-none z-10"
