@@ -43,18 +43,18 @@ export default function GlassCard({
       const rect = el.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width;
       const y = (e.clientY - rect.top) / rect.height;
-      const rotateX = (y - 0.5) * -14;
-      const rotateY = (x - 0.5) * 14;
+      const rotateX = (y - 0.5) * -6;
+      const rotateY = (x - 0.5) * 6;
 
       setStyle({
-        transform: `perspective(500px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`,
-        transition: "transform 120ms ease-out",
+        transform: `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.01)`,
+        transition: "transform 300ms ease-out",
       });
 
       setGlareStyle({
-        opacity: 0.18,
-        background: `radial-gradient(circle at ${x * 100}% ${y * 100}%, rgba(255,255,255,0.3), transparent 55%)`,
-        transition: "opacity 120ms ease-out",
+        opacity: 0.12,
+        background: `radial-gradient(circle at ${x * 100}% ${y * 100}%, rgba(255,255,255,0.2), transparent 60%)`,
+        transition: "opacity 300ms ease-out",
       });
 
       // Border glint — bright spot that follows the cursor along the edge.
