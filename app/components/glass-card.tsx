@@ -55,7 +55,6 @@ export default function GlassCard({
         transition: "opacity 120ms ease-out",
       });
 
-      // Chromatic refraction — offset RGB shadows based on tilt
       const offsetX = (x - 0.5) * 6;
       const offsetY = (y - 0.5) * 6;
       setRefractionShadow(
@@ -102,20 +101,26 @@ export default function GlassCard({
             : "box-shadow 200ms ease-out",
         }}
       >
-        {/* Refractive edge — picks up and intensifies colors from behind */}
+        {/*
+          Refractive glass edge: extends 16px beyond the card on each side
+          so backdrop-filter samples the ACTUAL surroundings (not the card
+          interior). Masked to a 2px ring at the card boundary. Uses low
+          blur so surrounding colors come through clearly — the contrast
+          with the heavily frosted card center creates the beveled-edge look.
+        */}
         <div
-          className="absolute -inset-[1px] rounded-[19px] pointer-events-none z-0"
+          className="absolute pointer-events-none"
           style={{
-            padding: "2px",
-            maskImage:
-              "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-            maskComposite: "exclude",
-            WebkitMaskImage:
-              "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-            WebkitMaskComposite: "xor",
-            backdropFilter: "blur(30px) saturate(4) brightness(1.8)",
-            WebkitBackdropFilter: "blur(30px) saturate(4) brightness(1.8)",
-            background: "rgba(255,255,255,0.06)",
+            inset: "-16px",
+            borderRadius: "34px",
+            backdropFilter: "blur(3px) saturate(3) brightness(1.6)",
+            WebkitBackdropFilter: "blur(3px) saturate(3) brightness(1.6)",
+            background: "rgba(255,255,255,0.03)",
+            /* Clip to only a 2px ring at the card boundary (16px inward) */
+            clipPath: `polygon(
+              0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%,
+              16px 16px, 16px calc(100% - 16px), calc(100% - 16px) calc(100% - 16px), calc(100% - 16px) 16px, 16px 16px
+            )`,
           }}
         />
         {/* Glare overlay */}
