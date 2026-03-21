@@ -5,6 +5,12 @@ import AmbientImage from "../components/ambient-image";
 
 export const dynamic = "force-dynamic";
 
+function readingTime(content: string): string {
+  const words = content.trim().split(/\s+/).length;
+  const minutes = Math.max(1, Math.ceil(words / 200));
+  return `${minutes} min read`;
+}
+
 const SECTIONS = [
   { key: "favorites", label: "My Favorites" },
   { key: "poetry", label: "Poetry" },
@@ -41,6 +47,9 @@ function PostTile({ post }: { post: Post }) {
         <p className="text-xs text-text-soft leading-relaxed font-serif italic line-clamp-2">
           {post.excerpt}
         </p>
+        <span className="block text-[0.6rem] text-text-soft/50 font-mono mt-2 text-right">
+          {readingTime(post.content)}
+        </span>
       </div>
     </GlassCard>
   );
@@ -77,8 +86,8 @@ function PostRow({ post }: { post: Post }) {
         <p className="text-sm text-text-soft leading-relaxed font-serif italic">
           {post.excerpt}
         </p>
-        {post.tags.length > 0 && (
-          <div className="flex gap-2 mt-2">
+        <div className="flex items-center justify-between mt-2">
+          <div className="flex gap-2">
             {post.tags.map((tag) => (
               <span
                 key={tag}
@@ -88,7 +97,10 @@ function PostRow({ post }: { post: Post }) {
               </span>
             ))}
           </div>
-        )}
+          <span className="text-[0.65rem] text-text-soft/50 font-mono">
+            {readingTime(post.content)}
+          </span>
+        </div>
       </div>
     </Link>
   );

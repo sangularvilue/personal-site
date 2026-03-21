@@ -1,64 +1,12 @@
 import Link from "next/link";
 import GlassCard from "../components/glass-card";
+import { seedCraftsIfEmpty } from "@/lib/crafts";
 
-const projects = [
-  {
-    name: "ForkLift",
-    tag: "ios · swift",
-    desc: "Workout tracker for iOS. Log sets, reps, and weight with minimal taps. Tracks personal records, visualizes progress over time, and builds routines you can reuse.",
-    href: "https://apps.apple.com/us/app/forklift-workout-tracker/id6760603494",
-  },
-  {
-    name: "Connections²",
-    tag: "next.js · react 19",
-    desc: "A new spin on the word puzzle format. In progress.",
-    href: "https://connections.grannis.xyz",
-  },
-  {
-    name: "Willymarket",
-    tag: "next.js · redis · vercel",
-    desc: "Family prediction exchange. Three market types, real-time order matching, position tracking, and margin calculations.",
-    href: "https://willymarket.grannis.xyz",
-  },
-  {
-    name: "Railroad Tiles",
-    tag: "python · fastapi · websockets",
-    desc: "Online multiplayer Railroad Tiles. Real-time tile placement, rotation, scoring, and an in-app rules reference.",
-    href: "https://rrt.grannis.xyz",
-  },
-  {
-    name: "Hyper Tic Tac Toe",
-    tag: "firebase · multiplayer",
-    desc: "Ultimate tic tac toe with online multiplayer. Create or join a game and play a friend over the internet.",
-    href: "https://tictactoe.grannis.xyz",
-  },
-  {
-    name: "Even Backgammon",
-    tag: "vite · even g2 smart glasses",
-    desc: "Backgammon for the Even G2 smart glasses. Full game logic with AI opponent, rendered on a waveguide display.",
-    href: "https://github.com/sangularvilue/Even-Backgammon",
-  },
-  {
-    name: "Waveguide World",
-    tag: "vite · even g2 smart glasses",
-    desc: "Platformer game built for the Even G2 waveguide display. Pixel art, physics, and level design on a heads-up screen.",
-    href: "https://github.com/sangularvilue/Waveguide-World",
-  },
-  {
-    name: "Even LotH",
-    tag: "express · even g2 smart glasses",
-    desc: "Liturgy of the Hours on Even G2 smart glasses. Scrapes daily prayers and displays them on the waveguide.",
-    href: "https://github.com/sangularvilue/Even-LotH",
-  },
-  {
-    name: "Battleship",
-    tag: "vite · even g2 smart glasses",
-    desc: "Classic Battleship for the Even G2 smart glasses.",
-    href: "https://github.com/sangularvilue/Battleship",
-  },
-];
+export const dynamic = "force-dynamic";
 
-export default function Crafts() {
+export default async function Crafts() {
+  const projects = await seedCraftsIfEmpty();
+
   return (
     <main className="min-h-screen px-[clamp(1.5rem,5vw,4rem)] py-12 max-w-[720px] mx-auto animate-rise">
       <header className="mb-12 pb-6 border-b border-glass-border">
@@ -77,7 +25,7 @@ export default function Crafts() {
       <div className="space-y-3">
         {projects.map((p) => (
           <GlassCard
-            key={p.name}
+            key={p.id}
             href={p.href}
             target="_blank"
             rel="noopener noreferrer"

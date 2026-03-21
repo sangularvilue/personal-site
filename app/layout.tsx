@@ -34,7 +34,17 @@ export default function RootLayout({
           href="/rss.xml"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <footer className="w-full py-6 text-center">
+          <a
+            href="mailto:contact@grannis.xyz"
+            className="text-xs text-text-soft/40 hover:text-text-soft transition-colors font-mono"
+          >
+            contact@grannis.xyz
+          </a>
+        </footer>
+      </body>
     </html>
   );
 }

@@ -2,12 +2,13 @@
 
 import { useRouter } from "next/navigation";
 
-export function DeleteButton({ id }: { id: string }) {
+export function DeleteButton({ id, type = "post" }: { id: string; type?: "post" | "craft" }) {
   const router = useRouter();
+  const endpoint = type === "craft" ? `/api/crafts/${id}` : `/api/posts/${id}`;
 
   async function handleDelete() {
-    if (!confirm("Delete this post?")) return;
-    await fetch(`/api/posts/${id}`, { method: "DELETE" });
+    if (!confirm(`Delete this ${type}?`)) return;
+    await fetch(endpoint, { method: "DELETE" });
     router.refresh();
   }
 
