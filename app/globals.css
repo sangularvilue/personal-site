@@ -418,6 +418,22 @@ html.light .prose hr {
 html.light ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); }
 html.light ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.2); }
 
+/* ── Post reader overlay ── */
+@keyframes reader-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes reader-content-in {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-reader-in {
+  animation: reader-in 200ms ease-out both;
+}
+.animate-reader-content-in {
+  animation: reader-content-in 400ms cubic-bezier(0.16, 1, 0.3, 1) 100ms both;
+}
+
 /* ── Hover preview on post tiles ── */
 .post-tile-preview {
   max-height: 0;
