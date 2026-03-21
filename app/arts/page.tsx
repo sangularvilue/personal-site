@@ -1,9 +1,7 @@
 import Link from "next/link";
 import { getAllPosts, getAllTags, Post } from "@/lib/posts";
-import { renderMarkdown } from "@/lib/markdown";
 import GlassCard from "../components/glass-card";
 import AmbientImage from "../components/ambient-image";
-import ExpandableTile from "../components/expandable-tile";
 
 export const dynamic = "force-dynamic";
 
@@ -11,14 +9,6 @@ function readingTime(content: string): string {
   const words = content.trim().split(/\s+/).length;
   const minutes = Math.max(1, Math.ceil(words / 200));
   return `${minutes} min read`;
-}
-
-function formatDate(ts: number, style: "short" | "long") {
-  return new Date(ts).toLocaleDateString("en-US",
-    style === "short"
-      ? { month: "short", day: "numeric", year: "numeric" }
-      : { year: "numeric", month: "long", day: "numeric" }
-  );
 }
 
 const SECTIONS = [
@@ -29,110 +19,95 @@ const SECTIONS = [
   { key: "stories", label: "Stories" },
 ] as const;
 
-function PostTile({ post, html }: { post: Post; html: string }) {
-  const rt = readingTime(post.content);
-  const date = formatDate(post.createdAt, "short");
-
+function PostTile({ post }: { post: Post }) {
   return (
-    <ExpandableTile
-      title={post.title}
-      slug={post.slug}
-      date={formatDate(post.createdAt, "long")}
-      tags={post.tags}
-      coverImage={post.coverImage}
-      html={html}
-      readTime={rt}
-    >
-      <GlassCard className="cursor-pointer group">
-        <div className="p-4">
-          {post.coverImage && (
-            <div className="mb-3 overflow-hidden rounded-xl">
-              <AmbientImage
-                src={post.coverImage}
-                className="w-full h-32 rounded-xl object-cover"
-                spread={20}
-                blur={32}
-                intensity={0.5}
-              />
-            </div>
-          )}
-          <span className="text-[0.65rem] uppercase tracking-widest text-sand-dim font-semibold">
-            {date}
-          </span>
-          <h3 className="font-serif text-base font-medium text-text mt-1 mb-1.5 group-hover:text-sand transition-colors leading-snug">
-            {post.title}
-          </h3>
-          <p className="text-xs text-text-soft leading-relaxed font-serif italic line-clamp-2">
-            {post.excerpt}
-          </p>
-          <div className="post-tile-preview mt-2 pt-2 border-t border-glass-border">
-            <p className="text-[0.7rem] text-text-soft/70 leading-relaxed font-serif line-clamp-3">
-              {post.content.replace(/[#*\[\]()>_~`]/g, "").slice(0, 200)}
-            </p>
-          </div>
-          <span className="block text-[0.6rem] text-text-soft/50 font-mono mt-2 text-right">
-            {rt}
-          </span>
-        </div>
-      </GlassCard>
-    </ExpandableTile>
-  );
-}
-
-function PostRow({ post, html }: { post: Post; html: string }) {
-  const rt = readingTime(post.content);
-  const date = formatDate(post.createdAt, "long");
-
-  return (
-    <ExpandableTile
-      title={post.title}
-      slug={post.slug}
-      date={date}
-      tags={post.tags}
-      coverImage={post.coverImage}
-      html={html}
-      readTime={rt}
-    >
-      <div className="flex gap-4 py-5 border-b border-border/40 hover:pl-2 transition-all duration-200 group cursor-pointer">
+    <GlassCard href={`/arts/${post.slug}`} className="cursor-pointer group">
+      <div className="p-4">
         {post.coverImage && (
-          <div className="flex-shrink-0 mt-1 overflow-hidden rounded-lg">
+          <div className="mb-3 overflow-hidden rounded-xl">
             <AmbientImage
               src={post.coverImage}
-              className="w-20 h-20 rounded-lg object-cover"
-              spread={12}
-              blur={24}
-              intensity={0.45}
+              className="w-full h-32 rounded-xl object-cover"
+              spread={20}
+              blur={32}
+              intensity={0.5}
             />
           </div>
         )}
-        <div className="flex-1 min-w-0">
-          <span className="text-[0.72rem] uppercase tracking-widest text-sand-dim font-semibold">
-            {date}
-          </span>
-          <h3 className="font-serif text-xl font-medium text-text mt-1 mb-2 group-hover:text-sand transition-colors">
-            {post.title}
-          </h3>
-          <p className="text-sm text-text-soft leading-relaxed font-serif italic">
-            {post.excerpt}
+        <span className="text-[0.65rem] uppercase tracking-widest text-sand-dim font-semibold">
+          {new Date(post.createdAt).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          })}
+        </span>
+        <h3 className="font-serif text-base font-medium text-text mt-1 mb-1.5 group-hover:text-sand transition-colors leading-snug">
+          {post.title}
+        </h3>
+        <p className="text-xs text-text-soft leading-relaxed font-serif italic line-clamp-2">
+          {post.excerpt}
+        </p>
+        <div className="post-tile-preview mt-2 pt-2 border-t border-glass-border">
+          <p className="text-[0.7rem] text-text-soft/70 leading-relaxed font-serif line-clamp-3">
+            {post.content.replace(/[#*\[\]()>_~`]/g, "").slice(0, 200)}
           </p>
-          <div className="flex items-center justify-between mt-2">
-            <div className="flex gap-2">
-              {post.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="text-[0.65rem] text-sand-dim tracking-wide"
-                >
-                  #{tag}
-                </span>
-              ))}
-            </div>
-            <span className="text-[0.65rem] text-text-soft/50 font-mono">
-              {rt}
-            </span>
+        </div>
+        <span className="block text-[0.6rem] text-text-soft/50 font-mono mt-2 text-right">
+          {readingTime(post.content)}
+        </span>
+      </div>
+    </GlassCard>
+  );
+}
+
+function PostRow({ post }: { post: Post }) {
+  return (
+    <Link
+      href={`/arts/${post.slug}`}
+      className="flex gap-4 py-5 border-b border-border/40 hover:pl-2 transition-all duration-200 group"
+    >
+      {post.coverImage && (
+        <div className="flex-shrink-0 mt-1 overflow-hidden rounded-lg">
+          <AmbientImage
+            src={post.coverImage}
+            className="w-20 h-20 rounded-lg object-cover"
+            spread={12}
+            blur={24}
+            intensity={0.45}
+          />
+        </div>
+      )}
+      <div className="flex-1 min-w-0">
+        <span className="text-[0.72rem] uppercase tracking-widest text-sand-dim font-semibold">
+          {new Date(post.createdAt).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </span>
+        <h3 className="font-serif text-xl font-medium text-text mt-1 mb-2 group-hover:text-sand transition-colors">
+          {post.title}
+        </h3>
+        <p className="text-sm text-text-soft leading-relaxed font-serif italic">
+          {post.excerpt}
+        </p>
+        <div className="flex items-center justify-between mt-2">
+          <div className="flex gap-2">
+            {post.tags.map((tag) => (
+              <span
+                key={tag}
+                className="text-[0.65rem] text-sand-dim tracking-wide"
+              >
+                #{tag}
+              </span>
+            ))}
           </div>
+          <span className="text-[0.65rem] text-text-soft/50 font-mono">
+            {readingTime(post.content)}
+          </span>
         </div>
       </div>
-    </ExpandableTile>
+    </Link>
   );
 }
 
@@ -146,14 +121,6 @@ export default async function Arts({
   const tags = await getAllTags();
   const activeTag = params.tag;
   const query = params.q?.toLowerCase();
-
-  // Pre-render markdown for all posts
-  const htmlMap = new Map<string, string>();
-  await Promise.all(
-    allPosts.map(async (post) => {
-      htmlMap.set(post.id, await renderMarkdown(post.content));
-    })
-  );
 
   const isFiltering = activeTag || query;
 
@@ -253,7 +220,7 @@ export default async function Arts({
           ) : (
             <div>
               {filteredPosts.map((post) => (
-                <PostRow key={post.id} post={post} html={htmlMap.get(post.id) || ""} />
+                <PostRow key={post.id} post={post} />
               ))}
             </div>
           )}
@@ -275,7 +242,7 @@ export default async function Arts({
                 </h3>
                 <div className="space-y-3">
                   {posts.map((post) => (
-                    <PostTile key={post.id} post={post} html={htmlMap.get(post.id) || ""} />
+                    <PostTile key={post.id} post={post} />
                   ))}
                 </div>
               </div>
