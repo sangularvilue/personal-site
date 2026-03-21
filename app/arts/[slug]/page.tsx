@@ -1,10 +1,39 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getPostBySlug } from "@/lib/posts";
 import { renderMarkdown } from "@/lib/markdown";
 import { notFound } from "next/navigation";
 import AmbientImage from "@/app/components/ambient-image";
+import ReadingProgress from "@/app/components/reading-progress";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
+  if (!post) return {};
+
+  const ogUrl = `/api/og?title=${encodeURIComponent(post.title)}&subtitle=${encodeURIComponent("grannis.xyz/arts")}`;
+  return {
+    title: `${post.title} — Will Grannis`,
+    description: post.excerpt,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      images: [{ url: ogUrl, width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
+      images: [ogUrl],
+    },
+  };
+}
 
 export default async function PostPage({
   params,
@@ -18,6 +47,8 @@ export default async function PostPage({
   const html = await renderMarkdown(post.content);
 
   return (
+    <>
+    <ReadingProgress />
     <main className="min-h-screen px-[clamp(1.5rem,5vw,4rem)] py-12 max-w-[720px] mx-auto animate-rise">
       <Link
         href="/arts"
@@ -72,5 +103,6 @@ export default async function PostPage({
         />
       </article>
     </main>
+    </>
   );
 }

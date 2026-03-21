@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isAuthenticated } from "@/lib/auth";
-import { getCraftById, updateCraft, deleteCraft } from "@/lib/crafts";
+import { getCraftById, updateCraft, deleteCraft, swapCraftOrder } from "@/lib/crafts";
 
 export async function GET(
   _request: NextRequest,
@@ -24,6 +24,20 @@ export async function PUT(
   const craft = await updateCraft(id, data);
   if (!craft) return NextResponse.json({ error: "Not found" }, { status: 404 });
   return NextResponse.json(craft);
+}
+
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  if (!(await isAuthenticated())) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const { id } = await params;
+  const { direction } = await request.json();
+  const result = await swapCraftOrder(id, direction);
+  if (!result) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  return NextResponse.json({ ok: true });
 }
 
 export async function DELETE(

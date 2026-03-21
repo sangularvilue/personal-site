@@ -1,4 +1,29 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="6" fill="#0f1419"/>
-  <text x="16" y="24" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="24" fill="#d4c5a9">&amp;</text>
+  <rect width="32" height="32" rx="6" fill="#080b10"/>
+  <text x="16" y="22" text-anchor="middle" font-family="'Fraunces', Georgia, serif" font-weight="500" font-size="16" fill="#d4c5a9">W</text>
+  <text x="16" y="22" text-anchor="middle" font-family="'Fraunces', Georgia, serif" font-weight="500" font-size="16" fill="#49a6b5" opacity="0">G</text>
+  <style>
+    text:last-of-type {
+      animation: favicon-swap 6s ease-in-out infinite;
+    }
+    text:first-of-type + text {
+      animation: favicon-swap 6s ease-in-out infinite;
+    }
+    text:nth-of-type(1) {
+      animation: favicon-fade-out 6s ease-in-out infinite;
+    }
+    text:nth-of-type(2) {
+      animation: favicon-fade-in 6s ease-in-out infinite;
+    }
+    @keyframes favicon-fade-out {
+      0%, 40% { opacity: 1; }
+      50%, 90% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    @keyframes favicon-fade-in {
+      0%, 40% { opacity: 0; }
+      50%, 90% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+  </style>
 </svg>

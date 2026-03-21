@@ -79,6 +79,25 @@ export async function deleteCraft(id: string): Promise<void> {
   await redis.zrem(CRAFTS_KEY, id);
 }
 
+export async function swapCraftOrder(
+  id: string,
+  direction: "up" | "down"
+): Promise<boolean> {
+  const crafts = await getAllCrafts();
+  const idx = crafts.findIndex((c) => c.id === id);
+  if (idx === -1) return false;
+
+  const swapIdx = direction === "up" ? idx - 1 : idx + 1;
+  if (swapIdx < 0 || swapIdx >= crafts.length) return false;
+
+  const a = crafts[idx];
+  const b = crafts[swapIdx];
+
+  await updateCraft(a.id, { order: b.order });
+  await updateCraft(b.id, { order: a.order });
+  return true;
+}
+
 // Seeds default crafts into Redis if none exist
 export async function seedCraftsIfEmpty(): Promise<Craft[]> {
   const existing = await getAllCrafts();

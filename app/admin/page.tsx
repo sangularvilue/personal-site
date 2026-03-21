@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getAllPosts } from "@/lib/posts";
 import { getAllCrafts } from "@/lib/crafts";
 import { DeleteButton } from "./delete-button";
+import { ReorderButtons } from "./reorder-buttons";
 
 export const dynamic = "force-dynamic";
 
@@ -108,21 +109,28 @@ export default async function AdminDashboard() {
           </p>
         ) : (
           <div className="space-y-0">
-            {crafts.map((craft) => (
+            {crafts.map((craft, i) => (
               <div
                 key={craft.id}
                 className="flex items-center justify-between py-4 border-b border-glass-border group"
               >
-                <div className="flex-1 min-w-0">
-                  <Link
-                    href={`/admin/crafts/${craft.id}`}
-                    className="font-mono text-text group-hover:text-teal transition-colors truncate block"
-                  >
-                    {craft.name}
-                  </Link>
-                  <span className="text-[0.6rem] text-text-soft/60 font-mono mt-0.5 block">
-                    {craft.tag}
-                  </span>
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <ReorderButtons
+                    id={craft.id}
+                    isFirst={i === 0}
+                    isLast={i === crafts.length - 1}
+                  />
+                  <div className="min-w-0">
+                    <Link
+                      href={`/admin/crafts/${craft.id}`}
+                      className="font-mono text-text group-hover:text-teal transition-colors truncate block"
+                    >
+                      {craft.name}
+                    </Link>
+                    <span className="text-[0.6rem] text-text-soft/60 font-mono mt-0.5 block">
+                      {craft.tag}
+                    </span>
+                  </div>
                 </div>
                 <div className="flex items-center gap-2 ml-4">
                   <Link

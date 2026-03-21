@@ -1,11 +1,24 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import ThemeToggle from "./components/theme-toggle";
 
 export const metadata: Metadata = {
   title: "Will Grannis",
   description: "Arts & Crafts",
   icons: {
     icon: "/favicon.svg",
+  },
+  openGraph: {
+    title: "Will Grannis",
+    description: "Arts & Crafts",
+    siteName: "grannis.xyz",
+    images: [{ url: "/api/og", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Will Grannis",
+    description: "Arts & Crafts",
+    images: ["/api/og"],
   },
 };
 
@@ -35,7 +48,13 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light')}catch(e){}})()`,
+          }}
+        />
         {children}
+        <ThemeToggle />
         <footer className="w-full py-6 text-center">
           <a
             href="mailto:contact@grannis.xyz"

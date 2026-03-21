@@ -47,6 +47,11 @@ function PostTile({ post }: { post: Post }) {
         <p className="text-xs text-text-soft leading-relaxed font-serif italic line-clamp-2">
           {post.excerpt}
         </p>
+        <div className="post-tile-preview mt-2 pt-2 border-t border-glass-border">
+          <p className="text-[0.7rem] text-text-soft/70 leading-relaxed font-serif line-clamp-3">
+            {post.content.replace(/[#*\[\]()>_~`]/g, "").slice(0, 200)}
+          </p>
+        </div>
         <span className="block text-[0.6rem] text-text-soft/50 font-mono mt-2 text-right">
           {readingTime(post.content)}
         </span>
