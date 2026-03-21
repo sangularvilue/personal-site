@@ -1,0 +1,92 @@
+[
+  {
+    "id": "c16db083-75f1-465b-8f6a-cdc757001cbf",
+    "name": "ForkLift",
+    "tag": "ios · swift",
+    "desc": "Workout tracker for iOS. Log sets, reps, and weight with minimal taps. Tracks personal records, visualizes progress over time, and builds routines you can reuse.",
+    "href": "https://apps.apple.com/us/app/forklift-workout-tracker/id6760603494",
+    "order": 0,
+    "createdAt": 1774114343692,
+    "updatedAt": 1774114343692
+  },
+  {
+    "id": "79c6f968-ed8f-4a50-bf1f-51cbebc3924c",
+    "name": "Connections²",
+    "tag": "next.js · react 19",
+    "desc": "A new spin on the word puzzle format.",
+    "href": "https://connections.grannis.xyz",
+    "order": 1,
+    "createdAt": 1774114343708,
+    "updatedAt": 1774114343708
+  },
+  {
+    "id": "5fc64da0-80d5-43e7-a994-a7ce90a1ee5f",
+    "name": "Willymarket",
+    "tag": "next.js · redis · vercel",
+    "desc": "Family prediction exchange. Three market types, real-time order matching, position tracking, and margin calculations.",
+    "href": "https://willymarket.grannis.xyz",
+    "order": 2,
+    "createdAt": 1774114343750,
+    "updatedAt": 1774114343750
+  },
+  {
+    "id": "e8c2035f-f1eb-4215-bc68-6fbf571f96f3",
+    "name": "Railroad Tiles",
+    "tag": "python · fastapi · websockets",
+    "desc": "Online multiplayer Railroad Tiles. Real-time tile placement, rotation, scoring, and an in-app rules reference.",
+    "href": "https://rrt.grannis.xyz",
+    "order": 3,
+    "createdAt": 1774114343791,
+    "updatedAt": 1774114343791
+  },
+  {
+    "id": "f5c56ba4-e25f-4c54-af13-3979f6d5a8ed",
+    "name": "Hyper Tic Tac Toe",
+    "tag": "firebase · multiplayer",
+    "desc": "Ultimate tic tac toe with online multiplayer. Create or join a game and play a friend over the internet.",
+    "href": "https://tictactoe.grannis.xyz",
+    "order": 4,
+    "createdAt": 1774114343828,
+    "updatedAt": 1774114343828
+  },
+  {
+    "id": "7e18f032-2988-4dbd-b112-69c13d52ebef",
+    "name": "Even Backgammon",
+    "tag": "vite · even g2 smart glasses",
+    "desc": "Backgammon for the Even G2 smart glasses. Full game logic with AI opponent, rendered on a waveguide display.",
+    "href": "https://github.com/sangularvilue/Even-Backgammon",
+    "order": 5,
+    "createdAt": 1774114343839,
+    "updatedAt": 1774114343839
+  },
+  {
+    "id": "a23ac030-b12c-4151-8dee-31665dce989c",
+    "name": "Waveguide World",
+    "tag": "vite · even g2 smart glasses",
+    "desc": "Platformer game built for the Even G2 waveguide display. Pixel art, physics, and level design on a heads-up screen.",
+    "href": "https://github.com/sangularvilue/Waveguide-World",
+    "order": 6,
+    "createdAt": 1774114343875,
+    "updatedAt": 1774114343875
+  },
+  {
+    "id": "e57f5691-6eeb-4440-a783-a2b53d7e3fdb",
+    "name": "Even LotH",
+    "tag": "express · even g2 smart glasses",
+    "desc": "Liturgy of the Hours on Even G2 smart glasses. Scrapes daily prayers and displays them on the waveguide.",
+    "href": "https://github.com/sangularvilue/Even-LotH",
+    "order": 7,
+    "createdAt": 1774114343885,
+    "updatedAt": 1774114343885
+  },
+  {
+    "id": "d6c92412-3bec-4818-89aa-7085d148dab3",
+    "name": "Battleship",
+    "tag": "vite · even g2 smart glasses",
+    "desc": "Classic Battleship for the Even G2 smart glasses.",
+    "href": "https://github.com/sangularvilue/Battleship",
+    "order": 8,
+    "createdAt": 1774114343923,
+    "updatedAt": 1774114343923
+  }
+]

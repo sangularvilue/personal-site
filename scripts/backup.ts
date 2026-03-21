@@ -10,7 +10,10 @@
 
 import { Redis } from "@upstash/redis";
 import { writeFileSync, mkdirSync } from "fs";
-import { join } from "path";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL!,
@@ -22,7 +25,7 @@ const CRAFTS_KEY = "crafts:list";
 const postKey = (id: string) => `blog:post:${id}`;
 const craftKey = (id: string) => `crafts:item:${id}`;
 
-const BACKUP_DIR = join(import.meta.dirname, "..", "content", "backup");
+const BACKUP_DIR = join(__dirname, "..", "content", "backup");
 
 async function main() {
   mkdirSync(BACKUP_DIR, { recursive: true });
