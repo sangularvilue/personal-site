@@ -15,6 +15,19 @@ export async function middleware(request: NextRequest) {
     return NextResponse.rewrite(new URL("https://hypertictactoe-60d85.web.app" + pathname));
   }
 
+  // fedcourts.grannis.xyz → rewrite to /fedcourts routes
+  if (hostname.startsWith("fedcourts.")) {
+    if (pathname.startsWith("/api/")) {
+      return NextResponse.next();
+    }
+    if (!pathname.startsWith("/fedcourts")) {
+      const url = request.nextUrl.clone();
+      url.pathname = pathname === "/" ? "/fedcourts" : `/fedcourts${pathname}`;
+      return NextResponse.rewrite(url);
+    }
+    return NextResponse.next();
+  }
+
   // admin.grannis.xyz → rewrite to /admin routes (with auth)
   if (hostname.startsWith("admin.")) {
     // Map subdomain paths to /admin/* paths
