@@ -100,7 +100,7 @@ export async function upsertQuestion(q: FCQuestion): Promise<void> {
 
 export async function getQuestion(id: string): Promise<FCQuestion | null> {
   const r = getRedis();
-  const data = await r.hgetall<Record<string, string>>(K.question(id));
+  const data = await r.hgetall<Record<string, unknown>>(K.question(id));
   if (!data || !data.id) return null;
   return parseQuestionRow(data);
 }
@@ -116,31 +116,38 @@ export async function getQuestionsByIds(ids: string[]): Promise<FCQuestion[]> {
   const r = getRedis();
   const pipeline = r.pipeline();
   for (const id of ids) pipeline.hgetall(K.question(id));
-  const results = (await pipeline.exec()) as Array<Record<string, string> | null>;
+  const results = (await pipeline.exec()) as Array<Record<string, unknown> | null>;
   return results
-    .filter((d): d is Record<string, string> => d !== null && !!d.id)
+    .filter((d): d is Record<string, unknown> => d !== null && !!d.id)
     .map(parseQuestionRow);
 }
 
-function parseQuestionRow(d: Record<string, string>): FCQuestion {
+function parseQuestionRow(d: Record<string, unknown>): FCQuestion {
+  const s = (k: string) => (typeof d[k] === "string" ? (d[k] as string) : "");
+  const n = (k: string, def = 0) => {
+    const v = d[k];
+    if (typeof v === "number") return v;
+    if (typeof v === "string") return parseInt(v, 10) || def;
+    return def;
+  };
   return {
-    id: d.id,
-    category: d.category as FCCategory,
-    difficulty: parseInt(d.difficulty || "3", 10),
-    rating: parseInt(d.rating || "1000", 10),
-    num_answered: parseInt(d.num_answered || "0", 10),
-    stem: d.stem,
-    opt_a: d.opt_a,
-    opt_b: d.opt_b,
-    opt_c: d.opt_c,
-    opt_d: d.opt_d,
-    correct: d.correct as "a" | "b" | "c" | "d",
-    case_cited: d.case_cited || undefined,
-    rule_id: d.rule_id || undefined,
-    prong: d.prong || undefined,
-    explanation: d.explanation,
-    tags: d.tags ? safeJSON<string[]>(d.tags, []) : [],
-    daily_eligible: d.daily_eligible === "1" || d.daily_eligible === "true",
+    id: s("id"),
+    category: s("category") as FCCategory,
+    difficulty: n("difficulty", 3),
+    rating: n("rating", 1000),
+    num_answered: n("num_answered", 0),
+    stem: s("stem"),
+    opt_a: s("opt_a"),
+    opt_b: s("opt_b"),
+    opt_c: s("opt_c"),
+    opt_d: s("opt_d"),
+    correct: s("correct") as "a" | "b" | "c" | "d",
+    case_cited: s("case_cited") || undefined,
+    rule_id: s("rule_id") || undefined,
+    prong: s("prong") || undefined,
+    explanation: s("explanation"),
+    tags: asStringArray(d.tags),
+    daily_eligible: d.daily_eligible === "1" || d.daily_eligible === "true" || d.daily_eligible === true,
   };
 }
 
@@ -150,6 +157,17 @@ function safeJSON<T>(s: string, fallback: T): T {
   } catch {
     return fallback;
   }
+}
+
+// Upstash's HGETALL auto-deserializes JSON values. A field stored via
+// JSON.stringify(arr) may come back as either a string or already as the array.
+function asStringArray(v: unknown): string[] {
+  if (Array.isArray(v)) return v.filter((x): x is string => typeof x === "string");
+  if (typeof v === "string") {
+    const parsed = safeJSON<unknown>(v, null);
+    if (Array.isArray(parsed)) return parsed.filter((x): x is string => typeof x === "string");
+  }
+  return [];
 }
 
 // ====== CASES ======
@@ -198,16 +216,17 @@ export async function upsertRule(rule: FCRule): Promise<void> {
 
 export async function getRule(id: string): Promise<FCRule | null> {
   const r = getRedis();
-  const d = await r.hgetall<Record<string, string>>(K.rule(id));
+  const d = await r.hgetall<Record<string, unknown>>(K.rule(id));
   if (!d || !d.id) return null;
+  const s = (k: string) => (typeof d[k] === "string" ? (d[k] as string) : "");
   return {
-    id: d.id,
-    name: d.name,
-    category: d.category as FCCategory,
-    elements: safeJSON<string[]>(d.elements || "[]", []),
-    source_case: d.source_case || undefined,
-    when_applied: d.when_applied || undefined,
-    common_distractors: safeJSON<string[]>(d.common_distractors || "[]", []),
+    id: s("id"),
+    name: s("name"),
+    category: s("category") as FCCategory,
+    elements: asStringArray(d.elements),
+    source_case: s("source_case") || undefined,
+    when_applied: s("when_applied") || undefined,
+    common_distractors: asStringArray(d.common_distractors),
   };
 }
 

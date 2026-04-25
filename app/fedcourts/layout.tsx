@@ -4,8 +4,8 @@ import { currentUser } from "@/lib/fc-auth";
 import "./fedcourts.css";
 
 export const metadata = {
-  title: "Fed Courts Drill",
-  description: "Drill federal courts skills, compete on the leaderboard.",
+  title: "Fed Courts — A drilling-ground for the doctrines",
+  description: "Drill federal courts skills. Adaptive ratings, daily hypotheticals, leaderboard.",
 };
 
 export default async function FCLayout({ children }: { children: ReactNode }) {
@@ -14,7 +14,7 @@ export default async function FCLayout({ children }: { children: ReactNode }) {
     <div className="fc-root">
       <nav className="fc-nav">
         <Link href="/" className="fc-brand">
-          fedcourts<span className="fc-brand-dot">.</span>
+          Fed<span className="fc-brand-dot">·</span>Courts
         </Link>
         <div className="fc-nav-right">
           <Link href="/leaderboard">Leaderboard</Link>
