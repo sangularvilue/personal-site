@@ -11,6 +11,7 @@ type Q = {
   case_cited?: string;
   explanation: string;
   correct: "a" | "b" | "c" | "d";
+  shuffle_key?: string;
 };
 
 type Props = {
@@ -57,7 +58,7 @@ export default function DailyHypoClient({ date, question, alreadyAnswered }: Pro
     const res = await fetch("/api/fc/daily/submit", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ date, game: "daily-hypo", question_id: question.id, selected }),
+      body: JSON.stringify({ date, game: "daily-hypo", question_id: question.id, selected, shuffle_key: question.shuffle_key }),
     });
     const data = await res.json();
     if (data.ok) setSubmitted({ selected, correct: data.correct });

@@ -13,6 +13,7 @@ type Q = {
   opt_c: string;
   opt_d: string;
   case_cited?: string;
+  shuffle_key?: string;
 };
 
 type AnswerResult = {
@@ -110,6 +111,7 @@ export default function DrillEngine({
         game_mode: gameMode,
         session_id: sessionId.current,
         selected: choice,
+        shuffle_key: q.shuffle_key,
         ms_to_answer: ms,
       }),
     });

@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
   const user = await currentUser();
   if (!user) return NextResponse.json({ ok: false, error: "Not signed in" }, { status: 401 });
 
-  const { date, game, question_id, selected } = await req.json();
+  const { date, game, question_id, selected, shuffle_key } = await req.json();
   if (!date || !game || !question_id || !selected) {
     return NextResponse.json({ ok: false, error: "Bad request" }, { status: 400 });
   }
@@ -32,7 +32,13 @@ export async function POST(req: NextRequest) {
 
   const q = await getQuestion(question_id);
   if (!q) return NextResponse.json({ ok: false, error: "Bad question" }, { status: 404 });
-  const correct = selected === q.correct;
+
+  // Map display-letter back to canonical via shuffle_key.
+  let canonicalSelected: string = selected;
+  if (typeof shuffle_key === "string" && /^[abcd]{4}$/.test(shuffle_key)) {
+    canonicalSelected = shuffle_key["abcd".indexOf(selected)];
+  }
+  const correct = canonicalSelected === q.correct;
 
   await Promise.all([
     setDailySubmission(user.id, game, date, { selected, correct }),
