@@ -1,0 +1,257 @@
+id,category,score,reasons
+imm-049,imm,-31,short distractor (21) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | overused pool distractor (18×) | overused pool distractor (20×) | thin stem | very thin stem | thin explanation
+imm-006,imm,-15,short distractor (18) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | repeated pool distractor (11×) | repeated pool distractor (13×) | thin stem | very thin stem | thin explanation | very thin explanation
+scsr-013,scsr,-8,short distractor (18) | short distractor (18) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | repeated pool distractor (13×) | thin stem | very thin stem | thin explanation
+imm-058,imm,-8,short distractor (20) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | repeated pool distractor (13×) | overused pool distractor (18×) | thin stem | thin explanation
+xc-001,roa,-8,short distractor (15) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | overused pool distractor (20×) | repeated pool distractor (12×) | thin explanation | very thin explanation
+roa-032,roa,-5,short distractor (15) | length-tell: correct > 2.6x shortest | repeated pool distractor (14×) | overused pool distractor (20×) | thin stem | very thin stem | thin explanation | very thin explanation
+imm-035,imm,-5,short distractor (20) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | repeated pool distractor (12×) | repeated pool distractor (13×) | thin stem | very thin stem | thin explanation
+imm-046,imm,-3,overused pool distractor (20×) | overused pool distractor (18×) | overused pool distractor (18×) | thin stem | thin explanation | very thin explanation
+roa-001,roa,0,short distractor (16) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | repeated pool distractor (13×) | overused pool distractor (20×) | thin explanation
+imm-007,imm,2,short distractor (15) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | repeated pool distractor (17×) | overused pool distractor (18×) | thin stem
+imm-025,imm,6,repeated pool distractor (12×) | overused pool distractor (18×) | overused pool distractor (20×) | thin stem | thin explanation | very thin explanation
+erie-011,erie,7,short distractor (15) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | repeated pool distractor (12×) | repeated pool distractor (16×) | thin stem | thin explanation
+hab-010,hab,7,short distractor (18) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | repeated pool distractor (10×) | repeated pool distractor (16×) | thin stem | thin explanation
+imm-052,imm,10,overused pool distractor (20×) | repeated pool distractor (13×) | overused pool distractor (18×) | thin stem | thin explanation | very thin explanation
+just-045,just,11,short distractor (19) | short distractor (18) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | thin stem | thin explanation
+imm-002,imm,12,short distractor (17) | length-tell: correct > 2.6x shortest | overused pool distractor (20×) | thin stem | thin explanation | very thin explanation
+imm-044,imm,12,overused pool distractor (18×) | repeated pool distractor (17×) | overused pool distractor (18×) | thin stem | thin explanation | very thin explanation
+erie-043,erie,13,short distractor (18) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | repeated pool distractor (10×) | repeated pool distractor (16×) | thin stem
+erie-031,erie,14,short distractor (14) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | repeated pool distractor (16×) | overused pool distractor (18×)
+scsr-024,scsr,15,short distractor (20) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | thin stem | very thin stem | thin explanation
+imm-024,imm,16,overused pool distractor (18×) | repeated pool distractor (17×) | thin stem | very thin stem | thin explanation | very thin explanation
+cong-006,cong,17,short distractor (19) | short distractor (19) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | thin stem
+cong-038,cong,17,short distractor (21) | short distractor (21) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | thin stem
+fqj-007,fqj,17,short distractor (19) | short distractor (17) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | thin stem
+erie-034,erie,17,short distractor (21) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | repeated pool distractor (14×) | thin stem | thin explanation
+imm-061,imm,18,short distractor (15) | length-tell: correct > 2.6x shortest | repeated pool distractor (13×) | repeated pool distractor (16×) | thin stem | thin explanation | very thin explanation
+scsr-016,scsr,19,short distractor (19) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | thin stem | thin explanation
+erie-019,erie,19,length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | repeated pool distractor (10×) | repeated pool distractor (11×) | thin stem
+imm-017,imm,19,short distractor (15) | length-tell: correct > 2.6x shortest | repeated pool distractor (17×) | overused pool distractor (20×) | thin stem | thin explanation
+imm-039,imm,19,short distractor (16) | overused pool distractor (18×) | overused pool distractor (20×) | thin stem | thin explanation
+imm-069,imm,19,repeated pool distractor (17×) | overused pool distractor (18×) | repeated pool distractor (10×) | thin stem | thin explanation | very thin explanation
+imm-034,imm,20,short distractor (18) | overused pool distractor (20×) | repeated pool distractor (17×) | thin stem | thin explanation | very thin explanation
+imm-036,imm,20,short distractor (18) | overused pool distractor (18×) | repeated pool distractor (13×) | thin stem | thin explanation | very thin explanation
+cong-015,cong,21,short distractor (20) | short distractor (21) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | thin explanation
+imm-009,imm,21,overused pool distractor (20×) | repeated pool distractor (17×) | repeated pool distractor (13×) | thin stem | thin explanation | very thin explanation
+fqj-032,fqj,22,length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | thin stem | thin explanation | very thin explanation
+erie-004,erie,22,short distractor (15) | short distractor (16) | length-tell: correct > 2.6x shortest | overused pool distractor (18×) | thin stem
+roa-066,roa,22,short distractor (16) | length-tell: correct > 2.6x shortest | repeated pool distractor (12×) | thin stem | very thin stem | thin explanation | very thin explanation
+imm-030,imm,22,short distractor (18) | length-tell: correct > 2.6x shortest | repeated pool distractor (14×) | repeated pool distractor (13×) | thin stem | very thin stem | thin explanation
+imm-037,imm,22,overused pool distractor (18×) | overused pool distractor (20×) | repeated pool distractor (10×) | thin stem | thin explanation
+imm-056,imm,22,repeated pool distractor (14×) | overused pool distractor (20×) | overused pool distractor (18×) | thin stem | thin explanation
+cong-033,cong,23,short distractor (15) | short distractor (20) | thin stem | very thin stem | thin explanation | very thin explanation
+fqj-026,fqj,23,short distractor (16) | short distractor (21) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | thin explanation
+roa-005,roa,23,repeated pool distractor (13×) | overused pool distractor (20×) | repeated pool distractor (13×) | thin stem | thin explanation | very thin explanation
+roa-014,roa,23,repeated pool distractor (14×) | overused pool distractor (20×) | repeated pool distractor (12×) | thin stem | thin explanation | very thin explanation
+roa-050,roa,23,repeated pool distractor (15×) | repeated pool distractor (13×) | overused pool distractor (20×) | thin stem | thin explanation | very thin explanation
+erie-014,erie,25,short distractor (14) | short distractor (19) | length-tell: correct > 2.6x shortest | repeated pool distractor (11×) | thin stem | very thin stem
+roa-022,roa,25,repeated pool distractor (14×) | repeated pool distractor (11×) | overused pool distractor (20×) | thin stem | thin explanation | very thin explanation
+roa-024,roa,25,overused pool distractor (20×) | repeated pool distractor (14×) | repeated pool distractor (14×) | thin stem | thin explanation | very thin explanation
+roa-042,roa,25,repeated pool distractor (14×) | repeated pool distractor (11×) | overused pool distractor (20×) | thin stem | thin explanation | very thin explanation
+roa-043,roa,25,repeated pool distractor (15×) | repeated pool distractor (12×) | overused pool distractor (20×) | thin stem | thin explanation | very thin explanation
+roa-044,roa,25,overused pool distractor (20×) | repeated pool distractor (14×) | repeated pool distractor (13×) | thin stem | thin explanation | very thin explanation
+roa-046,roa,25,repeated pool distractor (13×) | overused pool distractor (20×) | repeated pool distractor (14×) | thin stem | thin explanation | very thin explanation
+imm-013,imm,25,repeated pool distractor (14×) | overused pool distractor (18×) | repeated pool distractor (16×) | thin stem | thin explanation | very thin explanation
+imm-014,imm,25,repeated pool distractor (12×) | overused pool distractor (18×) | repeated pool distractor (10×) | thin stem | very thin stem | thin explanation
+imm-050,imm,25,repeated pool distractor (10×) | overused pool distractor (18×) | repeated pool distractor (12×) | thin stem | very thin stem | thin explanation
+imm-051,imm,25,repeated pool distractor (13×) | repeated pool distractor (17×) | overused pool distractor (18×) | thin stem | very thin stem | thin explanation
+imm-053,imm,25,overused pool distractor (18×) | repeated pool distractor (11×) | repeated pool distractor (13×) | thin stem | very thin stem | thin explanation
+scsr-008,scsr,26,short distractor (17) | short distractor (16) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | thin explanation
+imm-027,imm,26,repeated pool distractor (10×) | repeated pool distractor (11×) | repeated pool distractor (12×) | thin stem | very thin stem | thin explanation | very thin explanation
+imm-059,imm,26,repeated pool distractor (13×) | repeated pool distractor (12×) | repeated pool distractor (14×) | thin stem | very thin stem | thin explanation | very thin explanation
+hab-024,hab,26,repeated pool distractor (10×) | repeated pool distractor (16×) | repeated pool distractor (10×) | thin stem | very thin stem | thin explanation | very thin explanation
+just-030,just,27,short distractor (16) | short distractor (21) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest
+just-069,just,27,short distractor (14) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | thin explanation
+fqj-033,fqj,27,short distractor (18) | short distractor (15) | length-tell: correct > 2.6x shortest | thin stem | very thin stem | thin explanation
+erie-001,erie,27,short distractor (15) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | thin stem
+erie-047,erie,27,short distractor (16) | short distractor (17) | length-tell: correct > 2.6x shortest | repeated pool distractor (11×) | thin stem | thin explanation
+roa-031,roa,28,repeated pool distractor (11×) | repeated pool distractor (11×) | repeated pool distractor (14×) | thin stem | very thin stem | thin explanation | very thin explanation
+fqj-003,fqj,29,short distractor (20) | short distractor (21) | thin stem | very thin stem | thin explanation | very thin explanation
+fqj-019,fqj,29,short distractor (18) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | repeated pool distractor (10×) | thin explanation
+fqj-040,fqj,29,short distractor (17) | short distractor (14) | short distractor (18) | thin stem | very thin stem | thin explanation
+erie-017,erie,29,short distractor (18) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | repeated pool distractor (11×) | thin explanation
+roa-019,roa,29,short distractor (14) | length-tell: correct > 2.6x shortest | repeated pool distractor (11×) | overused pool distractor (20×) | thin explanation
+roa-028,roa,29,short distractor (16) | length-tell: correct > 2.6x shortest | overused pool distractor (20×) | repeated pool distractor (11×) | thin explanation
+erie-005,erie,30,short distractor (15) | short distractor (19) | length-tell: correct > 2.6x shortest | thin explanation | very thin explanation
+roa-015,roa,30,short distractor (14) | length-tell: correct > 2.6x shortest | repeated pool distractor (13×) | repeated pool distractor (13×) | thin stem | thin explanation
+scsr-003,scsr,31,short distractor (18) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | thin explanation
+scsr-006,scsr,31,short distractor (21) | short distractor (16) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest
+roa-007,roa,31,short distractor (19) | length-tell: correct > 2.6x shortest | repeated pool distractor (11×) | overused pool distractor (20×) | thin explanation
+imm-005,imm,31,overused pool distractor (18×) | repeated pool distractor (11×) | repeated pool distractor (12×) | thin stem | thin explanation
+hab-033,hab,31,short distractor (21) | repeated pool distractor (14×) | repeated pool distractor (13×) | thin stem | very thin stem | thin explanation
+xc-015,scsr,31,short distractor (17) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | repeated pool distractor (13×) | thin explanation
+cong-010,cong,32,short distractor (19) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | thin explanation
+scsr-015,scsr,32,short distractor (18) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | thin stem
+roa-011,roa,32,short distractor (21) | overused pool distractor (20×) | repeated pool distractor (11×) | thin stem | thin explanation
+roa-026,roa,32,short distractor (15) | length-tell: correct > 2.6x shortest | repeated pool distractor (14×) | repeated pool distractor (13×) | thin stem | thin explanation
+imm-001,imm,32,short distractor (18) | overused pool distractor (18×) | repeated pool distractor (13×) | thin explanation | very thin explanation
+imm-031,imm,32,short distractor (16) | length-tell: correct > 2.6x shortest | repeated pool distractor (17×) | repeated pool distractor (11×) | thin stem | thin explanation
+imm-080,imm,32,short distractor (14) | length-tell: correct > 2.6x shortest | repeated pool distractor (11×) | repeated pool distractor (10×) | thin explanation | very thin explanation
+hab-017,hab,32,short distractor (16) | length-tell: correct > 2.6x shortest | repeated pool distractor (16×) | repeated pool distractor (14×) | thin stem | thin explanation
+roa-018,roa,33,short distractor (14) | length-tell: correct > 2.6x shortest | repeated pool distractor (11×) | overused pool distractor (20×)
+roa-052,roa,33,overused pool distractor (20×) | repeated pool distractor (13×) | repeated pool distractor (13×) | thin stem | very thin stem
+imm-003,imm,33,short distractor (21) | repeated pool distractor (10×) | repeated pool distractor (13×) | thin stem | thin explanation | very thin explanation
+imm-038,imm,33,short distractor (19) | repeated pool distractor (17×) | repeated pool distractor (13×) | thin stem | thin explanation | very thin explanation
+imm-047,imm,33,short distractor (18) | repeated pool distractor (16×) | repeated pool distractor (13×) | thin stem | thin explanation | very thin explanation
+just-055,just,34,short distractor (21) | short distractor (17) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest
+cong-024,cong,34,short distractor (21) | short distractor (19) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest
+fqj-013,fqj,34,short distractor (16) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | thin stem
+fqj-027,fqj,34,short distractor (20) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | thin explanation
+scsr-027,scsr,34,short distractor (16) | short distractor (18) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest
+roa-055,roa,34,short distractor (15) | overused pool distractor (20×) | repeated pool distractor (15×) | thin explanation | very thin explanation
+imm-043,imm,34,short distractor (21) | overused pool distractor (20×) | repeated pool distractor (11×) | thin stem | thin explanation
+imm-073,imm,34,short distractor (15) | repeated pool distractor (13×) | overused pool distractor (18×) | thin explanation | very thin explanation
+imm-078,imm,34,overused pool distractor (20×) | overused pool distractor (18×) | repeated pool distractor (16×) | thin explanation
+hab-030,hab,34,repeated pool distractor (11×) | repeated pool distractor (13×) | repeated pool distractor (12×) | thin stem | thin explanation | very thin explanation
+hab-036,hab,34,repeated pool distractor (16×) | repeated pool distractor (10×) | thin stem | very thin stem | thin explanation | very thin explanation
+cong-007,cong,35,short distractor (18) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest
+erie-016,erie,35,repeated pool distractor (12×) | repeated pool distractor (16×) | overused pool distractor (18×) | thin stem | thin explanation
+erie-022,erie,35,repeated pool distractor (16×) | repeated pool distractor (11×) | overused pool distractor (18×) | thin explanation | very thin explanation
+roa-006,roa,35,short distractor (19) | repeated pool distractor (13×) | repeated pool distractor (13×) | thin stem | thin explanation | very thin explanation
+roa-013,roa,35,repeated pool distractor (14×) | repeated pool distractor (14×) | overused pool distractor (20×) | thin stem | thin explanation
+roa-029,roa,35,overused pool distractor (20×) | repeated pool distractor (14×) | repeated pool distractor (13×) | thin stem | thin explanation
+roa-045,roa,35,repeated pool distractor (14×) | repeated pool distractor (14×) | overused pool distractor (20×) | thin stem | very thin stem
+roa-047,roa,35,overused pool distractor (20×) | repeated pool distractor (13×) | repeated pool distractor (14×) | thin stem | thin explanation
+imm-028,imm,35,overused pool distractor (18×) | repeated pool distractor (12×) | repeated pool distractor (11×) | thin stem | thin explanation
+imm-057,imm,35,overused pool distractor (18×) | repeated pool distractor (13×) | repeated pool distractor (12×) | thin stem | thin explanation
+imm-070,imm,35,overused pool distractor (20×) | repeated pool distractor (13×) | repeated pool distractor (14×) | thin explanation | very thin explanation
+roa-037,roa,36,repeated pool distractor (13×) | overused pool distractor (20×) | overused pool distractor (20×) | thin explanation
+roa-065,roa,36,repeated pool distractor (13×) | repeated pool distractor (11×) | repeated pool distractor (13×) | thin stem | thin explanation | very thin explanation
+imm-063,imm,36,repeated pool distractor (14×) | overused pool distractor (18×) | overused pool distractor (18×) | thin explanation
+fqj-030,fqj,37,length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | thin stem
+roa-004,roa,37,overused pool distractor (20×) | repeated pool distractor (13×) | repeated pool distractor (14×) | thin explanation | very thin explanation
+roa-023,roa,37,repeated pool distractor (13×) | overused pool distractor (20×) | repeated pool distractor (14×) | thin stem | thin explanation
+roa-041,roa,37,repeated pool distractor (13×) | repeated pool distractor (11×) | overused pool distractor (20×) | thin stem | thin explanation
+roa-048,roa,37,repeated pool distractor (13×) | repeated pool distractor (15×) | overused pool distractor (20×) | thin stem | thin explanation
+roa-063,roa,37,short distractor (16) | length-tell: correct > 2.6x shortest | repeated pool distractor (14×) | overused pool distractor (20×)
+imm-015,imm,37,repeated pool distractor (11×) | overused pool distractor (18×) | repeated pool distractor (12×) | thin stem | thin explanation
+imm-032,imm,37,overused pool distractor (20×) | repeated pool distractor (14×) | repeated pool distractor (12×) | thin explanation | very thin explanation
+imm-041,imm,37,overused pool distractor (18×) | repeated pool distractor (14×) | repeated pool distractor (13×) | thin stem | thin explanation
+imm-067,imm,37,overused pool distractor (18×) | repeated pool distractor (12×) | repeated pool distractor (13×) | thin stem | thin explanation
+imm-071,imm,37,overused pool distractor (18×) | repeated pool distractor (13×) | repeated pool distractor (11×) | thin explanation | very thin explanation
+just-065,just,38,short distractor (18) | short distractor (21) | length-tell: correct > 2.6x shortest | thin stem
+cong-022,cong,38,short distractor (18) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | thin explanation
+erie-013,erie,38,short distractor (15) | length-tell: correct > 2.6x shortest | repeated pool distractor (11×) | repeated pool distractor (16×) | thin stem
+erie-036,erie,38,overused pool distractor (18×) | repeated pool distractor (10×) | thin stem | thin explanation
+roa-016,roa,38,short distractor (14) | length-tell: correct > 2.6x shortest | repeated pool distractor (13×) | repeated pool distractor (12×) | thin explanation
+roa-017,roa,38,short distractor (14) | length-tell: correct > 2.6x shortest | repeated pool distractor (14×) | repeated pool distractor (14×) | thin explanation
+roa-020,roa,38,short distractor (14) | length-tell: correct > 2.6x shortest | repeated pool distractor (13×) | repeated pool distractor (14×) | thin explanation
+roa-051,roa,38,repeated pool distractor (13×) | repeated pool distractor (13×) | repeated pool distractor (13×) | thin stem | thin explanation | very thin explanation
+roa-064,roa,38,repeated pool distractor (15×) | repeated pool distractor (14×) | repeated pool distractor (11×) | thin stem | very thin stem | thin explanation
+hab-021,hab,38,repeated pool distractor (10×) | repeated pool distractor (10×) | repeated pool distractor (10×) | thin stem | very thin stem | thin explanation
+hab-022,hab,38,repeated pool distractor (11×) | repeated pool distractor (13×) | repeated pool distractor (10×) | thin stem | very thin stem | thin explanation
+hab-028,hab,38,repeated pool distractor (11×) | repeated pool distractor (16×) | repeated pool distractor (10×) | thin stem | thin explanation | very thin explanation
+just-023,just,39,short distractor (17) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest
+imm-075,imm,39,repeated pool distractor (11×) | overused pool distractor (20×) | repeated pool distractor (12×) | thin stem
+hab-007,hab,40,repeated pool distractor (10×) | repeated pool distractor (14×) | repeated pool distractor (12×) | thin stem | very thin stem | thin explanation
+fqj-024,fqj,41,short distractor (15) | short distractor (18) | short distractor (14) | thin stem | thin explanation
+hab-031,hab,41,short distractor (18) | repeated pool distractor (13×) | thin stem | thin explanation | very thin explanation
+hab-039,hab,41,short distractor (14) | repeated pool distractor (13×) | repeated pool distractor (11×) | thin explanation | very thin explanation
+xc-008,cong,41,short distractor (15) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest | thin explanation
+fqj-029,fqj,42,short distractor (16) | length-tell: correct > 2.6x shortest | thin stem | very thin stem | thin explanation
+fqj-056,fqj,42,short distractor (14) | short distractor (17) | length-tell: correct > 2.6x shortest | thin explanation
+erie-015,erie,42,short distractor (18) | length-tell: correct > 2.6x shortest | repeated pool distractor (11×) | repeated pool distractor (14×) | thin explanation
+roa-002,roa,42,overused pool distractor (20×) | repeated pool distractor (14×) | thin stem | thin explanation
+roa-034,roa,42,short distractor (16) | length-tell: correct > 2.6x shortest | repeated pool distractor (11×) | repeated pool distractor (13×) | thin explanation
+roa-058,roa,42,short distractor (16) | length-tell: correct > 2.6x shortest | repeated pool distractor (15×) | repeated pool distractor (13×) | thin explanation
+imm-060,imm,42,overused pool distractor (20×) | repeated pool distractor (10×) | thin explanation | very thin explanation
+hab-002,hab,42,short distractor (15) | length-tell: correct > 2.6x shortest | repeated pool distractor (10×) | thin explanation | very thin explanation
+fqj-042,fqj,43,short distractor (20) | thin stem | thin explanation | very thin explanation
+fqj-046,fqj,43,short distractor (14) | short distractor (21) | length-tell: correct > 2.6x shortest | repeated pool distractor (10×)
+erie-030,erie,43,repeated pool distractor (14×) | repeated pool distractor (11×) | overused pool distractor (18×) | thin stem
+imm-004,imm,43,repeated pool distractor (13×) | repeated pool distractor (12×) | thin stem | thin explanation | very thin explanation
+imm-062,imm,43,repeated pool distractor (14×) | overused pool distractor (20×) | repeated pool distractor (11×) | thin stem
+cong-020,cong,44,short distractor (20) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest
+cong-028,cong,44,short distractor (14) | short distractor (17) | short distractor (16) | length-tell: correct > 2.6x shortest
+fqj-006,fqj,44,short distractor (18) | short distractor (16) | short distractor (18) | length-tell: correct > 2.6x shortest
+fqj-016,fqj,44,short distractor (18) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest
+erie-048,erie,44,repeated pool distractor (11×) | repeated pool distractor (14×) | repeated pool distractor (16×) | thin stem | thin explanation
+hab-001,hab,44,repeated pool distractor (13×) | repeated pool distractor (16×) | repeated pool distractor (10×) | thin explanation | very thin explanation
+hab-005,hab,44,short distractor (17) | length-tell: correct > 2.6x shortest | repeated pool distractor (10×) | thin stem | thin explanation
+hab-032,hab,44,repeated pool distractor (14×) | repeated pool distractor (10×) | thin stem | thin explanation | very thin explanation
+hab-034,hab,44,repeated pool distractor (11×) | repeated pool distractor (12×) | thin stem | thin explanation | very thin explanation
+hab-035,hab,44,repeated pool distractor (13×) | repeated pool distractor (10×) | repeated pool distractor (16×) | thin explanation | very thin explanation
+xc-007,scsr,44,short distractor (14) | length-tell: correct > 2.6x shortest | repeated pool distractor (13×) | thin explanation | very thin explanation
+cong-016,cong,45,length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest
+fqj-047,fqj,45,short distractor (15) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest
+fqj-048,fqj,45,short distractor (21) | short distractor (19) | thin explanation | very thin explanation
+roa-060,roa,45,repeated pool distractor (13×) | repeated pool distractor (12×) | thin stem | thin explanation | very thin explanation
+imm-010,imm,45,overused pool distractor (20×) | repeated pool distractor (17×) | repeated pool distractor (12×) | thin explanation
+imm-023,imm,45,overused pool distractor (20×) | repeated pool distractor (16×) | repeated pool distractor (13×) | thin explanation
+imm-026,imm,45,short distractor (16) | repeated pool distractor (12×) | repeated pool distractor (10×) | thin explanation | very thin explanation
+scsr-005,scsr,46,short distractor (14) | length-tell: correct > 2.6x shortest | repeated pool distractor (13×) | thin stem
+hab-038,hab,46,repeated pool distractor (11×) | thin stem | very thin stem | thin explanation | very thin explanation
+cong-044,cong,47,short distractor (17) | short distractor (18) | short distractor (21) | thin explanation
+scsr-007,scsr,47,short distractor (18) | short distractor (21) | length-tell: correct > 2.6x shortest | thin stem
+erie-045,erie,47,repeated pool distractor (14×) | overused pool distractor (18×) | repeated pool distractor (11×) | thin explanation
+erie-051,erie,47,overused pool distractor (18×) | repeated pool distractor (11×) | repeated pool distractor (14×) | thin explanation
+erie-053,erie,47,overused pool distractor (18×) | repeated pool distractor (14×) | thin explanation | very thin explanation
+roa-062,roa,47,overused pool distractor (20×) | repeated pool distractor (13×) | repeated pool distractor (12×) | thin explanation
+roa-068,roa,47,overused pool distractor (20×) | repeated pool distractor (11×) | repeated pool distractor (13×) | thin explanation
+imm-011,imm,47,short distractor (14) | repeated pool distractor (13×) | repeated pool distractor (13×) | thin stem | thin explanation
+imm-079,imm,47,short distractor (21) | repeated pool distractor (13×) | repeated pool distractor (12×) | thin explanation | very thin explanation
+hab-050,hab,47,short distractor (18) | repeated pool distractor (13×) | repeated pool distractor (10×) | thin explanation | very thin explanation
+fqj-031,fqj,48,repeated pool distractor (11×) | repeated pool distractor (10×) | thin stem | thin explanation | very thin explanation
+erie-040,erie,48,repeated pool distractor (11×) | repeated pool distractor (12×) | repeated pool distractor (11×) | thin stem | thin explanation
+erie-050,erie,48,repeated pool distractor (14×) | repeated pool distractor (12×) | repeated pool distractor (16×) | thin explanation | very thin explanation
+erie-052,erie,48,repeated pool distractor (11×) | repeated pool distractor (14×) | repeated pool distractor (11×) | thin stem | thin explanation
+roa-010,roa,48,repeated pool distractor (12×) | repeated pool distractor (14×) | repeated pool distractor (11×) | thin explanation | very thin explanation
+roa-012,roa,48,repeated pool distractor (13×) | repeated pool distractor (13×) | repeated pool distractor (14×) | thin stem | thin explanation
+roa-030,roa,48,repeated pool distractor (11×) | repeated pool distractor (11×) | repeated pool distractor (11×) | thin stem | thin explanation
+roa-056,roa,48,repeated pool distractor (13×) | repeated pool distractor (14×) | repeated pool distractor (14×) | thin stem | thin explanation
+imm-048,imm,48,repeated pool distractor (12×) | repeated pool distractor (11×) | repeated pool distractor (12×) | thin stem | thin explanation
+imm-054,imm,48,repeated pool distractor (13×) | repeated pool distractor (12×) | repeated pool distractor (12×) | thin explanation | very thin explanation
+imm-074,imm,48,repeated pool distractor (13×) | repeated pool distractor (11×) | repeated pool distractor (14×) | thin explanation | very thin explanation
+imm-076,imm,48,repeated pool distractor (16×) | repeated pool distractor (17×) | repeated pool distractor (11×) | thin stem | thin explanation
+hab-003,hab,48,repeated pool distractor (10×) | repeated pool distractor (16×) | thin stem | thin explanation | very thin explanation
+hab-020,hab,48,repeated pool distractor (14×) | repeated pool distractor (16×) | repeated pool distractor (10×) | thin explanation | very thin explanation
+hab-048,hab,48,repeated pool distractor (14×) | repeated pool distractor (10×) | repeated pool distractor (16×) | thin explanation | very thin explanation
+fqj-023,fqj,49,length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest
+scsr-001,scsr,49,short distractor (20) | length-tell: correct > 2.6x shortest | thin stem | thin explanation
+erie-044,erie,49,repeated pool distractor (16×) | overused pool distractor (18×) | thin explanation | very thin explanation
+roa-039,roa,49,overused pool distractor (20×) | repeated pool distractor (15×) | thin explanation | very thin explanation
+roa-049,roa,49,repeated pool distractor (13×) | repeated pool distractor (14×) | overused pool distractor (20×) | thin explanation
+roa-057,roa,49,overused pool distractor (20×) | repeated pool distractor (15×) | repeated pool distractor (13×) | thin explanation
+roa-069,roa,49,overused pool distractor (20×) | repeated pool distractor (13×) | repeated pool distractor (14×) | thin explanation
+roa-070,roa,49,repeated pool distractor (14×) | overused pool distractor (20×) | repeated pool distractor (14×) | thin explanation
+imm-021,imm,49,overused pool distractor (18×) | repeated pool distractor (16×) | repeated pool distractor (10×) | thin explanation
+imm-022,imm,49,repeated pool distractor (13×) | repeated pool distractor (12×) | overused pool distractor (18×) | thin explanation
+imm-072,imm,49,repeated pool distractor (10×) | overused pool distractor (18×) | repeated pool distractor (13×) | thin explanation
+xc-003,roa,49,repeated pool distractor (11×) | repeated pool distractor (15×) | overused pool distractor (20×) | thin explanation
+just-043,just,50,short distractor (17) | short distractor (21) | length-tell: correct > 2.6x shortest
+erie-010,erie,50,short distractor (17) | length-tell: correct > 2.6x shortest | repeated pool distractor (11×) | thin stem
+erie-028,erie,50,short distractor (15) | length-tell: correct > 2.6x shortest | repeated pool distractor (11×) | repeated pool distractor (11×)
+erie-039,erie,50,repeated pool distractor (11×) | overused pool distractor (18×) | thin explanation
+roa-003,roa,50,repeated pool distractor (13×) | repeated pool distractor (14×) | repeated pool distractor (13×) | thin explanation | very thin explanation
+roa-038,roa,50,short distractor (16) | length-tell: correct > 2.6x shortest | repeated pool distractor (15×) | repeated pool distractor (14×)
+imm-040,imm,50,repeated pool distractor (17×) | repeated pool distractor (11×) | repeated pool distractor (13×) | thin stem | thin explanation
+imm-042,imm,50,repeated pool distractor (10×) | repeated pool distractor (16×) | repeated pool distractor (10×) | thin explanation | very thin explanation
+imm-045,imm,50,repeated pool distractor (17×) | repeated pool distractor (10×) | repeated pool distractor (12×) | thin stem | thin explanation
+imm-065,imm,50,repeated pool distractor (10×) | repeated pool distractor (12×) | repeated pool distractor (12×) | thin explanation | very thin explanation
+hab-011,hab,50,repeated pool distractor (14×) | repeated pool distractor (10×) | thin stem | thin explanation | very thin explanation
+hab-013,hab,50,repeated pool distractor (10×) | repeated pool distractor (14×) | repeated pool distractor (13×) | thin explanation | very thin explanation
+xc-010,imm,50,repeated pool distractor (10×) | repeated pool distractor (12×) | repeated pool distractor (16×) | thin explanation | very thin explanation
+just-018,just,51,short distractor (19) | length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest
+erie-033,erie,51,repeated pool distractor (10×) | overused pool distractor (18×) | repeated pool distractor (14×)
+just-062,just,52,short distractor (19) | short distractor (19) | thin explanation | very thin explanation
+fqj-065,fqj,52,short distractor (19) | short distractor (19) | repeated pool distractor (10×) | thin explanation
+erie-032,erie,52,short distractor (17) | repeated pool distractor (10×) | thin stem | thin explanation
+imm-008,imm,52,short distractor (18) | length-tell: correct > 2.6x shortest | repeated pool distractor (12×) | repeated pool distractor (12×)
+erie-023,erie,53,short distractor (16) | repeated pool distractor (16×) | repeated pool distractor (11×) | thin explanation
+erie-038,erie,53,short distractor (21) | repeated pool distractor (14×) | thin explanation | very thin explanation
+roa-067,roa,53,short distractor (15) | repeated pool distractor (14×) | repeated pool distractor (14×) | thin explanation
+just-020,just,54,length-tell: correct >> shortest distractor | length-tell: correct > 2.6x shortest
+just-063,just,54,short distractor (16) | short distractor (19) | length-tell: correct > 2.6x shortest
+just-070,just,54,short distractor (21) | short distractor (17) | length-tell: correct > 2.6x shortest
+erie-055,erie,54,repeated pool distractor (11×) | overused pool distractor (18×) | thin explanation
+xc-019,hab,54,length-tell: correct > 2.6x shortest | repeated pool distractor (13×) | repeated pool distractor (12×) | thin explanation
+just-033,just,55,short distractor (17) | short distractor (20) | thin stem
+cong-011,cong,55,short distractor (20) | short distractor (18) | short distractor (18)
+cong-014,cong,55,short distractor (16) | short distractor (18) | short distractor (17)
+
+fqj-039,fqj,audit2,grammar mismatch (2)
+scsr-002,scsr,audit2,grammar mismatch (2)
+scsr-029,scsr,audit2,grammar mismatch (2)
+roa-008,roa,audit2,grammar mismatch (2)
+hab-015,hab,audit2,grammar mismatch (2)
