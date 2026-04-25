@@ -6,11 +6,20 @@ export default function ThemeToggle() {
   const [dark, setDark] = useState(true);
   const [mounted, setMounted] = useState(false);
 
+  const [hidden, setHidden] = useState(false);
+
   useEffect(() => {
     const stored = localStorage.getItem("theme");
     if (stored === "light") {
       setDark(false);
       document.documentElement.classList.add("light");
+    }
+    // Fedcourts has a single committed aesthetic (cream parchment); hide the toggle there.
+    if (typeof window !== "undefined") {
+      const host = window.location.host;
+      if (host.startsWith("fedcourts.") || window.location.pathname.startsWith("/fedcourts")) {
+        setHidden(true);
+      }
     }
     setMounted(true);
   }, []);
@@ -27,7 +36,7 @@ export default function ThemeToggle() {
     }
   }
 
-  if (!mounted) return null;
+  if (!mounted || hidden) return null;
 
   return (
     <button
