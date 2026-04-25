@@ -7,8 +7,62 @@
    Cream parchment · oxblood · gilt · Caslon · ledger numerals.
    ============================================================ */
 
+/* Default: NIGHT MODE — leather-bound, candlelight, gold leaf */
 .fc-root {
-  /* Paper & ink */
+  --fc-paper:        #1a140e;          /* deep warm leather */
+  --fc-paper-warm:   #241c14;          /* lifted surface — cards, options */
+  --fc-paper-deep:   #322619;          /* deeper accent */
+  --fc-paper-shadow: rgba(0, 0, 0, 0.5);
+
+  --fc-ink:          #f0e3c4;          /* parchment cream */
+  --fc-ink-mid:      #c9b894;
+  --fc-ink-soft:     #8e7e60;
+  --fc-ink-faint:    rgba(240, 227, 196, 0.35);
+
+  --fc-rule:         #5a4220;          /* aged gilt rule lines */
+  --fc-rule-soft:    rgba(180, 140, 60, 0.30);
+  --fc-rule-faint:   rgba(180, 140, 60, 0.12);
+
+  --fc-oxblood:        #d97a8c;        /* lifted rose oxblood for contrast */
+  --fc-oxblood-deep:   #b8576b;
+  --fc-oxblood-soft:   rgba(217, 122, 140, 0.16);
+
+  --fc-gold:           #d4b76d;        /* bright gold leaf */
+  --fc-gold-bright:    #f0d785;
+  --fc-gold-soft:      rgba(212, 183, 109, 0.20);
+
+  --fc-success:        #8fbb6c;
+  --fc-success-soft:   rgba(143, 187, 108, 0.20);
+  --fc-error:          #d97560;
+  --fc-error-soft:     rgba(217, 117, 96, 0.20);
+
+  /* Background atmosphere */
+  --fc-bg-vignette: radial-gradient(ellipse 100% 50% at 50% 0%, rgba(180, 140, 60, 0.06), transparent 70%),
+                    radial-gradient(ellipse 100% 50% at 50% 100%, rgba(140, 60, 80, 0.05), transparent 70%);
+  --fc-bg-grain-opacity: 0.05;
+
+  /* Type */
+  --fc-serif-display: 'Libre Caslon Display', 'Libre Caslon Text', Georgia, 'Times New Roman', serif;
+  --fc-serif:         'Libre Caslon Text', Georgia, 'Times New Roman', serif;
+  --fc-mono:          'JetBrains Mono', ui-monospace, 'Cascadia Code', Menlo, monospace;
+
+  font-family: var(--fc-serif);
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--fc-ink);
+  background-color: var(--fc-paper);
+
+  background-image:
+    var(--fc-bg-vignette),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  background-size: auto, auto, 220px 220px;
+  background-attachment: fixed;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+/* LIGHT MODE — cream parchment casebook (toggle on) */
+html.light .fc-root {
   --fc-paper:        #f4ead4;
   --fc-paper-warm:   #eddec0;
   --fc-paper-deep:   #d9c89a;
@@ -23,7 +77,6 @@
   --fc-rule-soft:    rgba(42, 31, 16, 0.22);
   --fc-rule-faint:   rgba(42, 31, 16, 0.10);
 
-  /* Accents */
   --fc-oxblood:        #7a2a3a;
   --fc-oxblood-deep:   #531c28;
   --fc-oxblood-soft:   rgba(122, 42, 58, 0.10);
@@ -37,30 +90,14 @@
   --fc-error:          #8a3826;
   --fc-error-soft:     rgba(138, 56, 38, 0.16);
 
-  /* Type */
-  --fc-serif-display: 'Libre Caslon Display', 'Libre Caslon Text', Georgia, 'Times New Roman', serif;
-  --fc-serif:         'Libre Caslon Text', Georgia, 'Times New Roman', serif;
-  --fc-mono:          'JetBrains Mono', ui-monospace, 'Cascadia Code', Menlo, monospace;
+  --fc-bg-vignette: radial-gradient(ellipse 100% 40% at 50% 0%,   rgba(74, 40, 22, 0.07), transparent 70%),
+                    radial-gradient(ellipse 100% 40% at 50% 100%, rgba(74, 40, 22, 0.07), transparent 70%);
+  --fc-bg-grain-opacity: 0.07;
 
-  font-family: var(--fc-serif);
-  font-size: 17px;
-  line-height: 1.5;
-  color: var(--fc-ink);
-  background-color: var(--fc-paper);
-
-  /* Paper grain + soft vignette */
   background-image:
-    radial-gradient(ellipse 100% 40% at 50% 0%,   rgba(74, 40, 22, 0.07), transparent 70%),
-    radial-gradient(ellipse 100% 40% at 50% 100%, rgba(74, 40, 22, 0.07), transparent 70%),
+    var(--fc-bg-vignette),
     url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
-  background-size: auto, auto, 220px 220px;
-  background-attachment: fixed;
-  min-height: 100dvh;
-  overflow-x: hidden;
 }
-
-/* The fedcourts aesthetic ignores the global theme toggle. */
-html.light .fc-root { color: var(--fc-ink); background-color: var(--fc-paper); }
 
 ::selection { background: var(--fc-gold-soft); color: var(--fc-rule); }
 
@@ -85,6 +122,8 @@ html.light .fc-root { color: var(--fc-ink); background-color: var(--fc-paper); }
   /* double rule like a legal-letterhead */
   border-bottom: 1px solid var(--fc-rule);
   box-shadow: 0 3px 0 -2px var(--fc-rule);
+  /* fade page below to keep grain off the nav */
+  background-image: linear-gradient(to bottom, var(--fc-paper) 95%, transparent);
 }
 @media (min-width: 768px) {
   .fc-nav { padding: 1.1rem 3rem; }
@@ -366,7 +405,7 @@ a.fc-btn-primary {
 @media (min-width: 1000px) { .fc-grid { grid-template-columns: repeat(3, 1fr); } }
 
 .fc-card {
-  background: var(--fc-paper);
+  background: var(--fc-paper-warm);
   padding: 1.5rem 1.4rem;
   text-decoration: none;
   color: inherit;
@@ -378,7 +417,7 @@ a.fc-btn-primary {
   cursor: pointer;
 }
 .fc-card:hover {
-  background: var(--fc-paper-warm);
+  background: var(--fc-paper-deep);
 }
 .fc-card-title {
   font-family: var(--fc-serif-display);
@@ -849,7 +888,7 @@ a.fc-btn-primary {
   max-width: 42rem;
   margin: 0 auto;
   padding: 1.75rem 1.5rem;
-  background: var(--fc-paper);
+  background: var(--fc-paper-warm);
   border: 1px solid var(--fc-rule);
   border-top: 4px double var(--fc-rule);
   border-bottom: 4px double var(--fc-rule);
@@ -966,14 +1005,14 @@ a.fc-btn-primary {
   flex-wrap: wrap;
   gap: 0.55rem;
   padding: 1.1rem;
-  background: var(--fc-paper);
+  background: var(--fc-paper-warm);
   border: 1px solid var(--fc-rule-soft);
   min-height: 4rem;
   margin-bottom: 1.25rem;
 }
-.fc-rule-slots { border-style: dashed; background: var(--fc-paper-warm); }
+.fc-rule-slots { border-style: dashed; background: var(--fc-paper-deep); }
 .fc-rule-tile {
-  background: var(--fc-paper);
+  background: var(--fc-paper-deep);
   border: 1px solid var(--fc-rule);
   padding: 0.5rem 0.85rem;
   font-family: var(--fc-serif);
@@ -1015,7 +1054,7 @@ a.fc-btn-primary {
 }
 .fc-match-card {
   aspect-ratio: 3 / 4;
-  background: var(--fc-paper);
+  background: var(--fc-paper-warm);
   border: 1px solid var(--fc-rule);
   padding: 0.7rem;
   cursor: pointer;
@@ -1391,4 +1430,29 @@ input[type="search"] {
 /* Better default on dark-mode toggle press during iOS Safari */
 .fc-root, .fc-card, .fc-option {
   -webkit-tap-highlight-color: rgba(122, 42, 58, 0.10);
+}
+
+/* ============================================================
+   THEME TOGGLE — fitted to the casebook aesthetic
+   ============================================================ */
+
+.fc-theme-toggle {
+  background: var(--fc-paper-warm);
+  border: 1px solid var(--fc-rule);
+  border-radius: 0;
+  color: var(--fc-ink-mid);
+  font-family: var(--fc-serif-display);
+  cursor: pointer;
+  box-shadow: 2px 2px 0 -1px var(--fc-paper-shadow);
+  transition: background 0.15s, color 0.15s, transform 0.1s, border-color 0.15s;
+}
+.fc-theme-toggle:hover {
+  background: var(--fc-paper-deep);
+  color: var(--fc-oxblood);
+  border-color: var(--fc-oxblood);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 -1px var(--fc-paper-shadow);
+}
+.fc-theme-toggle svg {
+  color: inherit;
 }

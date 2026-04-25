@@ -6,7 +6,7 @@ export default function ThemeToggle() {
   const [dark, setDark] = useState(true);
   const [mounted, setMounted] = useState(false);
 
-  const [hidden, setHidden] = useState(false);
+  const [onFedcourts, setOnFedcourts] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem("theme");
@@ -14,11 +14,10 @@ export default function ThemeToggle() {
       setDark(false);
       document.documentElement.classList.add("light");
     }
-    // Fedcourts has a single committed aesthetic (cream parchment); hide the toggle there.
     if (typeof window !== "undefined") {
       const host = window.location.host;
       if (host.startsWith("fedcourts.") || window.location.pathname.startsWith("/fedcourts")) {
-        setHidden(true);
+        setOnFedcourts(true);
       }
     }
     setMounted(true);
@@ -36,13 +35,17 @@ export default function ThemeToggle() {
     }
   }
 
-  if (!mounted || hidden) return null;
+  if (!mounted) return null;
 
   return (
     <button
       onClick={toggle}
       aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
-      className="fixed bottom-5 right-5 z-[9998] w-8 h-8 rounded-full border border-glass-border bg-surface-solid/80 backdrop-blur-sm flex items-center justify-center text-text-soft hover:text-text transition-colors"
+      className={
+        onFedcourts
+          ? "fc-theme-toggle fixed bottom-5 right-5 z-[9998] w-9 h-9 flex items-center justify-center transition-colors"
+          : "fixed bottom-5 right-5 z-[9998] w-8 h-8 rounded-full border border-glass-border bg-surface-solid/80 backdrop-blur-sm flex items-center justify-center text-text-soft hover:text-text transition-colors"
+      }
     >
       {dark ? (
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
