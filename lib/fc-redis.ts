@@ -77,7 +77,21 @@ export async function getUserByUsername(
 export async function upsertQuestion(q: FCQuestion): Promise<void> {
   const r = getRedis();
   await r.hset(K.question(q.id), {
-    ...q,
+    id: q.id,
+    category: q.category,
+    difficulty: q.difficulty,
+    rating: q.rating,
+    num_answered: q.num_answered,
+    stem: q.stem,
+    opt_a: q.opt_a,
+    opt_b: q.opt_b,
+    opt_c: q.opt_c,
+    opt_d: q.opt_d,
+    correct: q.correct,
+    case_cited: q.case_cited ?? "",
+    rule_id: q.rule_id ?? "",
+    prong: q.prong ?? "",
+    explanation: q.explanation,
     tags: JSON.stringify(q.tags),
     daily_eligible: q.daily_eligible ? "1" : "0",
   });
