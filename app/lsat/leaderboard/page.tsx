@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import {
   LSAT_SKILLS,
   LSAT_SKILL_LABELS,
+  arabicToRoman,
   type LSATGameMode,
   type LSATSkill,
 } from "@/lib/lsat-types";
@@ -48,8 +49,23 @@ export default function LeaderboardPage() {
 
   return (
     <div>
-      <h1 className="lsat-h1">Leaderboard</h1>
-      <p className="lsat-sub">Highest scores in each mode.</p>
+      <div className="lsat-edition">
+        <span>Vol. <em>I</em></span>
+        <span>The Roll</span>
+        <span>No. <em>II</em></span>
+      </div>
+
+      <h1 className="lsat-h1">
+        The <em>Roll</em>.
+      </h1>
+      <p className="lsat-sub">
+        Highest scores in each chapter. The first ribbon belongs to the
+        first name on the roll.
+      </p>
+
+      <div className="lsat-fleuron" aria-hidden>
+        <span>❦</span>
+      </div>
 
       <div className="lsat-pill-row">
         {GAMES.map((g) => (
@@ -103,8 +119,8 @@ export default function LeaderboardPage() {
         <table className="lsat-lb-table">
           <thead>
             <tr>
-              <th style={{ width: "3rem" }}>#</th>
-              <th>Player</th>
+              <th style={{ width: "3rem" }}>Rank</th>
+              <th>Name</th>
               <th className="score" style={{ textAlign: "right" }}>
                 Score
               </th>
@@ -113,11 +129,17 @@ export default function LeaderboardPage() {
           <tbody>
             {rows.map((r, i) => (
               <tr key={r.uid + i}>
-                <td>{i + 1}</td>
-                <td>{r.display_name}</td>
-                <td className="score" style={{ textAlign: "right" }}>
-                  {r.score.toLocaleString()}
+                <td
+                  style={{
+                    fontFamily: "var(--lsat-display)",
+                    fontStyle: "italic",
+                    color: "var(--lsat-ink-soft)",
+                  }}
+                >
+                  {arabicToRoman(i + 1)}.
                 </td>
+                <td>{r.display_name}</td>
+                <td className="score">{r.score.toLocaleString()}</td>
               </tr>
             ))}
           </tbody>

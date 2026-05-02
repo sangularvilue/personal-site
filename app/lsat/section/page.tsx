@@ -16,23 +16,26 @@ export default function SectionPage() {
       <DrillLoader
         gameMode="section-focus"
         apiQuery={`?section=${section}&n=15`}
-        heading={`Section · ${LSAT_SECTION_LABELS[section]}`}
-        subheading="Fifteen questions, all from this section type."
+        heading={LSAT_SECTION_LABELS[section]}
+        subheading="Fifteen questions of this section type."
       />
     );
   }
 
   return (
     <div>
-      <h1 className="lsat-h1">Section Focus</h1>
-      <p className="lsat-sub">Pick a section type to drill.</p>
+      <h1 className="lsat-h1">
+        By <em>Section</em>.
+      </h1>
+      <p className="lsat-sub">Choose a section type.</p>
+
+      <div className="lsat-fleuron" aria-hidden>
+        <span>❦</span>
+      </div>
+
       <div className="lsat-pill-row">
         {SECTIONS.map((s) => (
-          <button
-            key={s}
-            className="lsat-pill"
-            onClick={() => setSection(s)}
-          >
+          <button key={s} className="lsat-pill" onClick={() => setSection(s)}>
             {LSAT_SECTION_LABELS[s]}
           </button>
         ))}

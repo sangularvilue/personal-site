@@ -31,11 +31,18 @@ export default function SignupPage() {
 
   return (
     <div>
-      <h1 className="lsat-h1">Sign up</h1>
+      <h1 className="lsat-h1">
+        Begin a <em>book</em>.
+      </h1>
       <p className="lsat-sub">
-        Pick a username (3–20 chars) and a password (8+). Your display name is
-        what shows on the leaderboard.
+        A username (3–20 chars), a password (8+), and the name you wish
+        to be known by on the roll.
       </p>
+
+      <div className="lsat-fleuron" aria-hidden>
+        <span>❦</span>
+      </div>
+
       <form onSubmit={submit} className="lsat-form">
         <label>
           Username
@@ -69,7 +76,7 @@ export default function SignupPage() {
         </label>
         {error && <p className="lsat-error">{error}</p>}
         <button type="submit" disabled={loading}>
-          {loading ? "..." : "Sign up"}
+          {loading ? "…" : "Sign your name"}
         </button>
       </form>
     </div>

@@ -26,7 +26,15 @@ export default function LoginPage() {
 
   return (
     <div>
-      <h1 className="lsat-h1">Log in</h1>
+      <h1 className="lsat-h1">
+        Open <em>book</em>.
+      </h1>
+      <p className="lsat-sub">Sign your name to take up the pen.</p>
+
+      <div className="lsat-fleuron" aria-hidden>
+        <span>❦</span>
+      </div>
+
       <form onSubmit={submit} className="lsat-form">
         <label>
           Username
@@ -49,9 +57,20 @@ export default function LoginPage() {
         </label>
         {error && <p className="lsat-error">{error}</p>}
         <button type="submit" disabled={loading}>
-          {loading ? "..." : "Log in"}
+          {loading ? "…" : "Open"}
         </button>
       </form>
+
+      <p className="lsat-footnote">
+        New here?{" "}
+        <a
+          href="/signup"
+          style={{ color: "var(--lsat-ribbon-deep)", fontStyle: "italic" }}
+        >
+          Sign up
+        </a>{" "}
+        for a fresh book.
+      </p>
     </div>
   );
 }

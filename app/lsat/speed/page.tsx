@@ -8,7 +8,7 @@ export default function SpeedPage() {
       apiQuery="?n=10"
       timeLimitSec={60}
       heading="Speed Drill"
-      subheading="Ten questions, sixty seconds each. Score = accuracy × speed × streak."
+      subheading="Ten questions, sixty seconds each. Score is accuracy × time × streak."
     />
   );
 }

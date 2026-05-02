@@ -4,9 +4,9 @@ import { currentUser, isAdminUser } from "@/lib/lsat-auth";
 import "./lsat.css";
 
 export const metadata = {
-  title: "LSAT Drill — A practice ground for the real test",
+  title: "A Practice Book — LSAT",
   description:
-    "Drill official LSAT questions by skill. Adaptive ratings, live leaderboard, every attempt logged.",
+    "A practice book for the LSAT. Drill, by skill or section, in a private commonplace book. Every answer keeps a ribbon.",
 };
 
 export default async function LSATLayout({
@@ -20,18 +20,14 @@ export default async function LSATLayout({
     <div className="lsat-root" data-admin={admin ? "1" : "0"}>
       <nav className="lsat-nav">
         <Link href="/" className="lsat-brand">
-          LSAT<span className="lsat-brand-dot">·</span>Drill
+          A&nbsp;Practice<span className="lsat-brand-dot">·</span>Book
         </Link>
         <div className="lsat-nav-right">
           <Link href="/leaderboard">Leaderboard</Link>
           {user ? (
             <>
               <Link href="/me">{user.display_name}</Link>
-              {admin && (
-                <span className="lsat-admin-pill" title="Admin">
-                  admin
-                </span>
-              )}
+              {admin && <span className="lsat-admin-pill">Editor</span>}
               <form action="/api/lsat/logout" method="post">
                 <button className="lsat-btn-link" type="submit">
                   log out

@@ -1,87 +1,105 @@
 import Link from "next/link";
 import { currentUser } from "@/lib/lsat-auth";
+import { arabicToRoman } from "@/lib/lsat-types";
 
-const modes = [
+const chapters = [
   {
     href: "/drill",
-    eyebrow: "Adaptive",
-    title: "Drill",
-    desc: "Mixed questions targeted to your weakest skills. Every attempt updates your rating.",
+    title: "Adaptive Drill",
+    meta: "fifteen, mixed",
+    sub: "Weighted to your weaker skills.",
   },
   {
     href: "/speed",
-    eyebrow: "10 / Timed",
     title: "Speed Drill",
-    desc: "Ten questions, sixty seconds each. Score combines accuracy, speed, and streak.",
+    meta: "ten, timed",
+    sub: "Sixty seconds each. Score = accuracy × time × streak.",
   },
   {
     href: "/skill",
-    eyebrow: "Focus",
-    title: "Skill Focus",
-    desc: "Pick one of the eight skills. Practice until your rating climbs.",
+    title: "By Skill",
+    meta: "fifteen of one kind",
+    sub: "Choose one of the eight skills.",
   },
   {
     href: "/section",
-    eyebrow: "RC · LR · LG",
-    title: "Section Focus",
-    desc: "Practice questions of one section type only.",
+    title: "By Section",
+    meta: "RC · LR · LG",
+    sub: "Practice questions of one section type only.",
   },
   {
     href: "/marathon",
-    eyebrow: "Endurance",
     title: "Marathon",
-    desc: "Twenty-five questions in a row. Built for stamina, not for points.",
+    meta: "twenty-five, untimed",
+    sub: "For stamina, not for points.",
   },
 ];
 
 export default async function LSATHome() {
   const user = await currentUser();
+  const now = new Date();
+  const yearRoman = arabicToRoman(now.getFullYear());
+
   return (
     <>
-      <h1 className="lsat-h1">LSAT Drill.</h1>
+      <div className="lsat-edition">
+        <span>Vol. <em>I</em></span>
+        <span>No. <em>I</em></span>
+        <span>Anno {yearRoman}</span>
+      </div>
+
+      <h1 className="lsat-h1">
+        A Practice <em>Book</em>.
+      </h1>
+
       <p className="lsat-sub">
         {user ? (
           <>
-            Welcome back, <em>{user.display_name}</em>. Pick a mode and get to
-            work.
+            Welcome back, <em>{user.display_name}</em>. Take up the pen.
           </>
         ) : (
           <>
-            A practice ground for the LSAT, built on the official released
-            tests. Each question is tagged with one of eight skills; your
-            rating in each climbs (or sinks) with every answer. Sign up to
-            keep score.
+            A practice book for the LSAT, kept by every reader. Drill, by
+            skill or section. Every answer keeps a ribbon. Sign up to keep
+            score.
           </>
         )}
       </p>
 
-      <h2 className="lsat-h2">Modes</h2>
-
-      <div className="lsat-tile-grid">
-        {modes.map((m) => (
-          <Link key={m.href} href={m.href} className="lsat-tile">
-            <div className="lsat-tile-eyebrow">{m.eyebrow}</div>
-            <div className="lsat-tile-title">{m.title}</div>
-            <div className="lsat-tile-desc">{m.desc}</div>
-          </Link>
-        ))}
+      <div className="lsat-fleuron" aria-hidden>
+        <span>❦</span><span>❧</span><span>❦</span>
       </div>
 
-      <hr className="lsat-rule" />
+      <h2 className="lsat-h2">Table of Contents</h2>
 
-      <p
-        style={{
-          color: "var(--lsat-ink-soft)",
-          fontStyle: "italic",
-          fontSize: "0.92rem",
-          textAlign: "center",
-          maxWidth: "32rem",
-          margin: "0 auto",
-        }}
-      >
-        Source: official LSAC released PrepTests, normalized + tagged.
-        Logged in users have every attempt saved.
+      <ol className="lsat-toc">
+        {chapters.map((c, i) => (
+          <li key={c.href}>
+            <Link href={c.href} className="lsat-toc-row">
+              <span className="lsat-toc-num">{toRoman(i + 1)}.</span>
+              <span className="lsat-toc-name">
+                {c.title}
+                <span className="lsat-toc-leader" aria-hidden />
+              </span>
+              <span className="lsat-toc-meta">{c.meta}</span>
+            </Link>
+          </li>
+        ))}
+      </ol>
+
+      <div className="lsat-fleuron" aria-hidden>
+        <span>⁂</span>
+      </div>
+
+      <p className="lsat-footnote">
+        Source: official LSAC released PrepTests, normalized & tagged.
+        Each question carries one of eight skills. The signature ribbon
+        falls from the page on every answer.
       </p>
     </>
   );
+}
+
+function toRoman(n: number): string {
+  return arabicToRoman(n);
 }

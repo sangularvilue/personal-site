@@ -109,6 +109,42 @@ export function ratingTier(r: number): string {
   return "Expert";
 }
 
+// Roman-numeral tier (I-V), used as a marginal flourish on the bookplate.
+export function ratingTierRoman(r: number): string {
+  if (r < 900) return "I";
+  if (r < 1050) return "II";
+  if (r < 1200) return "III";
+  if (r < 1350) return "IV";
+  return "V";
+}
+
+export function arabicToRoman(n: number): string {
+  const map: Array<[number, string]> = [
+    [1000, "M"],
+    [900, "CM"],
+    [500, "D"],
+    [400, "CD"],
+    [100, "C"],
+    [90, "XC"],
+    [50, "L"],
+    [40, "XL"],
+    [10, "X"],
+    [9, "IX"],
+    [5, "V"],
+    [4, "IV"],
+    [1, "I"],
+  ];
+  let out = "";
+  let v = Math.max(0, Math.floor(n));
+  for (const [val, sym] of map) {
+    while (v >= val) {
+      out += sym;
+      v -= val;
+    }
+  }
+  return out || "0";
+}
+
 // Per-question per-user attempt history.
 export type LSATAttempt = {
   question_id: string;

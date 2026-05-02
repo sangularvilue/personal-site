@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
   LSAT_LETTERS,
-  LSAT_SKILL_SHORT,
+  LSAT_SKILL_LABELS,
   type LSATAnswerLetter,
   type LSATGameMode,
   type LSATQuestion,
@@ -10,6 +10,7 @@ import {
   type LSATSkill,
 } from "@/lib/lsat-types";
 import QuestionInfo from "./QuestionInfo";
+import Ribbon from "./Ribbon";
 
 type ClientQuestion = {
   id: string;
@@ -50,7 +51,7 @@ type Props = {
   gameMode: LSATGameMode;
   skillFilter?: LSATSkill | "all";
   questions: ClientQuestion[];
-  timeLimitSec?: number; // 0 for untimed
+  timeLimitSec?: number;
   isAdmin: boolean;
   isAuthed: boolean;
 };
@@ -101,10 +102,8 @@ export default function DrillEngine({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idx, result, done]);
 
-  // Keyboard 1-5 / a-e / Enter to advance.
   useEffect(() => {
     function key(e: KeyboardEvent) {
-      // Don't hijack typing inside the admin modal.
       const tag = (e.target as HTMLElement | null)?.tagName;
       if (tag === "TEXTAREA" || tag === "INPUT" || tag === "SELECT") return;
       if (showInfo) return;
@@ -140,9 +139,6 @@ export default function DrillEngine({
     setSelected(choice);
     const ms = Date.now() - startMs;
     if (!isAuthed) {
-      // We don't expose the correct answer to unauthenticated clients.
-      // Show the answer choice the user picked, but leave correctness blank
-      // and ask them to sign in to verify and record their answer.
       const placeholder: AnswerResult = {
         correct: false,
         correct_answer: null,
@@ -227,16 +223,12 @@ export default function DrillEngine({
   }
 
   function onAdminUpdated(updated: LSATQuestion) {
-    // Rewrite the in-memory question to reflect the edit. Keep the same
-    // shuffle_key but re-shuffle display indices using new content.
     setQuestions((qs) => {
       const out = [...qs];
       const cur = out[idx];
       const fields: ClientQuestion = {
         ...cur,
         skill: updated.skill,
-        // The shuffle_key tells us which canonical letter sits in each
-        // display position. We pick fresh content by remapping.
         choice_a: pickByKey(updated, cur.shuffle_key, 0),
         choice_b: pickByKey(updated, cur.shuffle_key, 1),
         choice_c: pickByKey(updated, cur.shuffle_key, 2),
@@ -253,54 +245,91 @@ export default function DrillEngine({
     const correctN = answers.current.filter((a) => a.result.correct).length;
     return (
       <div className="lsat-results">
+        <div className="lsat-fleuron" aria-hidden>
+          <span>❦</span>
+        </div>
+        <p
+          style={{
+            fontFamily: "var(--lsat-display)",
+            fontStyle: "italic",
+            fontSize: "1.05rem",
+            color: "var(--lsat-ink-soft)",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            marginBottom: "0.4rem",
+          }}
+        >
+          End of Section
+        </p>
         <p className="lsat-results-score">{score.toLocaleString()}</p>
         <p className="lsat-results-detail">
-          {correctN} / {answers.current.length} correct
-          {streak > 0 && ` · 🔥 ${streak} streak`}
+          {correctN} of {answers.current.length} correct
+          {streak > 0 && ` · streak of ${streak}`}
         </p>
         <div className="lsat-results-actions">
           <a href="/" className="primary">
-            Back home
+            Close the book
           </a>
-          <button onClick={() => window.location.reload()}>Play again</button>
+          <button onClick={() => window.location.reload()}>Begin again</button>
           <a href="/leaderboard">Leaderboard</a>
         </div>
-        <hr className="lsat-rule" />
+        <div className="lsat-fleuron" aria-hidden>
+          <span>❧</span>
+        </div>
         <h3
           className="lsat-h2"
-          style={{ textAlign: "left", fontSize: "1.1rem" }}
+          style={{ textAlign: "left", fontSize: "1.3rem" }}
         >
-          Review
+          Marginalia
         </h3>
         <div style={{ textAlign: "left" }}>
           {answers.current.map((a, i) => (
             <div
               key={i}
-              className="lsat-explanation"
-              style={{ marginBottom: "0.6rem" }}
-            >
-              <div className="lsat-explanation-head">
-                {a.result.unauth
-                  ? "· not verified"
+              style={{
+                position: "relative",
+                marginBottom: "1.2rem",
+                paddingLeft: "1.4rem",
+                borderLeft: a.result.unauth
+                  ? "2px solid var(--lsat-rule-soft)"
                   : a.result.correct
-                    ? "✓ correct"
-                    : "✗ wrong"}{" "}
-                · {LSAT_SKILL_SHORT[a.q.skill]} · PT {a.q.pt} Q{" "}
-                {a.q.question_num}
+                    ? "2px solid #4a6843"
+                    : "2px solid var(--lsat-ribbon)",
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: "var(--lsat-display)",
+                  fontStyle: "italic",
+                  fontSize: "0.88rem",
+                  color: "var(--lsat-ink-soft)",
+                  letterSpacing: "0.04em",
+                  marginBottom: "0.3rem",
+                }}
+              >
+                {LSAT_SKILL_LABELS[a.q.skill]} · PT {a.q.pt} S{a.q.section_num}{" "}
+                Q{a.q.question_num}
               </div>
-              <div style={{ marginTop: "0.3rem", fontSize: "0.92rem" }}>
-                {truncate(a.q.stem, 240)}
+              <div
+                style={{
+                  fontSize: "0.95rem",
+                  lineHeight: 1.55,
+                  color: "var(--lsat-ink)",
+                }}
+              >
+                {truncate(a.q.stem, 220)}
               </div>
               <div
                 style={{
                   marginTop: "0.4rem",
                   fontSize: "0.85rem",
                   color: "var(--lsat-ink-soft)",
+                  fontStyle: "italic",
                 }}
               >
-                Your answer: {a.selected?.toUpperCase() || "—"}
+                Picked {a.selected?.toUpperCase() || "—"}
                 {a.result.correct_answer
-                  ? ` · Correct: ${a.result.correct_answer.toUpperCase()}`
+                  ? `; correct was ${a.result.correct_answer.toUpperCase()}`
                   : ""}
               </div>
             </div>
@@ -312,17 +341,39 @@ export default function DrillEngine({
 
   if (!q) return <div className="lsat-empty">No questions available.</div>;
 
+  // Decide whether to apply a drop cap. Drop cap requires the stem to begin
+  // with a real letter; otherwise the ::first-letter falls awkwardly on
+  // punctuation.
+  const stemStartsWithLetter = /^[A-Za-z]/.test(q.stem.trim());
+
+  // Choose a ribbon variant for the drop animation when an answer lands.
+  const ribbonVariant: "correct" | "wrong" | "neutral" | null = result
+    ? result.unauth
+      ? "neutral"
+      : result.correct
+        ? "correct"
+        : "wrong"
+    : null;
+
   return (
     <div className="lsat-drill">
       <div className="lsat-drill-header">
         <span className="lsat-drill-skill">
-          {LSAT_SKILL_SHORT[q.skill]} · {q.section_type}
+          {LSAT_SKILL_LABELS[q.skill]}
         </span>
         <span className="lsat-drill-progress">
           {idx + 1} / {questions.length}
         </span>
-        {streak >= 2 && <span className="lsat-drill-streak">{streak}🔥</span>}
-        <span style={{ fontVariantNumeric: "tabular-nums" }}>
+        {streak >= 2 && (
+          <span className="lsat-drill-streak">streak {streak}</span>
+        )}
+        <span
+          style={{
+            fontFamily: "var(--lsat-display)",
+            fontVariantNumeric: "tabular-nums oldstyle-nums",
+            fontSize: "1.1rem",
+          }}
+        >
           {score.toLocaleString()}
         </span>
       </div>
@@ -336,7 +387,10 @@ export default function DrillEngine({
       )}
       <div className="lsat-q-meta">
         <span>
-          PT {q.pt} · S{q.section_num} · Q{q.question_num}
+          PT&nbsp;{q.pt} · §{q.section_num} · Q&nbsp;{q.question_num}
+          <span style={{ marginLeft: "0.6rem", color: "var(--lsat-ink-faint)" }}>
+            ({q.section_type})
+          </span>
         </span>
         <button
           type="button"
@@ -348,7 +402,25 @@ export default function DrillEngine({
           i
         </button>
       </div>
-      <p className="lsat-stem">{q.stem}</p>
+
+      {/* The dropping ribbon — the signature mechanic */}
+      {ribbonVariant && (
+        <Ribbon
+          variant={ribbonVariant}
+          className={`lsat-ribbon lsat-ribbon--${ribbonVariant}`}
+          ariaLabel={
+            ribbonVariant === "correct"
+              ? "Correct"
+              : ribbonVariant === "wrong"
+                ? "Incorrect"
+                : "Answered"
+          }
+        />
+      )}
+
+      <p className={`lsat-stem${stemStartsWithLetter ? " has-dropcap" : ""}`}>
+        {q.stem}
+      </p>
       <div className="lsat-options">
         {LSAT_LETTERS.map((letter) => {
           const text = q[`choice_${letter}` as const];
@@ -379,27 +451,32 @@ export default function DrillEngine({
           <div className="lsat-explanation">
             <div className="lsat-explanation-head">
               {result.unauth
-                ? "Not verified"
+                ? "Marked"
                 : result.correct
-                  ? "✓ correct"
-                  : "✗ wrong"}{" "}
-              · {LSAT_SKILL_SHORT[result.skill]}
+                  ? "Correct"
+                  : "Incorrect"}{" "}
+              · {LSAT_SKILL_LABELS[result.skill]}
               {isAuthed &&
                 !result.unauth &&
                 ` · rating ${result.new_user_rating}`}
             </div>
             {!isAuthed && (
               <div>
-                <a href="/login" style={{ color: "var(--lsat-accent)" }}>
+                <a
+                  href="/login"
+                  style={{
+                    color: "var(--lsat-ribbon-deep)",
+                    fontStyle: "italic",
+                  }}
+                >
                   Sign in
                 </a>{" "}
-                to verify this answer, see your rating change, and have it
-                saved to your profile.
+                to verify, set a rating, and keep this ribbon in your book.
               </div>
             )}
           </div>
           <button className="lsat-drill-next" onClick={next}>
-            {idx < questions.length - 1 ? "Next →" : "Finish"}
+            {idx < questions.length - 1 ? "Turn the page" : "Close section"}
           </button>
         </>
       )}

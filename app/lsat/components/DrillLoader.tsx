@@ -49,15 +49,24 @@ export default function DrillLoader(props: Props) {
 
   return (
     <div>
-      <div style={{ marginBottom: "1.4rem" }}>
-        <h1 className="lsat-h1" style={{ fontSize: "1.8rem" }}>
+      <div style={{ marginBottom: "1.6rem", textAlign: "center" }}>
+        <h1
+          className="lsat-h1"
+          style={{ fontSize: "2.4rem", marginBottom: "0.4rem" }}
+        >
           {props.heading}
         </h1>
         {props.subheading && (
-          <p className="lsat-sub" style={{ marginBottom: 0 }}>
+          <p
+            className="lsat-sub"
+            style={{ marginBottom: "0.4rem", fontSize: "1rem" }}
+          >
             {props.subheading}
           </p>
         )}
+        <div className="lsat-fleuron" aria-hidden style={{ margin: "0.6rem 0" }}>
+          <span>❦</span>
+        </div>
       </div>
       <DrillEngine
         gameMode={props.gameMode}

@@ -1,55 +1,74 @@
-@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600;8..60,700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Spectral:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Tangerine:wght@400;700&display=swap');
 
 /* ============================================================
-   L S A T · D R I L L
-   Practice ground for the real test.
-   Aesthetic: contemporary law-review, slate + paper.
+   L S A T  ·  A   P R A C T I C E   B O O K
+   The Commonplace Book aesthetic.
+   Aged paper. Copperplate marginalia. Ribbon bookmarks.
    ============================================================ */
 
 .lsat-root {
-  --lsat-paper:        #f7f5ef;
-  --lsat-paper-warm:   #efeae0;
-  --lsat-paper-deep:   #e3dccb;
-  --lsat-shadow:       rgba(20, 24, 38, 0.08);
+  /* Paper */
+  --lsat-paper:         #f4ead4;
+  --lsat-paper-warm:    #ebe0c1;
+  --lsat-paper-deep:    #d9c89a;
+  --lsat-paper-darker:  #c2b27d;
+  --lsat-shadow:        rgba(58, 38, 12, 0.08);
+  --lsat-shadow-deep:   rgba(58, 38, 12, 0.18);
 
-  --lsat-ink:          #1a1d2a;
-  --lsat-ink-mid:      #41475a;
-  --lsat-ink-soft:     #6f7587;
-  --lsat-ink-faint:    rgba(26, 29, 42, 0.42);
+  /* Ink, in three weights */
+  --lsat-ink:           #1a1612;
+  --lsat-ink-mid:       #4a3f30;
+  --lsat-ink-soft:      #7a5a3a;
+  --lsat-ink-faint:     rgba(26, 22, 18, 0.32);
 
-  --lsat-rule:         #2d3142;
-  --lsat-rule-soft:    rgba(45, 49, 66, 0.30);
-  --lsat-rule-faint:   rgba(45, 49, 66, 0.10);
+  /* Hand-ruled lines */
+  --lsat-rule:          #7a5a3a;
+  --lsat-rule-soft:     rgba(122, 90, 58, 0.30);
+  --lsat-rule-faint:    rgba(122, 90, 58, 0.10);
 
-  --lsat-accent:        #4a3aff;          /* electric indigo */
-  --lsat-accent-deep:   #2c1fc7;
-  --lsat-accent-soft:   rgba(74, 58, 255, 0.10);
+  /* Ribbon red — the only true accent */
+  --lsat-ribbon:        #9c2c2c;
+  --lsat-ribbon-deep:   #6e1b1b;
+  --lsat-ribbon-soft:   rgba(156, 44, 44, 0.10);
+  --lsat-ribbon-faded:  #b8847f;   /* for "wrong" ribbons */
 
-  --lsat-gold:          #b8860b;
-  --lsat-gold-soft:     rgba(184, 134, 11, 0.16);
+  /* Gilt for leaderboards & fleurons */
+  --lsat-gold:          #a07d2a;
+  --lsat-gold-bright:   #c89f3a;
+  --lsat-gold-soft:     rgba(160, 125, 42, 0.16);
 
-  --lsat-success:       #1f7a4d;
-  --lsat-success-soft:  rgba(31, 122, 77, 0.12);
-  --lsat-error:         #b3261e;
-  --lsat-error-soft:    rgba(179, 38, 30, 0.12);
+  /* Foxing stain (age) */
+  --lsat-foxing:        rgba(120, 80, 40, 0.045);
 
-  --lsat-serif:         'Source Serif 4', Georgia, 'Times New Roman', serif;
-  --lsat-mono:          'JetBrains Mono', ui-monospace, Menlo, monospace;
+  /* Type */
+  --lsat-display:       'Cormorant Garamond', 'EB Garamond', Garamond, 'Times New Roman', serif;
+  --lsat-body:          'Spectral', 'Cormorant Garamond', Garamond, 'Times New Roman', serif;
+  --lsat-script:        'Tangerine', 'Apple Chancery', cursive;
 
-  font-family: var(--lsat-serif);
-  font-size: 17px;
-  line-height: 1.55;
+  font-family: var(--lsat-body);
+  font-size: 18px;
+  line-height: 1.6;
   color: var(--lsat-ink);
   background: var(--lsat-paper);
   min-height: 100dvh;
+
+  /* Paper texture — fine noise + foxing */
   background-image:
-    radial-gradient(ellipse 80% 30% at 50% 0%, rgba(74, 58, 255, 0.05), transparent 70%);
+    radial-gradient(ellipse 380px 120px at 12% 18%, var(--lsat-foxing), transparent 70%),
+    radial-gradient(ellipse 240px 90px at 88% 76%, var(--lsat-foxing), transparent 70%),
+    radial-gradient(ellipse 140px 60px at 30% 92%, var(--lsat-foxing), transparent 70%),
+    radial-gradient(ellipse 200px 100px at 78% 8%, var(--lsat-foxing), transparent 70%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+  background-attachment: fixed;
+  background-size: auto, auto, auto, auto, 240px 240px;
 }
 
-/* dark mode toggle from main site shouldn't bleed in */
+/* Insulate from the main site's html.light/.dark toggle */
 html.light .lsat-root,
-html.dark .lsat-root {
-  /* explicitly keep our scheme regardless */
+html.dark .lsat-root,
+html .lsat-root {
+  color: var(--lsat-ink);
+  background-color: var(--lsat-paper);
 }
 
 .lsat-root *,
@@ -58,231 +77,342 @@ html.dark .lsat-root {
   box-sizing: border-box;
 }
 
-/* ===== Nav ===== */
+/* ===== Selection ===== */
+.lsat-root ::selection {
+  background: var(--lsat-ribbon-soft);
+  color: var(--lsat-ribbon-deep);
+}
+
+/* ===== Nav — a cover plate on the front of the book ===== */
 
 .lsat-nav {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
-  padding: 1.1rem 1.5rem;
+  padding: 1.1rem 1.6rem 0.9rem;
   border-bottom: 1px solid var(--lsat-rule-soft);
-  background: rgba(247, 245, 239, 0.92);
-  backdrop-filter: blur(6px);
-  position: sticky;
-  top: 0;
-  z-index: 30;
+  position: relative;
+}
+.lsat-nav::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -3px;
+  height: 1px;
+  background: var(--lsat-rule-soft);
 }
 
 .lsat-brand {
-  font-family: var(--lsat-serif);
-  font-weight: 700;
-  font-size: 1.25rem;
-  letter-spacing: 0.02em;
+  font-family: var(--lsat-display);
+  font-weight: 600;
+  font-size: 1.4rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--lsat-ink);
   text-decoration: none;
 }
 .lsat-brand-dot {
-  color: var(--lsat-accent);
-  margin: 0 0.18em;
+  color: var(--lsat-ribbon);
+  margin: 0 0.2em;
+  font-style: italic;
 }
 
 .lsat-nav-right {
   display: flex;
-  align-items: center;
-  gap: 1.1rem;
-  font-size: 0.92rem;
+  align-items: baseline;
+  gap: 1.5rem;
+  font-family: var(--lsat-body);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--lsat-ink-mid);
 }
 .lsat-nav-right a {
   color: var(--lsat-ink-mid);
   text-decoration: none;
-  transition: color 0.15s;
+  transition: color 0.18s;
+  position: relative;
 }
 .lsat-nav-right a:hover {
-  color: var(--lsat-accent);
+  color: var(--lsat-ribbon);
+}
+.lsat-nav-right a:hover::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -3px;
+  height: 1px;
+  background: var(--lsat-ribbon);
 }
 
 .lsat-btn-link {
   background: none;
   border: none;
+  font: inherit;
   color: var(--lsat-ink-mid);
   cursor: pointer;
-  font: inherit;
   padding: 0;
+  font-style: italic;
 }
 .lsat-btn-link:hover {
-  color: var(--lsat-accent);
+  color: var(--lsat-ribbon);
 }
 
 .lsat-btn-primary {
-  padding: 0.42rem 0.85rem;
-  background: var(--lsat-accent);
+  font-family: var(--lsat-display);
+  font-weight: 500;
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   color: var(--lsat-paper) !important;
-  border-radius: 6px;
-  font-weight: 600;
-  font-size: 0.88rem;
-  transition: background 0.15s;
+  background: var(--lsat-ink);
+  padding: 0.45rem 1rem;
+  border: 1px solid var(--lsat-ink);
+  border-radius: 0;
+  text-decoration: none;
+  font-style: normal !important;
+  transition: background 0.18s, color 0.18s;
 }
 .lsat-btn-primary:hover {
-  background: var(--lsat-accent-deep);
+  background: var(--lsat-ribbon);
+  border-color: var(--lsat-ribbon);
+  color: var(--lsat-paper) !important;
 }
 
 .lsat-admin-pill {
-  font-family: var(--lsat-mono);
-  font-size: 0.7rem;
+  font-family: var(--lsat-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  background: var(--lsat-gold-soft);
-  color: var(--lsat-gold);
-  padding: 0.18rem 0.45rem;
-  border-radius: 4px;
-  border: 1px solid rgba(184, 134, 11, 0.3);
+  color: var(--lsat-ribbon-deep);
+  border: 1px solid var(--lsat-ribbon-deep);
+  padding: 0.12rem 0.5rem;
+  font-style: normal;
+  background: var(--lsat-paper);
 }
 
-/* ===== Main ===== */
+/* ===== Main body — a writing page ===== */
 
 .lsat-main {
-  max-width: 64rem;
+  max-width: 56rem;
   margin: 0 auto;
-  padding: 2.5rem 1.5rem 4rem;
+  padding: 3rem 2rem 5rem;
+  position: relative;
 }
 
+/* Edition marks at the very top of pages, like Vol. I, No. III */
+.lsat-edition {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--lsat-display);
+  font-style: italic;
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  color: var(--lsat-ink-soft);
+  border-bottom: 1px solid var(--lsat-rule-soft);
+  padding-bottom: 0.5rem;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+}
+.lsat-edition em {
+  font-style: italic;
+  color: var(--lsat-ink-mid);
+}
+
+/* ===== Headings — handset display type ===== */
+
 .lsat-h1 {
-  font-family: var(--lsat-serif);
-  font-weight: 700;
-  font-size: clamp(2rem, 4.2vw, 3rem);
-  line-height: 1.1;
-  letter-spacing: -0.01em;
-  margin: 0 0 1rem;
+  font-family: var(--lsat-display);
+  font-weight: 500;
+  font-size: clamp(2.6rem, 6vw, 4.4rem);
+  line-height: 1;
+  letter-spacing: -0.005em;
+  margin: 0 0 1.4rem;
   color: var(--lsat-ink);
+  text-align: center;
+}
+.lsat-h1 em {
+  font-style: italic;
+  color: var(--lsat-ribbon-deep);
+  font-weight: 500;
 }
 
 .lsat-sub {
+  font-family: var(--lsat-body);
   font-size: 1.05rem;
+  font-style: italic;
   color: var(--lsat-ink-mid);
-  max-width: 42rem;
-  margin: 0 0 2rem;
+  max-width: 40rem;
+  margin: 0 auto 2.5rem;
+  text-align: center;
+  line-height: 1.55;
 }
 
 .lsat-h2 {
-  font-family: var(--lsat-serif);
-  font-weight: 700;
+  font-family: var(--lsat-display);
+  font-weight: 500;
   font-size: 1.6rem;
+  letter-spacing: 0.02em;
   margin: 2.5rem 0 1rem;
-  letter-spacing: -0.005em;
+  text-align: center;
 }
+
+/* ===== Fleuron divider — ❦ ❧ ⁂ ※ ===== */
+
+.lsat-fleuron {
+  text-align: center;
+  font-family: var(--lsat-display);
+  font-size: 1.6rem;
+  color: var(--lsat-ribbon);
+  margin: 2rem 0;
+  letter-spacing: 0.5em;
+  user-select: none;
+}
+.lsat-fleuron::before { content: "—  " }
+.lsat-fleuron::after { content: "  —" }
+.lsat-fleuron span { letter-spacing: 0; margin: 0 0.4em; }
 
 .lsat-rule {
   border: 0;
-  border-top: 1px solid var(--lsat-rule-soft);
+  height: 1px;
+  background: linear-gradient(to right,
+    transparent,
+    var(--lsat-rule-soft) 18%,
+    var(--lsat-rule-soft) 82%,
+    transparent);
   margin: 2rem 0;
 }
+
+/* ===== Empty / errors ===== */
 
 .lsat-empty {
   padding: 4rem 1rem;
   text-align: center;
   color: var(--lsat-ink-soft);
   font-style: italic;
+  font-size: 1.05rem;
 }
 
 .lsat-error {
-  color: var(--lsat-error);
-  font-size: 0.9rem;
+  color: var(--lsat-ribbon-deep);
+  font-style: italic;
+  font-size: 0.95rem;
 }
 
 .lsat-success {
-  color: var(--lsat-success);
-  font-size: 0.9rem;
+  color: var(--lsat-ink-mid);
+  font-style: italic;
+  font-size: 0.95rem;
 }
 
-/* ===== Game tile grid (home) ===== */
+/* ===== Mode tile grid (table of contents) ===== */
 
-.lsat-tile-grid {
+.lsat-toc {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 2rem;
+  border-top: 1px solid var(--lsat-rule-soft);
+  border-bottom: 1px solid var(--lsat-rule-soft);
+}
+
+.lsat-toc-row {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-  gap: 1rem;
-  margin: 1.5rem 0;
-}
-
-.lsat-tile {
-  display: block;
-  padding: 1.4rem 1.2rem;
-  background: var(--lsat-paper-warm);
-  border: 1px solid var(--lsat-rule-faint);
-  border-radius: 10px;
+  grid-template-columns: 3.5rem 1fr auto;
+  align-items: baseline;
+  padding: 1rem 0.5rem;
   text-decoration: none;
   color: inherit;
-  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+  border-bottom: 1px dotted var(--lsat-rule-soft);
+  transition: background 0.18s;
+}
+.lsat-toc-row:last-child { border-bottom: none; }
+.lsat-toc-row:hover {
+  background: var(--lsat-ribbon-soft);
 }
 
-.lsat-tile:hover {
-  transform: translateY(-2px);
-  border-color: var(--lsat-accent);
-  box-shadow: 0 6px 24px var(--lsat-shadow);
+.lsat-toc-num {
+  font-family: var(--lsat-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1.4rem;
+  color: var(--lsat-ribbon);
 }
-
-.lsat-tile-eyebrow {
-  font-family: var(--lsat-mono);
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--lsat-accent);
-  margin-bottom: 0.5rem;
+.lsat-toc-name {
+  font-family: var(--lsat-display);
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: 0.005em;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  position: relative;
 }
-
-.lsat-tile-title {
-  font-weight: 700;
-  font-size: 1.1rem;
-  margin-bottom: 0.3rem;
+.lsat-toc-leader {
+  flex: 1;
+  height: 1em;
+  border-bottom: 2px dotted var(--lsat-rule-soft);
+  margin: 0 0.4rem;
+  align-self: end;
+  position: relative;
+  top: -0.15em;
 }
-
-.lsat-tile-desc {
-  color: var(--lsat-ink-mid);
+.lsat-toc-meta {
+  font-family: var(--lsat-body);
+  font-style: italic;
   font-size: 0.9rem;
-  line-height: 1.45;
+  color: var(--lsat-ink-soft);
+  text-align: right;
 }
 
-/* ===== Forms ===== */
+/* ===== Forms — paper ledger entries ===== */
 
 .lsat-form {
-  max-width: 24rem;
+  max-width: 22rem;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
+  gap: 1.3rem;
 }
 .lsat-form label {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
-  font-size: 0.85rem;
-  color: var(--lsat-ink-mid);
+  gap: 0.25rem;
+  font-family: var(--lsat-display);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--lsat-ink-soft);
+  letter-spacing: 0.05em;
 }
 .lsat-form input {
-  padding: 0.6rem 0.8rem;
-  border: 1px solid var(--lsat-rule-soft);
-  border-radius: 6px;
-  font: inherit;
-  font-size: 1rem;
-  background: var(--lsat-paper);
+  font-family: var(--lsat-body);
+  font-size: 1.05rem;
+  padding: 0.4rem 0.1rem;
+  background: transparent;
   color: var(--lsat-ink);
+  border: 0;
+  border-bottom: 1px solid var(--lsat-rule);
+  border-radius: 0;
+  transition: border-color 0.18s;
 }
 .lsat-form input:focus {
-  outline: 2px solid var(--lsat-accent);
-  outline-offset: 1px;
-  border-color: var(--lsat-accent);
+  outline: none;
+  border-bottom-color: var(--lsat-ribbon);
 }
 .lsat-form button {
+  margin-top: 0.5rem;
+  font-family: var(--lsat-display);
+  font-weight: 500;
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   padding: 0.7rem 1rem;
-  background: var(--lsat-accent);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font: inherit;
-  font-weight: 600;
+  background: var(--lsat-ink);
+  color: var(--lsat-paper);
+  border: 1px solid var(--lsat-ink);
+  border-radius: 0;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.18s;
 }
 .lsat-form button:hover:not(:disabled) {
-  background: var(--lsat-accent-deep);
+  background: var(--lsat-ribbon);
+  border-color: var(--lsat-ribbon);
 }
 .lsat-form button:disabled {
   opacity: 0.5;
@@ -292,304 +422,405 @@ html.dark .lsat-root {
 /* ===== Drill engine ===== */
 
 .lsat-drill {
-  max-width: 48rem;
+  max-width: 44rem;
   margin: 0 auto;
+  position: relative;
+  padding: 1.5rem 0 0;
+}
+
+/* Top strap above the page where ribbons drop from */
+.lsat-drill::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: var(--lsat-rule-soft);
 }
 
 .lsat-drill-header {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
-  font-family: var(--lsat-mono);
-  font-size: 0.78rem;
-  color: var(--lsat-ink-mid);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  font-family: var(--lsat-display);
+  font-style: italic;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  color: var(--lsat-ink-soft);
   margin-bottom: 1rem;
 }
 
 .lsat-drill-skill {
-  background: var(--lsat-accent-soft);
-  color: var(--lsat-accent-deep);
-  padding: 0.2rem 0.55rem;
-  border-radius: 4px;
+  font-style: normal;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  color: var(--lsat-ribbon-deep);
+  border-bottom: 1px solid var(--lsat-ribbon);
+  padding-bottom: 0.1rem;
 }
-
 .lsat-drill-progress {
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: tabular-nums oldstyle-nums;
 }
-
 .lsat-drill-streak {
-  background: var(--lsat-gold-soft);
-  color: var(--lsat-gold);
-  padding: 0.2rem 0.55rem;
-  border-radius: 4px;
-  font-weight: 600;
+  font-family: var(--lsat-display);
+  color: var(--lsat-ribbon);
+  font-style: italic;
+  font-size: 1.05rem;
 }
 
+/* Timer bar — rendered as a hand-drawn rule */
 .lsat-timer-bar {
-  height: 4px;
-  background: var(--lsat-paper-deep);
-  border-radius: 2px;
-  margin-bottom: 1.4rem;
+  height: 2px;
+  background: var(--lsat-rule-faint);
+  margin: 0.5rem 0 1.5rem;
+  position: relative;
   overflow: hidden;
 }
 .lsat-timer-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--lsat-success), var(--lsat-gold), var(--lsat-error));
+  background: linear-gradient(to right,
+    var(--lsat-leaf, #4a6843),
+    var(--lsat-gold),
+    var(--lsat-ribbon));
   transition: width 0.1s linear;
 }
 
-.lsat-stem {
-  font-size: 1.05rem;
-  line-height: 1.6;
-  margin: 1.2rem 0 1.4rem;
-  color: var(--lsat-ink);
-  white-space: pre-wrap;
+/* Marginalia — the question's PT/section/Q metadata */
+.lsat-q-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-family: var(--lsat-display);
+  font-style: italic;
+  font-size: 0.92rem;
+  color: var(--lsat-ink-soft);
+  letter-spacing: 0.03em;
+  margin-bottom: 1rem;
 }
 
-.lsat-passage {
+.lsat-info-btn {
+  appearance: none;
+  background: var(--lsat-paper);
+  border: 1px solid var(--lsat-rule-soft);
+  color: var(--lsat-ink-mid);
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  font-family: var(--lsat-display);
+  font-style: italic;
+  font-weight: 500;
   font-size: 0.95rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  margin-left: 0.5rem;
+}
+.lsat-info-btn:hover {
+  background: var(--lsat-ribbon);
+  color: var(--lsat-paper);
+  border-color: var(--lsat-ribbon);
+}
+
+/* The stem — set as a journal entry, with a drop cap */
+.lsat-stem {
+  font-family: var(--lsat-body);
+  font-size: 1.1rem;
   line-height: 1.65;
-  background: var(--lsat-paper-warm);
-  border-left: 3px solid var(--lsat-accent);
-  padding: 1rem 1.2rem;
+  color: var(--lsat-ink);
+  margin: 1.2rem 0 1.6rem;
+  white-space: pre-wrap;
+  hyphens: auto;
+}
+.lsat-stem.has-dropcap::first-letter {
+  font-family: var(--lsat-display);
+  font-weight: 600;
+  float: left;
+  font-size: 4.6em;
+  line-height: 0.84;
+  margin: 0.07em 0.12em -0.12em 0;
+  color: var(--lsat-ribbon);
+}
+
+/* Embedded passage (RC) — set off as a quoted block */
+.lsat-passage {
+  font-family: var(--lsat-body);
+  font-size: 0.96rem;
+  line-height: 1.65;
+  font-style: italic;
+  color: var(--lsat-ink-mid);
+  background: rgba(122, 90, 58, 0.06);
+  border-left: 2px solid var(--lsat-rule);
+  padding: 0.9rem 1.2rem;
   margin-bottom: 1.4rem;
   white-space: pre-wrap;
-  color: var(--lsat-ink-mid);
   max-height: 18rem;
   overflow-y: auto;
 }
 
+/* Options — five choices set as a numbered list */
 .lsat-options {
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
 }
 
 .lsat-option {
   display: flex;
   align-items: flex-start;
-  gap: 0.8rem;
-  padding: 0.85rem 1rem;
-  background: var(--lsat-paper-warm);
-  border: 1px solid var(--lsat-rule-faint);
-  border-radius: 8px;
+  gap: 1rem;
+  padding: 0.85rem 1rem 0.85rem 0.6rem;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px dotted var(--lsat-rule-faint);
   text-align: left;
-  cursor: pointer;
   font: inherit;
-  font-size: 0.97rem;
+  font-family: var(--lsat-body);
+  font-size: 1rem;
+  line-height: 1.55;
   color: var(--lsat-ink);
-  transition: background 0.12s, border-color 0.12s;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
 }
-
+.lsat-option:last-child { border-bottom: 0; }
 .lsat-option:hover:not(:disabled) {
-  background: var(--lsat-paper-deep);
-  border-color: var(--lsat-accent);
+  background: var(--lsat-ribbon-soft);
 }
 .lsat-option:disabled {
   cursor: default;
 }
 
 .lsat-option-letter {
-  font-family: var(--lsat-mono);
-  font-weight: 700;
-  font-size: 0.85rem;
-  background: var(--lsat-paper-deep);
-  color: var(--lsat-ink-mid);
-  width: 1.7rem;
-  height: 1.7rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
+  font-family: var(--lsat-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1.4rem;
+  width: 1.4rem;
+  text-align: center;
   flex-shrink: 0;
-  text-transform: uppercase;
+  color: var(--lsat-ribbon);
+  position: relative;
+  top: -0.1em;
 }
 
 .lsat-option-text {
   flex: 1;
-  line-height: 1.45;
 }
 
 .lsat-option-correct {
-  background: var(--lsat-success-soft);
-  border-color: var(--lsat-success);
+  background: rgba(74, 104, 67, 0.08);
 }
 .lsat-option-correct .lsat-option-letter {
-  background: var(--lsat-success);
-  color: white;
+  color: var(--lsat-leaf, #4a6843);
+}
+.lsat-option-correct .lsat-option-text::after {
+  content: " ✓";
+  color: var(--lsat-leaf, #4a6843);
+  font-style: italic;
 }
 .lsat-option-wrong {
-  background: var(--lsat-error-soft);
-  border-color: var(--lsat-error);
+  background: rgba(156, 44, 44, 0.06);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--lsat-ink-soft);
 }
 .lsat-option-wrong .lsat-option-letter {
-  background: var(--lsat-error);
-  color: white;
-}
-
-.lsat-explanation {
-  margin-top: 1.4rem;
-  padding: 1rem 1.2rem;
-  background: var(--lsat-paper-warm);
-  border-left: 3px solid var(--lsat-accent);
-  border-radius: 4px;
-  font-size: 0.92rem;
-  line-height: 1.55;
-}
-
-.lsat-explanation-head {
-  font-family: var(--lsat-mono);
-  font-size: 0.74rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
   color: var(--lsat-ink-soft);
+}
+
+/* Explanation — the marginal commentary */
+.lsat-explanation {
+  margin-top: 1.6rem;
+  padding: 0.9rem 1.2rem;
+  border-left: 2px solid var(--lsat-ribbon);
+  background: var(--lsat-ribbon-soft);
+  font-family: var(--lsat-body);
+  font-size: 0.97rem;
+  line-height: 1.55;
+  color: var(--lsat-ink-mid);
+}
+.lsat-explanation-head {
+  font-family: var(--lsat-display);
+  font-style: italic;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  color: var(--lsat-ribbon-deep);
   margin-bottom: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-style: normal;
+  font-size: 0.78rem;
 }
 
 .lsat-drill-next {
-  margin-top: 1.4rem;
+  margin-top: 1.5rem;
   padding: 0.7rem 1.4rem;
-  background: var(--lsat-accent);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font: inherit;
-  font-weight: 600;
+  background: var(--lsat-ink);
+  color: var(--lsat-paper);
+  border: 1px solid var(--lsat-ink);
+  border-radius: 0;
+  font-family: var(--lsat-display);
+  font-weight: 500;
+  font-size: 1.05rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.18s, border-color 0.18s;
 }
 .lsat-drill-next:hover {
-  background: var(--lsat-accent-deep);
+  background: var(--lsat-ribbon);
+  border-color: var(--lsat-ribbon);
 }
 
-/* ===== Question info / admin "i" overlay ===== */
+/* ============================================================
+   T H E   R I B B O N
+   The signature mechanic. A swallow-tailed bookmark drops from
+   the top of the question card on submit. Red on correct,
+   muted on wrong. Stays through the explanation.
+   ============================================================ */
 
-.lsat-q-meta {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  font-family: var(--lsat-mono);
-  font-size: 0.72rem;
-  color: var(--lsat-ink-soft);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+.lsat-ribbon {
+  position: absolute;
+  top: -10px;
+  width: 36px;
+  height: 88px;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 8px var(--lsat-shadow-deep));
+  animation: lsat-ribbon-drop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  transform-origin: top center;
+}
+.lsat-ribbon--correct { right: 24px; }
+.lsat-ribbon--wrong   { right: 24px; }
+.lsat-ribbon--neutral { right: 24px; }
+
+@keyframes lsat-ribbon-drop {
+  0%   { transform: translateY(-100px) rotate(-1deg); opacity: 0; }
+  60%  { transform: translateY(6px) rotate(0.5deg); opacity: 1; }
+  100% { transform: translateY(0) rotate(0); opacity: 1; }
 }
 
-.lsat-info-btn {
-  appearance: none;
-  background: var(--lsat-paper-deep);
-  border: 1px solid var(--lsat-rule-soft);
-  color: var(--lsat-ink-mid);
-  width: 1.4rem;
-  height: 1.4rem;
-  border-radius: 50%;
-  font-family: var(--lsat-serif);
-  font-style: italic;
-  font-weight: 700;
-  font-size: 0.85rem;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-  transition: background 0.12s, color 0.12s;
-}
-.lsat-info-btn:hover {
-  background: var(--lsat-accent);
-  color: white;
-  border-color: var(--lsat-accent);
+@media (prefers-reduced-motion: reduce) {
+  .lsat-ribbon { animation: none; transform: none; }
 }
 
-/* Admin overlay modal */
+/* ===== Modal — paper slip with deckle edge ===== */
+
 .lsat-modal-back {
   position: fixed;
   inset: 0;
-  background: rgba(20, 24, 38, 0.55);
+  background: rgba(26, 22, 18, 0.55);
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 3rem 1rem;
+  padding: 4rem 1rem;
   z-index: 80;
   overflow-y: auto;
+  backdrop-filter: blur(2px);
 }
 .lsat-modal {
   background: var(--lsat-paper);
-  border-radius: 12px;
-  max-width: 44rem;
+  background-image:
+    radial-gradient(ellipse 200px 80px at 30% 20%, var(--lsat-foxing), transparent 70%),
+    radial-gradient(ellipse 160px 60px at 80% 80%, var(--lsat-foxing), transparent 70%);
+  border: 1px solid var(--lsat-rule);
+  max-width: 40rem;
   width: 100%;
-  padding: 1.6rem 1.6rem 1.4rem;
-  box-shadow: 0 30px 60px rgba(20, 24, 38, 0.25);
-  border: 1px solid var(--lsat-rule-soft);
+  padding: 2rem 2.4rem 1.6rem;
+  box-shadow: 0 30px 80px rgba(26, 22, 18, 0.4);
+  position: relative;
+}
+/* Deckle edge top */
+.lsat-modal::before {
+  content: "";
+  position: absolute;
+  top: -8px; left: 0; right: 0;
+  height: 8px;
+  background: var(--lsat-paper);
+  clip-path: polygon(0% 100%, 3% 30%, 6% 80%, 11% 20%, 16% 80%, 22% 30%, 28% 90%, 35% 20%, 42% 80%, 48% 30%, 54% 80%, 60% 20%, 66% 80%, 72% 30%, 78% 80%, 84% 30%, 90% 80%, 95% 30%, 100% 80%, 100% 100%);
 }
 .lsat-modal h3 {
+  font-family: var(--lsat-display);
+  font-weight: 500;
+  font-size: 1.7rem;
   margin: 0 0 0.3rem;
-  font-size: 1.15rem;
+  letter-spacing: 0.005em;
 }
 .lsat-modal-meta {
-  font-family: var(--lsat-mono);
-  font-size: 0.74rem;
+  font-family: var(--lsat-display);
+  font-style: italic;
+  font-size: 0.9rem;
   color: var(--lsat-ink-soft);
-  margin-bottom: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  margin-bottom: 1.2rem;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--lsat-rule-soft);
+  padding-bottom: 0.5rem;
 }
 .lsat-modal label {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
-  font-size: 0.78rem;
-  color: var(--lsat-ink-mid);
-  margin-bottom: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  font-family: var(--lsat-display);
+  font-style: italic;
+  font-size: 0.92rem;
+  color: var(--lsat-ink-soft);
+  letter-spacing: 0.04em;
+  margin-bottom: 0.95rem;
 }
 .lsat-modal textarea,
 .lsat-modal input,
 .lsat-modal select {
   font: inherit;
-  font-size: 0.95rem;
-  padding: 0.55rem 0.7rem;
+  font-family: var(--lsat-body);
+  font-style: normal;
+  font-size: 1rem;
+  padding: 0.5rem 0.7rem;
   border: 1px solid var(--lsat-rule-soft);
-  border-radius: 6px;
-  background: var(--lsat-paper-warm);
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.4);
   color: var(--lsat-ink);
   resize: vertical;
-  text-transform: none;
-  letter-spacing: normal;
 }
 .lsat-modal textarea {
   min-height: 4rem;
-  line-height: 1.45;
-  font-family: var(--lsat-serif);
+  line-height: 1.5;
 }
 .lsat-modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 0.6rem;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--lsat-rule-soft);
 }
 .lsat-modal-actions button {
+  font-family: var(--lsat-display);
+  font-weight: 500;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   padding: 0.55rem 1rem;
-  border-radius: 6px;
-  font: inherit;
-  font-weight: 600;
-  cursor: pointer;
-  border: 1px solid var(--lsat-rule-soft);
-  background: var(--lsat-paper-warm);
+  border: 1px solid var(--lsat-ink-mid);
+  background: transparent;
   color: var(--lsat-ink);
-}
-.lsat-modal-actions button.primary {
-  background: var(--lsat-accent);
-  color: white;
-  border-color: var(--lsat-accent);
+  border-radius: 0;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
 }
 .lsat-modal-actions button:hover {
-  background: var(--lsat-paper-deep);
+  background: var(--lsat-ink-mid);
+  color: var(--lsat-paper);
+}
+.lsat-modal-actions button.primary {
+  background: var(--lsat-ink);
+  color: var(--lsat-paper);
+  border-color: var(--lsat-ink);
 }
 .lsat-modal-actions button.primary:hover {
-  background: var(--lsat-accent-deep);
+  background: var(--lsat-ribbon);
+  border-color: var(--lsat-ribbon);
 }
 
 /* ===== Results / review ===== */
@@ -599,150 +830,340 @@ html.dark .lsat-root {
   padding: 1rem 0;
 }
 .lsat-results-score {
-  font-family: var(--lsat-serif);
-  font-size: 3.4rem;
-  font-weight: 700;
-  margin: 0.3rem 0;
-  letter-spacing: -0.02em;
+  font-family: var(--lsat-display);
+  font-size: 5.5rem;
+  font-weight: 500;
+  line-height: 1;
+  margin: 0.5rem 0 0.4rem;
+  color: var(--lsat-ribbon);
+  letter-spacing: -0.01em;
 }
 .lsat-results-detail {
+  font-family: var(--lsat-display);
+  font-style: italic;
+  font-size: 1.15rem;
   color: var(--lsat-ink-mid);
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.6rem;
+  letter-spacing: 0.02em;
 }
 .lsat-results-actions {
   display: flex;
   justify-content: center;
-  gap: 0.7rem;
+  gap: 0.6rem;
   margin-bottom: 2rem;
+  flex-wrap: wrap;
 }
 .lsat-results-actions a,
 .lsat-results-actions button {
-  padding: 0.55rem 1rem;
-  border-radius: 6px;
-  font: inherit;
-  font-weight: 600;
-  text-decoration: none;
-  border: 1px solid var(--lsat-rule-soft);
-  background: var(--lsat-paper-warm);
+  font-family: var(--lsat-display);
+  font-weight: 500;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.55rem 1.1rem;
+  border: 1px solid var(--lsat-ink-mid);
+  background: transparent;
   color: var(--lsat-ink);
+  text-decoration: none;
+  border-radius: 0;
   cursor: pointer;
+  transition: all 0.18s;
+}
+.lsat-results-actions a:hover,
+.lsat-results-actions button:hover {
+  background: var(--lsat-ink-mid);
+  color: var(--lsat-paper);
 }
 .lsat-results-actions .primary {
-  background: var(--lsat-accent);
-  color: white;
-  border-color: var(--lsat-accent);
+  background: var(--lsat-ink);
+  color: var(--lsat-paper);
+  border-color: var(--lsat-ink);
+}
+.lsat-results-actions .primary:hover {
+  background: var(--lsat-ribbon);
+  border-color: var(--lsat-ribbon);
 }
 
-/* ===== Profile / stats ===== */
+/* ===== Profile / bookplate ===== */
 
+.lsat-bookplate {
+  border: 2px solid var(--lsat-ink);
+  padding: 2.5rem 2.5rem 2rem;
+  margin: 1.5rem auto 2.5rem;
+  max-width: 38rem;
+  position: relative;
+  background: rgba(255, 255, 255, 0.25);
+}
+.lsat-bookplate::before,
+.lsat-bookplate::after {
+  content: "";
+  position: absolute;
+  border: 1px solid var(--lsat-ink);
+  pointer-events: none;
+}
+.lsat-bookplate::before {
+  inset: 6px;
+}
+.lsat-bookplate::after {
+  inset: 12px;
+  border-style: dashed;
+  border-color: var(--lsat-rule-soft);
+}
+.lsat-bookplate-corner {
+  position: absolute;
+  font-family: var(--lsat-display);
+  font-size: 2rem;
+  color: var(--lsat-ribbon);
+  pointer-events: none;
+  line-height: 1;
+}
+.lsat-bookplate-corner--tl { top: 18px; left: 22px; }
+.lsat-bookplate-corner--tr { top: 18px; right: 22px; transform: scaleX(-1); }
+.lsat-bookplate-corner--bl { bottom: 18px; left: 22px; transform: scaleY(-1); }
+.lsat-bookplate-corner--br { bottom: 18px; right: 22px; transform: scale(-1, -1); }
+
+.lsat-ex-libris {
+  text-align: center;
+  font-family: var(--lsat-display);
+  font-style: italic;
+  font-size: 0.95rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--lsat-ink-soft);
+  margin-bottom: 0.4rem;
+}
+.lsat-bookplate-name {
+  text-align: center;
+  font-family: var(--lsat-script);
+  font-size: clamp(3rem, 8vw, 5rem);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--lsat-ink);
+  margin: 0.2rem 0 0.6rem;
+}
+.lsat-bookplate-username {
+  text-align: center;
+  font-family: var(--lsat-display);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--lsat-ink-soft);
+  margin-bottom: 1.2rem;
+}
+
+/* Skills shown as a rolled list — old-style layout */
 .lsat-stat-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
-  gap: 0.8rem;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: 0;
   margin: 1rem 0;
+  border-top: 1px solid var(--lsat-rule-soft);
 }
 .lsat-stat-cell {
-  background: var(--lsat-paper-warm);
-  padding: 0.85rem 1rem;
-  border-radius: 8px;
-  border: 1px solid var(--lsat-rule-faint);
+  padding: 1rem 1rem 0.9rem;
+  border-bottom: 1px solid var(--lsat-rule-soft);
+  border-right: 1px dotted var(--lsat-rule-faint);
+  position: relative;
 }
+.lsat-stat-cell:last-child { border-right: 0; }
+
 .lsat-stat-label {
-  font-family: var(--lsat-mono);
-  font-size: 0.7rem;
+  font-family: var(--lsat-display);
+  font-style: italic;
+  font-size: 0.85rem;
   color: var(--lsat-ink-soft);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 0.25rem;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.35rem;
 }
 .lsat-stat-value {
-  font-size: 1.6rem;
-  font-weight: 700;
-  font-family: var(--lsat-serif);
-  font-variant-numeric: tabular-nums;
+  font-family: var(--lsat-display);
+  font-weight: 500;
+  font-size: 2rem;
+  color: var(--lsat-ink);
+  line-height: 1;
+  font-variant-numeric: tabular-nums oldstyle-nums;
 }
 .lsat-stat-tier {
-  font-size: 0.78rem;
-  color: var(--lsat-ink-mid);
+  font-family: var(--lsat-display);
+  font-style: italic;
+  font-size: 0.88rem;
+  color: var(--lsat-ribbon-deep);
+  margin-top: 0.25rem;
+  letter-spacing: 0.04em;
 }
 
-/* ===== Leaderboard table ===== */
-
-.lsat-lb-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.94rem;
+/* The ribbon stack — visual streak history on /me */
+.lsat-ribbon-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 1rem 0.4rem;
+  margin: 1rem 0 2rem;
+  border-top: 1px solid var(--lsat-rule-soft);
+  border-bottom: 1px solid var(--lsat-rule-soft);
+  align-items: flex-start;
 }
-.lsat-lb-table th,
-.lsat-lb-table td {
-  padding: 0.6rem 0.5rem;
-  text-align: left;
-  border-bottom: 1px solid var(--lsat-rule-faint);
-}
-.lsat-lb-table th {
-  font-family: var(--lsat-mono);
-  font-size: 0.74rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--lsat-ink-soft);
-}
-.lsat-lb-table td.score {
-  font-variant-numeric: tabular-nums;
-  font-weight: 600;
+.lsat-ribbon-stack-item {
+  width: 14px;
+  height: 36px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.1));
 }
 
-/* ===== History list ===== */
-
+/* History list */
 .lsat-history-row {
   display: grid;
-  grid-template-columns: 4rem 1fr auto;
-  gap: 0.8rem;
-  padding: 0.55rem 0;
-  border-bottom: 1px solid var(--lsat-rule-faint);
-  align-items: center;
-  font-size: 0.92rem;
+  grid-template-columns: 2rem 1fr auto;
+  gap: 1rem;
+  padding: 0.6rem 0.2rem;
+  border-bottom: 1px dotted var(--lsat-rule-faint);
+  align-items: baseline;
+  font-size: 0.95rem;
 }
 .lsat-history-row .badge {
-  font-family: var(--lsat-mono);
-  font-size: 0.74rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 0.18rem 0.4rem;
-  border-radius: 4px;
+  font-family: var(--lsat-display);
+  font-style: italic;
+  font-size: 1.05rem;
+  text-align: center;
+  font-weight: 500;
 }
-.lsat-history-row .badge.ok {
-  background: var(--lsat-success-soft);
-  color: var(--lsat-success);
-}
-.lsat-history-row .badge.no {
-  background: var(--lsat-error-soft);
-  color: var(--lsat-error);
+.lsat-history-row .badge.ok { color: var(--lsat-leaf, #4a6843); }
+.lsat-history-row .badge.no { color: var(--lsat-ribbon); }
+
+.lsat-history-row .meta {
+  font-family: var(--lsat-display);
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--lsat-ink-soft);
 }
 
-/* ===== Mode pickers (skill / section selectors) ===== */
+/* ===== Pickers — pill row replaced with chapter-style chip ===== */
 
 .lsat-pill-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin: 0.8rem 0 1.4rem;
+  gap: 0.5rem;
+  justify-content: center;
+  margin: 1.2rem 0 2rem;
 }
 .lsat-pill {
-  padding: 0.35rem 0.7rem;
-  background: var(--lsat-paper-warm);
+  font-family: var(--lsat-display);
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  padding: 0.5rem 0.95rem;
+  background: transparent;
   border: 1px solid var(--lsat-rule-soft);
-  border-radius: 16px;
-  font-size: 0.85rem;
+  border-radius: 0;
   cursor: pointer;
-  font-family: var(--lsat-mono);
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--lsat-ink-mid);
+  color: var(--lsat-ink);
+  transition: all 0.18s;
+}
+.lsat-pill:hover {
+  background: var(--lsat-ribbon-soft);
+  border-color: var(--lsat-ribbon);
+  color: var(--lsat-ribbon-deep);
 }
 .lsat-pill[aria-pressed="true"],
 .lsat-pill.active {
-  background: var(--lsat-accent);
-  color: white;
-  border-color: var(--lsat-accent);
+  background: var(--lsat-ink);
+  color: var(--lsat-paper);
+  border-color: var(--lsat-ink);
+}
+
+/* ===== Leaderboard — bookplate ledger ===== */
+
+.lsat-lb-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--lsat-body);
+  font-size: 1rem;
+  margin-top: 1rem;
+}
+.lsat-lb-table thead th {
+  font-family: var(--lsat-display);
+  font-style: italic;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  color: var(--lsat-ink-soft);
+  text-transform: uppercase;
+  padding: 0.6rem 0.5rem;
+  border-bottom: 2px solid var(--lsat-rule);
+  text-align: left;
+}
+.lsat-lb-table tbody td {
+  padding: 0.7rem 0.5rem;
+  border-bottom: 1px dotted var(--lsat-rule-faint);
+}
+.lsat-lb-table tbody tr:nth-child(1) td {
+  background: var(--lsat-gold-soft);
+  font-weight: 500;
+  color: var(--lsat-ink);
+}
+.lsat-lb-table tbody tr:nth-child(1) td:first-child::before {
+  content: "❦ ";
+  color: var(--lsat-gold);
+}
+.lsat-lb-table td.score {
+  font-family: var(--lsat-display);
+  font-variant-numeric: tabular-nums oldstyle-nums;
+  font-size: 1.15rem;
+  font-weight: 500;
+  text-align: right;
+}
+
+/* ============================================================
+   Page-curl decoration on cards (subtle).
+   ============================================================ */
+.lsat-curl {
+  position: relative;
+}
+.lsat-curl::after {
+  content: "";
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(135deg, transparent 50%, var(--lsat-paper-deep) 50%, var(--lsat-paper-warm) 70%, var(--lsat-paper-deep) 100%);
+  box-shadow: -2px -2px 4px rgba(0,0,0,0.08);
+  transition: width 0.3s, height 0.3s;
+}
+.lsat-curl:hover::after {
+  width: 32px;
+  height: 32px;
+}
+
+/* ============================================================
+   Footnotes & misc
+   ============================================================ */
+
+.lsat-footnote {
+  font-family: var(--lsat-display);
+  font-style: italic;
+  font-size: 0.92rem;
+  color: var(--lsat-ink-soft);
+  text-align: center;
+  max-width: 32rem;
+  margin: 2rem auto;
+  line-height: 1.55;
+}
+
+/* Old style ledger table for me page */
+.lsat-ledger {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+.lsat-ledger th,
+.lsat-ledger td {
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px dotted var(--lsat-rule-faint);
+  text-align: left;
+}
+.lsat-ledger th {
+  font-family: var(--lsat-display);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--lsat-ink-soft);
+  font-size: 0.85rem;
+  text-transform: uppercase;
 }

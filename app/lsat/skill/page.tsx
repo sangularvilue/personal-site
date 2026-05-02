@@ -16,23 +16,26 @@ export default function SkillPage() {
         gameMode="skill-focus"
         apiQuery={`?skill=${skill}&n=15`}
         skillFilter={skill}
-        heading={`Skill · ${LSAT_SKILL_LABELS[skill]}`}
-        subheading="Fifteen questions of this skill type, drawn at random from your level."
+        heading={LSAT_SKILL_LABELS[skill]}
+        subheading="Fifteen of this skill, drawn at your level."
       />
     );
   }
 
   return (
     <div>
-      <h1 className="lsat-h1">Skill Focus</h1>
-      <p className="lsat-sub">Pick a skill to drill.</p>
+      <h1 className="lsat-h1">
+        By <em>Skill</em>.
+      </h1>
+      <p className="lsat-sub">Choose one of the eight.</p>
+
+      <div className="lsat-fleuron" aria-hidden>
+        <span>❦</span>
+      </div>
+
       <div className="lsat-pill-row">
         {LSAT_SKILLS.map((s) => (
-          <button
-            key={s}
-            className="lsat-pill"
-            onClick={() => setSkill(s)}
-          >
+          <button key={s} className="lsat-pill" onClick={() => setSkill(s)}>
             {LSAT_SKILL_LABELS[s]}
           </button>
         ))}

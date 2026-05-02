@@ -7,7 +7,7 @@ export default function DrillPage() {
       gameMode="drill"
       apiQuery="?adaptive=1&n=15"
       heading="Adaptive Drill"
-      subheading="Fifteen questions, weighted toward your weakest skills."
+      subheading="Fifteen questions, weighted toward the skills that need work."
     />
   );
 }
