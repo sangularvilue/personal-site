@@ -1,0 +1,748 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600;8..60,700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ============================================================
+   L S A T · D R I L L
+   Practice ground for the real test.
+   Aesthetic: contemporary law-review, slate + paper.
+   ============================================================ */
+
+.lsat-root {
+  --lsat-paper:        #f7f5ef;
+  --lsat-paper-warm:   #efeae0;
+  --lsat-paper-deep:   #e3dccb;
+  --lsat-shadow:       rgba(20, 24, 38, 0.08);
+
+  --lsat-ink:          #1a1d2a;
+  --lsat-ink-mid:      #41475a;
+  --lsat-ink-soft:     #6f7587;
+  --lsat-ink-faint:    rgba(26, 29, 42, 0.42);
+
+  --lsat-rule:         #2d3142;
+  --lsat-rule-soft:    rgba(45, 49, 66, 0.30);
+  --lsat-rule-faint:   rgba(45, 49, 66, 0.10);
+
+  --lsat-accent:        #4a3aff;          /* electric indigo */
+  --lsat-accent-deep:   #2c1fc7;
+  --lsat-accent-soft:   rgba(74, 58, 255, 0.10);
+
+  --lsat-gold:          #b8860b;
+  --lsat-gold-soft:     rgba(184, 134, 11, 0.16);
+
+  --lsat-success:       #1f7a4d;
+  --lsat-success-soft:  rgba(31, 122, 77, 0.12);
+  --lsat-error:         #b3261e;
+  --lsat-error-soft:    rgba(179, 38, 30, 0.12);
+
+  --lsat-serif:         'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --lsat-mono:          'JetBrains Mono', ui-monospace, Menlo, monospace;
+
+  font-family: var(--lsat-serif);
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--lsat-ink);
+  background: var(--lsat-paper);
+  min-height: 100dvh;
+  background-image:
+    radial-gradient(ellipse 80% 30% at 50% 0%, rgba(74, 58, 255, 0.05), transparent 70%);
+}
+
+/* dark mode toggle from main site shouldn't bleed in */
+html.light .lsat-root,
+html.dark .lsat-root {
+  /* explicitly keep our scheme regardless */
+}
+
+.lsat-root *,
+.lsat-root *::before,
+.lsat-root *::after {
+  box-sizing: border-box;
+}
+
+/* ===== Nav ===== */
+
+.lsat-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 1.5rem;
+  border-bottom: 1px solid var(--lsat-rule-soft);
+  background: rgba(247, 245, 239, 0.92);
+  backdrop-filter: blur(6px);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.lsat-brand {
+  font-family: var(--lsat-serif);
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: 0.02em;
+  color: var(--lsat-ink);
+  text-decoration: none;
+}
+.lsat-brand-dot {
+  color: var(--lsat-accent);
+  margin: 0 0.18em;
+}
+
+.lsat-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  font-size: 0.92rem;
+}
+.lsat-nav-right a {
+  color: var(--lsat-ink-mid);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.lsat-nav-right a:hover {
+  color: var(--lsat-accent);
+}
+
+.lsat-btn-link {
+  background: none;
+  border: none;
+  color: var(--lsat-ink-mid);
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+}
+.lsat-btn-link:hover {
+  color: var(--lsat-accent);
+}
+
+.lsat-btn-primary {
+  padding: 0.42rem 0.85rem;
+  background: var(--lsat-accent);
+  color: var(--lsat-paper) !important;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  transition: background 0.15s;
+}
+.lsat-btn-primary:hover {
+  background: var(--lsat-accent-deep);
+}
+
+.lsat-admin-pill {
+  font-family: var(--lsat-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: var(--lsat-gold-soft);
+  color: var(--lsat-gold);
+  padding: 0.18rem 0.45rem;
+  border-radius: 4px;
+  border: 1px solid rgba(184, 134, 11, 0.3);
+}
+
+/* ===== Main ===== */
+
+.lsat-main {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+}
+
+.lsat-h1 {
+  font-family: var(--lsat-serif);
+  font-weight: 700;
+  font-size: clamp(2rem, 4.2vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin: 0 0 1rem;
+  color: var(--lsat-ink);
+}
+
+.lsat-sub {
+  font-size: 1.05rem;
+  color: var(--lsat-ink-mid);
+  max-width: 42rem;
+  margin: 0 0 2rem;
+}
+
+.lsat-h2 {
+  font-family: var(--lsat-serif);
+  font-weight: 700;
+  font-size: 1.6rem;
+  margin: 2.5rem 0 1rem;
+  letter-spacing: -0.005em;
+}
+
+.lsat-rule {
+  border: 0;
+  border-top: 1px solid var(--lsat-rule-soft);
+  margin: 2rem 0;
+}
+
+.lsat-empty {
+  padding: 4rem 1rem;
+  text-align: center;
+  color: var(--lsat-ink-soft);
+  font-style: italic;
+}
+
+.lsat-error {
+  color: var(--lsat-error);
+  font-size: 0.9rem;
+}
+
+.lsat-success {
+  color: var(--lsat-success);
+  font-size: 0.9rem;
+}
+
+/* ===== Game tile grid (home) ===== */
+
+.lsat-tile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.lsat-tile {
+  display: block;
+  padding: 1.4rem 1.2rem;
+  background: var(--lsat-paper-warm);
+  border: 1px solid var(--lsat-rule-faint);
+  border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+
+.lsat-tile:hover {
+  transform: translateY(-2px);
+  border-color: var(--lsat-accent);
+  box-shadow: 0 6px 24px var(--lsat-shadow);
+}
+
+.lsat-tile-eyebrow {
+  font-family: var(--lsat-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--lsat-accent);
+  margin-bottom: 0.5rem;
+}
+
+.lsat-tile-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 0.3rem;
+}
+
+.lsat-tile-desc {
+  color: var(--lsat-ink-mid);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+/* ===== Forms ===== */
+
+.lsat-form {
+  max-width: 24rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+.lsat-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  color: var(--lsat-ink-mid);
+}
+.lsat-form input {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--lsat-rule-soft);
+  border-radius: 6px;
+  font: inherit;
+  font-size: 1rem;
+  background: var(--lsat-paper);
+  color: var(--lsat-ink);
+}
+.lsat-form input:focus {
+  outline: 2px solid var(--lsat-accent);
+  outline-offset: 1px;
+  border-color: var(--lsat-accent);
+}
+.lsat-form button {
+  padding: 0.7rem 1rem;
+  background: var(--lsat-accent);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.lsat-form button:hover:not(:disabled) {
+  background: var(--lsat-accent-deep);
+}
+.lsat-form button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== Drill engine ===== */
+
+.lsat-drill {
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+.lsat-drill-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--lsat-mono);
+  font-size: 0.78rem;
+  color: var(--lsat-ink-mid);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+.lsat-drill-skill {
+  background: var(--lsat-accent-soft);
+  color: var(--lsat-accent-deep);
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+}
+
+.lsat-drill-progress {
+  font-variant-numeric: tabular-nums;
+}
+
+.lsat-drill-streak {
+  background: var(--lsat-gold-soft);
+  color: var(--lsat-gold);
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.lsat-timer-bar {
+  height: 4px;
+  background: var(--lsat-paper-deep);
+  border-radius: 2px;
+  margin-bottom: 1.4rem;
+  overflow: hidden;
+}
+.lsat-timer-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--lsat-success), var(--lsat-gold), var(--lsat-error));
+  transition: width 0.1s linear;
+}
+
+.lsat-stem {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 1.2rem 0 1.4rem;
+  color: var(--lsat-ink);
+  white-space: pre-wrap;
+}
+
+.lsat-passage {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  background: var(--lsat-paper-warm);
+  border-left: 3px solid var(--lsat-accent);
+  padding: 1rem 1.2rem;
+  margin-bottom: 1.4rem;
+  white-space: pre-wrap;
+  color: var(--lsat-ink-mid);
+  max-height: 18rem;
+  overflow-y: auto;
+}
+
+.lsat-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.lsat-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  padding: 0.85rem 1rem;
+  background: var(--lsat-paper-warm);
+  border: 1px solid var(--lsat-rule-faint);
+  border-radius: 8px;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.97rem;
+  color: var(--lsat-ink);
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.lsat-option:hover:not(:disabled) {
+  background: var(--lsat-paper-deep);
+  border-color: var(--lsat-accent);
+}
+.lsat-option:disabled {
+  cursor: default;
+}
+
+.lsat-option-letter {
+  font-family: var(--lsat-mono);
+  font-weight: 700;
+  font-size: 0.85rem;
+  background: var(--lsat-paper-deep);
+  color: var(--lsat-ink-mid);
+  width: 1.7rem;
+  height: 1.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+
+.lsat-option-text {
+  flex: 1;
+  line-height: 1.45;
+}
+
+.lsat-option-correct {
+  background: var(--lsat-success-soft);
+  border-color: var(--lsat-success);
+}
+.lsat-option-correct .lsat-option-letter {
+  background: var(--lsat-success);
+  color: white;
+}
+.lsat-option-wrong {
+  background: var(--lsat-error-soft);
+  border-color: var(--lsat-error);
+}
+.lsat-option-wrong .lsat-option-letter {
+  background: var(--lsat-error);
+  color: white;
+}
+
+.lsat-explanation {
+  margin-top: 1.4rem;
+  padding: 1rem 1.2rem;
+  background: var(--lsat-paper-warm);
+  border-left: 3px solid var(--lsat-accent);
+  border-radius: 4px;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.lsat-explanation-head {
+  font-family: var(--lsat-mono);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--lsat-ink-soft);
+  margin-bottom: 0.4rem;
+}
+
+.lsat-drill-next {
+  margin-top: 1.4rem;
+  padding: 0.7rem 1.4rem;
+  background: var(--lsat-accent);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.lsat-drill-next:hover {
+  background: var(--lsat-accent-deep);
+}
+
+/* ===== Question info / admin "i" overlay ===== */
+
+.lsat-q-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-family: var(--lsat-mono);
+  font-size: 0.72rem;
+  color: var(--lsat-ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.lsat-info-btn {
+  appearance: none;
+  background: var(--lsat-paper-deep);
+  border: 1px solid var(--lsat-rule-soft);
+  color: var(--lsat-ink-mid);
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  font-family: var(--lsat-serif);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: background 0.12s, color 0.12s;
+}
+.lsat-info-btn:hover {
+  background: var(--lsat-accent);
+  color: white;
+  border-color: var(--lsat-accent);
+}
+
+/* Admin overlay modal */
+.lsat-modal-back {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 24, 38, 0.55);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 3rem 1rem;
+  z-index: 80;
+  overflow-y: auto;
+}
+.lsat-modal {
+  background: var(--lsat-paper);
+  border-radius: 12px;
+  max-width: 44rem;
+  width: 100%;
+  padding: 1.6rem 1.6rem 1.4rem;
+  box-shadow: 0 30px 60px rgba(20, 24, 38, 0.25);
+  border: 1px solid var(--lsat-rule-soft);
+}
+.lsat-modal h3 {
+  margin: 0 0 0.3rem;
+  font-size: 1.15rem;
+}
+.lsat-modal-meta {
+  font-family: var(--lsat-mono);
+  font-size: 0.74rem;
+  color: var(--lsat-ink-soft);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.lsat-modal label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+  color: var(--lsat-ink-mid);
+  margin-bottom: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.lsat-modal textarea,
+.lsat-modal input,
+.lsat-modal select {
+  font: inherit;
+  font-size: 0.95rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--lsat-rule-soft);
+  border-radius: 6px;
+  background: var(--lsat-paper-warm);
+  color: var(--lsat-ink);
+  resize: vertical;
+  text-transform: none;
+  letter-spacing: normal;
+}
+.lsat-modal textarea {
+  min-height: 4rem;
+  line-height: 1.45;
+  font-family: var(--lsat-serif);
+}
+.lsat-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+.lsat-modal-actions button {
+  padding: 0.55rem 1rem;
+  border-radius: 6px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--lsat-rule-soft);
+  background: var(--lsat-paper-warm);
+  color: var(--lsat-ink);
+}
+.lsat-modal-actions button.primary {
+  background: var(--lsat-accent);
+  color: white;
+  border-color: var(--lsat-accent);
+}
+.lsat-modal-actions button:hover {
+  background: var(--lsat-paper-deep);
+}
+.lsat-modal-actions button.primary:hover {
+  background: var(--lsat-accent-deep);
+}
+
+/* ===== Results / review ===== */
+
+.lsat-results {
+  text-align: center;
+  padding: 1rem 0;
+}
+.lsat-results-score {
+  font-family: var(--lsat-serif);
+  font-size: 3.4rem;
+  font-weight: 700;
+  margin: 0.3rem 0;
+  letter-spacing: -0.02em;
+}
+.lsat-results-detail {
+  color: var(--lsat-ink-mid);
+  margin-bottom: 1.2rem;
+}
+.lsat-results-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.7rem;
+  margin-bottom: 2rem;
+}
+.lsat-results-actions a,
+.lsat-results-actions button {
+  padding: 0.55rem 1rem;
+  border-radius: 6px;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid var(--lsat-rule-soft);
+  background: var(--lsat-paper-warm);
+  color: var(--lsat-ink);
+  cursor: pointer;
+}
+.lsat-results-actions .primary {
+  background: var(--lsat-accent);
+  color: white;
+  border-color: var(--lsat-accent);
+}
+
+/* ===== Profile / stats ===== */
+
+.lsat-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  gap: 0.8rem;
+  margin: 1rem 0;
+}
+.lsat-stat-cell {
+  background: var(--lsat-paper-warm);
+  padding: 0.85rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--lsat-rule-faint);
+}
+.lsat-stat-label {
+  font-family: var(--lsat-mono);
+  font-size: 0.7rem;
+  color: var(--lsat-ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.25rem;
+}
+.lsat-stat-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  font-family: var(--lsat-serif);
+  font-variant-numeric: tabular-nums;
+}
+.lsat-stat-tier {
+  font-size: 0.78rem;
+  color: var(--lsat-ink-mid);
+}
+
+/* ===== Leaderboard table ===== */
+
+.lsat-lb-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.94rem;
+}
+.lsat-lb-table th,
+.lsat-lb-table td {
+  padding: 0.6rem 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid var(--lsat-rule-faint);
+}
+.lsat-lb-table th {
+  font-family: var(--lsat-mono);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--lsat-ink-soft);
+}
+.lsat-lb-table td.score {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+/* ===== History list ===== */
+
+.lsat-history-row {
+  display: grid;
+  grid-template-columns: 4rem 1fr auto;
+  gap: 0.8rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--lsat-rule-faint);
+  align-items: center;
+  font-size: 0.92rem;
+}
+.lsat-history-row .badge {
+  font-family: var(--lsat-mono);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.18rem 0.4rem;
+  border-radius: 4px;
+}
+.lsat-history-row .badge.ok {
+  background: var(--lsat-success-soft);
+  color: var(--lsat-success);
+}
+.lsat-history-row .badge.no {
+  background: var(--lsat-error-soft);
+  color: var(--lsat-error);
+}
+
+/* ===== Mode pickers (skill / section selectors) ===== */
+
+.lsat-pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.8rem 0 1.4rem;
+}
+.lsat-pill {
+  padding: 0.35rem 0.7rem;
+  background: var(--lsat-paper-warm);
+  border: 1px solid var(--lsat-rule-soft);
+  border-radius: 16px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-family: var(--lsat-mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--lsat-ink-mid);
+}
+.lsat-pill[aria-pressed="true"],
+.lsat-pill.active {
+  background: var(--lsat-accent);
+  color: white;
+  border-color: var(--lsat-accent);
+}

@@ -28,6 +28,19 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // lsat.grannis.xyz → rewrite to /lsat routes
+  if (hostname.startsWith("lsat.")) {
+    if (pathname.startsWith("/api/")) {
+      return NextResponse.next();
+    }
+    if (!pathname.startsWith("/lsat")) {
+      const url = request.nextUrl.clone();
+      url.pathname = pathname === "/" ? "/lsat" : `/lsat${pathname}`;
+      return NextResponse.rewrite(url);
+    }
+    return NextResponse.next();
+  }
+
   // admin.grannis.xyz → rewrite to /admin routes (with auth)
   if (hostname.startsWith("admin.")) {
     // Map subdomain paths to /admin/* paths
