@@ -245,7 +245,15 @@ export default function DailyPage() {
             );
           })}
         </div>
-        <div style={{ display: "flex", gap: "0.6rem", marginTop: "1.5rem" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: "0.6rem",
+            marginTop: "1.5rem",
+            flexWrap: "wrap",
+            alignItems: "center",
+          }}
+        >
           <button
             className="lsat-drill-next"
             disabled={!cur?.selected}
@@ -253,6 +261,8 @@ export default function DailyPage() {
             style={{
               opacity: cur?.selected ? 1 : 0.4,
               cursor: cur?.selected ? "pointer" : "not-allowed",
+              flex: "1 1 auto",
+              minWidth: "12rem",
             }}
           >
             {isLast
@@ -274,7 +284,8 @@ export default function DailyPage() {
                 border: 0,
                 color: "var(--lsat-ink-soft)",
                 cursor: "pointer",
-                padding: "0.6rem",
+                padding: "0.6rem 0.4rem",
+                flex: "0 0 auto",
               }}
             >
               ← back

@@ -570,27 +570,41 @@ export default function DrillEngine({
               </div>
             )}
           </div>
-          <button className="lsat-drill-next" onClick={next}>
-            {streakMode && result && !result.correct
-              ? "End the run"
-              : idx < questions.length - 1
-                ? "Turn the page"
-                : "Close section"}
-          </button>
-          {streakMode && streak > 0 && result && result.correct && (
+          <div
+            style={{
+              display: "flex",
+              gap: "0.6rem",
+              flexWrap: "wrap",
+              marginTop: "1.4rem",
+            }}
+          >
             <button
               className="lsat-drill-next"
-              style={{
-                marginLeft: "0.6rem",
-                background: "transparent",
-                color: "var(--lsat-ink)",
-                borderColor: "var(--lsat-rule)",
-              }}
-              onClick={() => finish()}
+              onClick={next}
+              style={{ flex: "1 1 auto", marginTop: 0 }}
             >
-              Cash out at {streak}
+              {streakMode && result && !result.correct
+                ? "End the run"
+                : idx < questions.length - 1
+                  ? "Turn the page"
+                  : "Close section"}
             </button>
-          )}
+            {streakMode && streak > 0 && result && result.correct && (
+              <button
+                className="lsat-drill-next"
+                style={{
+                  flex: "1 1 auto",
+                  marginTop: 0,
+                  background: "transparent",
+                  color: "var(--lsat-ink)",
+                  borderColor: "var(--lsat-rule)",
+                }}
+                onClick={() => finish()}
+              >
+                Cash out at {streak}
+              </button>
+            )}
+          </div>
         </>
       )}
       {showInfo && (

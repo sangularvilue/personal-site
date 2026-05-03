@@ -1214,3 +1214,322 @@ html .lsat-root {
   font-size: 0.85rem;
   text-transform: uppercase;
 }
+
+/* ============================================================
+   M O B I L E
+   Pass for ≤ 720 px and a tighter pass for ≤ 480 px.
+   ============================================================ */
+
+@media (max-width: 720px) {
+  .lsat-root {
+    font-size: 16px;
+  }
+
+  /* Nav — tighter and more forgiving when wrapping. */
+  .lsat-nav {
+    padding: 0.85rem 1rem 0.7rem;
+    flex-wrap: wrap;
+    row-gap: 0.4rem;
+  }
+  .lsat-brand {
+    font-size: 1.05rem;
+    letter-spacing: 0.04em;
+  }
+  .lsat-nav-right {
+    gap: 0.8rem;
+    font-size: 0.92rem;
+    flex-wrap: wrap;
+  }
+  .lsat-btn-primary {
+    padding: 0.35rem 0.8rem;
+    font-size: 0.85rem;
+  }
+  .lsat-admin-pill {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    padding: 0.1rem 0.4rem;
+  }
+
+  .lsat-main {
+    padding: 1.6rem 1rem 3rem;
+  }
+
+  .lsat-edition {
+    font-size: 0.78rem;
+    gap: 0.4rem;
+    padding-bottom: 0.4rem;
+    margin-bottom: 1.4rem;
+    flex-wrap: wrap;
+  }
+
+  .lsat-h1 {
+    font-size: clamp(2rem, 8vw, 2.8rem);
+  }
+  .lsat-sub {
+    font-size: 0.96rem;
+    margin-bottom: 1.6rem;
+    padding: 0 0.4rem;
+  }
+  .lsat-h2 {
+    font-size: 1.3rem;
+    margin: 1.8rem 0 0.7rem;
+  }
+
+  .lsat-fleuron {
+    margin: 1.2rem 0;
+    font-size: 1.3rem;
+    letter-spacing: 0.4em;
+  }
+
+  /* Table of Contents — stack the meta beneath the title on a narrow row. */
+  .lsat-toc-row {
+    grid-template-columns: 2.2rem 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 0.6rem;
+    row-gap: 0.05rem;
+    padding: 0.85rem 0.3rem;
+  }
+  .lsat-toc-num {
+    grid-row: 1 / 3;
+    font-size: 1.2rem;
+    align-self: center;
+  }
+  .lsat-toc-name {
+    font-size: 1.2rem;
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .lsat-toc-leader {
+    display: none;
+  }
+  .lsat-toc-meta {
+    font-size: 0.82rem;
+    text-align: left;
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  /* Drill — tighter spacing, smaller drop cap. */
+  .lsat-drill {
+    padding-top: 1rem;
+  }
+  .lsat-drill-header {
+    font-size: 0.85rem;
+    flex-wrap: wrap;
+    row-gap: 0.3rem;
+    column-gap: 0.6rem;
+  }
+  .lsat-drill-skill {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+  }
+  .lsat-stem {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  .lsat-stem.has-dropcap::first-letter {
+    font-size: 3.2em;
+    margin: 0.05em 0.08em -0.1em 0;
+  }
+  .lsat-q-meta {
+    font-size: 0.84rem;
+  }
+
+  /* Options. */
+  .lsat-option {
+    padding: 0.75rem 0.6rem 0.75rem 0.4rem;
+    gap: 0.7rem;
+    font-size: 0.95rem;
+  }
+  .lsat-option-letter {
+    font-size: 1.2rem;
+    width: 1.2rem;
+  }
+
+  .lsat-explanation {
+    font-size: 0.92rem;
+    padding: 0.75rem 0.9rem;
+  }
+
+  .lsat-drill-next {
+    width: 100%;
+    padding: 0.8rem;
+    margin-top: 1.2rem;
+    font-size: 0.95rem;
+  }
+
+  /* The dropping ribbon — sits closer to the right edge on narrow screens
+     so it doesn't extend off the page. */
+  .lsat-ribbon {
+    right: 8px;
+    width: 28px;
+    height: 70px;
+  }
+
+  /* Modal: nearly full-bleed, less padding, no fancy deckle. */
+  .lsat-modal-back {
+    padding: 1.5rem 0.6rem;
+  }
+  .lsat-modal {
+    padding: 1.4rem 1.1rem 1.1rem;
+  }
+  .lsat-modal::before {
+    display: none;
+  }
+  .lsat-modal h3 {
+    font-size: 1.3rem;
+  }
+  .lsat-modal label {
+    font-size: 0.84rem;
+    margin-bottom: 0.7rem;
+  }
+  .lsat-modal-actions {
+    flex-direction: column-reverse;
+  }
+  .lsat-modal-actions button {
+    width: 100%;
+  }
+
+  /* Bookplate — keep the look but reduce padding so the name fits. */
+  .lsat-bookplate {
+    padding: 1.6rem 1.2rem 1.2rem;
+    margin: 1rem auto 1.8rem;
+  }
+  .lsat-bookplate::before {
+    inset: 4px;
+  }
+  .lsat-bookplate::after {
+    inset: 8px;
+  }
+  .lsat-bookplate-corner {
+    font-size: 1.4rem;
+  }
+  .lsat-bookplate-corner--tl,
+  .lsat-bookplate-corner--tr {
+    top: 12px;
+  }
+  .lsat-bookplate-corner--bl,
+  .lsat-bookplate-corner--br {
+    bottom: 12px;
+  }
+  .lsat-bookplate-corner--tl,
+  .lsat-bookplate-corner--bl { left: 14px; }
+  .lsat-bookplate-corner--tr,
+  .lsat-bookplate-corner--br { right: 14px; }
+  .lsat-ex-libris {
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+  }
+  .lsat-bookplate-name {
+    font-size: clamp(2.5rem, 12vw, 4rem);
+  }
+  .lsat-bookplate-username {
+    font-size: 0.85rem;
+  }
+
+  /* Stats grid — single column, no dotted right borders. */
+  .lsat-stat-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .lsat-stat-cell {
+    border-right: 0;
+    padding: 0.8rem 0.7rem;
+  }
+  .lsat-stat-value {
+    font-size: 1.6rem;
+  }
+  .lsat-stat-label {
+    font-size: 0.78rem;
+  }
+  .lsat-stat-tier {
+    font-size: 0.8rem;
+  }
+
+  /* Pills — smaller buttons that wrap nicely. */
+  .lsat-pill {
+    padding: 0.42rem 0.7rem;
+    font-size: 0.78rem;
+  }
+
+  /* Leaderboard table — collapsed for narrow screens. */
+  .lsat-lb-table {
+    font-size: 0.92rem;
+  }
+  .lsat-lb-table thead th {
+    font-size: 0.74rem;
+    padding: 0.45rem 0.4rem;
+  }
+  .lsat-lb-table tbody td {
+    padding: 0.55rem 0.4rem;
+  }
+  .lsat-lb-table td.score {
+    font-size: 1rem;
+  }
+
+  /* History rows on the profile page. */
+  .lsat-history-row {
+    grid-template-columns: 1.6rem 1fr;
+    grid-template-rows: auto auto;
+    row-gap: 0.1rem;
+    padding: 0.6rem 0.1rem;
+  }
+  .lsat-history-row .badge {
+    grid-row: 1 / 3;
+  }
+  .lsat-history-row .meta {
+    grid-column: 2;
+    grid-row: 2;
+    font-size: 0.78rem;
+  }
+
+  /* Forms. */
+  .lsat-form {
+    max-width: 100%;
+  }
+
+  /* Results screen. */
+  .lsat-results-score {
+    font-size: 4rem;
+  }
+  .lsat-results-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+  .lsat-results-actions a,
+  .lsat-results-actions button {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Spotter grid — stays 2 columns but tighter. */
+  .lsat-spotter-grid {
+    gap: 0.4rem;
+  }
+  .lsat-spotter-btn {
+    padding: 0.7rem 0.7rem;
+    min-height: 4rem;
+    font-size: 0.95rem;
+  }
+
+  /* Bookplate corners — smaller. */
+  .lsat-ribbon-stack {
+    gap: 3px;
+  }
+  .lsat-ribbon-stack-item {
+    width: 12px;
+    height: 30px;
+  }
+}
+
+@media (max-width: 380px) {
+  .lsat-root { font-size: 15px; }
+  .lsat-main { padding: 1.2rem 0.7rem 2.5rem; }
+  .lsat-h1 { font-size: clamp(1.7rem, 9vw, 2.4rem); }
+  .lsat-bookplate { padding: 1.2rem 0.9rem 1rem; }
+  .lsat-bookplate-name { font-size: clamp(2.2rem, 14vw, 3.2rem); }
+  .lsat-stat-grid { grid-template-columns: 1fr; }
+  .lsat-stat-cell { border-right: 0; }
+  .lsat-spotter-grid { grid-template-columns: 1fr; }
+  .lsat-edition span:nth-child(2) { display: none; }
+}
