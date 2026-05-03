@@ -164,6 +164,16 @@ async function main() {
       skip("empty-stem");
       continue;
     }
+    // Mega-stem: this row's stem carries the text of several downstream
+    // questions glued together (a parse artifact from the OCR). It always
+    // contains a few inline "(A)" "(B)" "(C)" markers.
+    if (stem.length > 800) {
+      const inlineMarkers = (stem.match(/\([A-E]\)/g) || []).length;
+      if (inlineMarkers >= 3) {
+        skip("mega-stem");
+        continue;
+      }
+    }
     const choices = {
       a: (o.choice_a || "").trim(),
       b: (o.choice_b || "").trim(),

@@ -180,6 +180,21 @@ function main() {
         `stem=${JSON.stringify(stem)}; might be truncated`,
       );
     }
+
+    // Mega-stem: a stem that contains the text of multiple downstream
+    // questions concatenated together. Signature: very long stem AND it
+    // contains 3+ inline choice markers like "(A)" "(B)" "(C)". On a clean
+    // row the stem doesn't carry choice markers — those live in the choice_a
+    // through choice_e columns.
+    if (stem.length > 800) {
+      const inlineMarkers = (stem.match(/\([A-E]\)/g) || []).length;
+      if (inlineMarkers >= 3) {
+        flag(
+          "mega-stem",
+          `stem is ${stem.length} chars with ${inlineMarkers} inline choice markers`,
+        );
+      }
+    }
   }
 
   // ====== Report ======
