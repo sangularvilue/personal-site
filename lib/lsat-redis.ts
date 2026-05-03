@@ -162,6 +162,36 @@ export async function getAllQuestionIds(): Promise<string[]> {
   return (await r.smembers(K.questionsAll)) as string[];
 }
 
+// Wipe every seeded question — both the per-question hashes and the index
+// sets that drive adaptive selection. Called by the seed script before a
+// fresh seed so stale rows from a broken earlier import don't linger.
+export async function clearAllQuestions(): Promise<{ deleted: number }> {
+  const r = getRedis();
+  const ids = await getAllQuestionIds();
+  let deleted = 0;
+  // Delete in chunks to keep Upstash request size sane.
+  for (let i = 0; i < ids.length; i += 100) {
+    const chunk = ids.slice(i, i + 100);
+    if (chunk.length === 0) continue;
+    const keys = chunk.map((id) => K.question(id));
+    await r.del(...(keys as [string, ...string[]]));
+    deleted += chunk.length;
+  }
+  // Wipe the index sets.
+  const skillKeys = LSAT_SKILLS.map((s) => K.questionsBySkill(s));
+  const sectionKeys = (["RC", "LR", "LG"] as LSATSectionType[]).map((s) =>
+    K.questionsBySection(s),
+  );
+  await r.del(K.questionsAll);
+  if (skillKeys.length > 0) {
+    await r.del(...(skillKeys as [string, ...string[]]));
+  }
+  if (sectionKeys.length > 0) {
+    await r.del(...(sectionKeys as [string, ...string[]]));
+  }
+  return { deleted };
+}
+
 export async function getQuestionsByIds(
   ids: string[],
 ): Promise<LSATQuestion[]> {

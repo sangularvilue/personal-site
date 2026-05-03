@@ -19,6 +19,7 @@ type ClientQuestion = {
   section_type: LSATSectionType;
   question_num: number;
   passage_id?: string;
+  passage_text?: string;
   skill: LSATSkill;
   rating: number;
   stem: string;
@@ -513,6 +514,11 @@ export default function DrillEngine({
         />
       )}
 
+      {q.passage_text && (
+        <div className="lsat-passage" aria-label="Passage">
+          {q.passage_text}
+        </div>
+      )}
       <p className={`lsat-stem${stemStartsWithLetter ? " has-dropcap" : ""}`}>
         {q.stem}
       </p>

@@ -17,6 +17,7 @@ type DQ = {
   question_num: number;
   skill: LSATSkill;
   stem: string;
+  passage_text?: string;
   choice_a: string;
   choice_b: string;
   choice_c: string;
@@ -227,6 +228,11 @@ export default function DailyPage() {
             PT&nbsp;{q.pt} · §{q.section_num} · Q&nbsp;{q.question_num} ({q.section_type})
           </span>
         </div>
+        {q.passage_text && (
+          <div className="lsat-passage" aria-label="Passage">
+            {q.passage_text}
+          </div>
+        )}
         <p className="lsat-stem has-dropcap">{q.stem}</p>
         <div className="lsat-options">
           {LSAT_LETTERS.map((letter) => {

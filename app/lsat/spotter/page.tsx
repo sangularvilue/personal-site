@@ -15,6 +15,7 @@ type SQ = {
   question_num: number;
   skill: LSATSkill;
   stem: string;
+  passage_text?: string;
 };
 
 type Phase = "idle" | "playing" | "done";
@@ -103,6 +104,7 @@ export default function SpotterPage() {
         question_num: q.question_num,
         skill: q.skill,
         stem: q.stem,
+        passage_text: q.passage_text,
       })),
     );
     setPhase("playing");
@@ -277,7 +279,12 @@ export default function SpotterPage() {
           PT&nbsp;{q.pt} · §{q.section_num} · Q&nbsp;{q.question_num} ({q.section_type})
         </span>
       </div>
-      <p className="lsat-stem has-dropcap" style={{ minHeight: "8rem" }}>
+      {q.passage_text && (
+        <div className="lsat-passage" aria-label="Passage">
+          {q.passage_text}
+        </div>
+      )}
+      <p className="lsat-stem has-dropcap" style={{ minHeight: "5rem" }}>
         {q.stem}
       </p>
       {feedback ? (

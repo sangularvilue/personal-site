@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { currentUser } from "@/lib/lsat-auth";
 import {
   getAllQuestionIds,
+  getPassageText,
   getQuestionIdsBySection,
   getQuestionIdsBySkill,
   getQuestionsByIds,
@@ -23,6 +24,7 @@ type ClientQuestion = {
   section_type: LSATSectionType;
   question_num: number;
   passage_id?: string;
+  passage_text?: string;
   skill: LSATSkill;
   rating: number;
   stem: string;
@@ -98,7 +100,25 @@ export async function GET(req: NextRequest) {
   shuffleInPlace(pool);
   const picked = pool.slice(0, n).map(toClientQuestion);
 
+  // Attach passage text for any RC questions that reference a passage.
+  await attachPassages(picked);
+
   return NextResponse.json({ ok: true, questions: picked });
+}
+
+async function attachPassages(qs: ClientQuestion[]): Promise<void> {
+  const cache = new Map<string, string | null>();
+  await Promise.all(
+    qs.map(async (q) => {
+      if (!q.passage_id) return;
+      if (!cache.has(q.passage_id)) {
+        const t = await getPassageText(q.passage_id);
+        cache.set(q.passage_id, t);
+      }
+      const text = cache.get(q.passage_id);
+      if (text) q.passage_text = text;
+    }),
+  );
 }
 
 function toClientQuestion(q: LSATQuestion): ClientQuestion {

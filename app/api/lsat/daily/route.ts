@@ -3,6 +3,7 @@ import { currentUser } from "@/lib/lsat-auth";
 import {
   getDailySet,
   getDailySubmission,
+  getPassageText,
   getQuestionsByIds,
   todayEst,
 } from "@/lib/lsat-redis";
@@ -23,38 +24,44 @@ export async function GET() {
   qs.sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
 
   // Shuffle each question's choices the same way every time today (seeded by qid+date).
-  const out = qs.map((q) => {
-    const seed = hash(q.id + ":" + date);
-    const idx = [0, 1, 2, 3, 4];
-    let s = seed >>> 0;
-    function rnd() {
-      s = (s * 1664525 + 1013904223) >>> 0;
-      return s / 0xffffffff;
-    }
-    for (let i = idx.length - 1; i > 0; i--) {
-      const j = Math.floor(rnd() * (i + 1));
-      [idx[i], idx[j]] = [idx[j], idx[i]];
-    }
-    const opts = [q.choice_a, q.choice_b, q.choice_c, q.choice_d, q.choice_e];
-    const shuffleKey = idx.map((i) => LSAT_LETTERS[i]).join("");
-    return {
-      id: q.id,
-      pt: q.pt,
-      section_num: q.section_num,
-      section_type: q.section_type,
-      question_num: q.question_num,
-      passage_id: q.passage_id,
-      skill: q.skill,
-      rating: q.rating,
-      stem: q.stem,
-      choice_a: opts[idx[0]],
-      choice_b: opts[idx[1]],
-      choice_c: opts[idx[2]],
-      choice_d: opts[idx[3]],
-      choice_e: opts[idx[4]],
-      shuffle_key: shuffleKey,
-    };
-  });
+  const out = await Promise.all(
+    qs.map(async (q) => {
+      const seed = hash(q.id + ":" + date);
+      const idx = [0, 1, 2, 3, 4];
+      let s = seed >>> 0;
+      function rnd() {
+        s = (s * 1664525 + 1013904223) >>> 0;
+        return s / 0xffffffff;
+      }
+      for (let i = idx.length - 1; i > 0; i--) {
+        const j = Math.floor(rnd() * (i + 1));
+        [idx[i], idx[j]] = [idx[j], idx[i]];
+      }
+      const opts = [q.choice_a, q.choice_b, q.choice_c, q.choice_d, q.choice_e];
+      const shuffleKey = idx.map((i) => LSAT_LETTERS[i]).join("");
+      const passage_text = q.passage_id
+        ? (await getPassageText(q.passage_id)) || undefined
+        : undefined;
+      return {
+        id: q.id,
+        pt: q.pt,
+        section_num: q.section_num,
+        section_type: q.section_type,
+        question_num: q.question_num,
+        passage_id: q.passage_id,
+        passage_text,
+        skill: q.skill,
+        rating: q.rating,
+        stem: q.stem,
+        choice_a: opts[idx[0]],
+        choice_b: opts[idx[1]],
+        choice_c: opts[idx[2]],
+        choice_d: opts[idx[3]],
+        choice_e: opts[idx[4]],
+        shuffle_key: shuffleKey,
+      };
+    }),
+  );
 
   const user = await currentUser();
   let submission = null;

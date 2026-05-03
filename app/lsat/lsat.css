@@ -544,20 +544,30 @@ html .lsat-root {
   color: var(--lsat-ribbon);
 }
 
-/* Embedded passage (RC) — set off as a quoted block */
+/* Embedded passage (RC) — set off as a quoted block. Stays roman (not
+   italic) because passages are long; readability beats flair. */
 .lsat-passage {
   font-family: var(--lsat-body);
-  font-size: 0.96rem;
-  line-height: 1.65;
-  font-style: italic;
-  color: var(--lsat-ink-mid);
+  font-size: 0.94rem;
+  line-height: 1.62;
+  color: var(--lsat-ink);
   background: rgba(122, 90, 58, 0.06);
   border-left: 2px solid var(--lsat-rule);
   padding: 0.9rem 1.2rem;
   margin-bottom: 1.4rem;
   white-space: pre-wrap;
-  max-height: 18rem;
+  max-height: 22rem;
   overflow-y: auto;
+  border-radius: 0;
+}
+.lsat-passage::first-letter {
+  font-family: var(--lsat-display);
+  font-weight: 600;
+  float: left;
+  font-size: 3em;
+  line-height: 0.84;
+  margin: 0.05em 0.1em -0.1em 0;
+  color: var(--lsat-ink-soft);
 }
 
 /* Options — five choices set as a numbered list */
@@ -1307,6 +1317,18 @@ html .lsat-root {
     text-align: left;
     grid-column: 2;
     grid-row: 2;
+  }
+
+  /* RC passages — tighter on mobile and constrained height. */
+  .lsat-passage {
+    max-height: 14rem;
+    font-size: 0.9rem;
+    padding: 0.7rem 0.9rem;
+    line-height: 1.55;
+    margin-bottom: 1rem;
+  }
+  .lsat-passage::first-letter {
+    font-size: 2.4em;
   }
 
   /* Drill — tighter spacing, smaller drop cap. */
