@@ -243,7 +243,7 @@ export default function DrillEngine({
     }
   }
 
-  function onAdminUpdated(updated: LSATQuestion) {
+  function onAdminUpdated(updated: LSATQuestion, passageText?: string) {
     setQuestions((qs) => {
       const out = [...qs];
       const cur = out[idx];
@@ -256,8 +256,18 @@ export default function DrillEngine({
         choice_d: pickByKey(updated, cur.shuffle_key, 3),
         choice_e: pickByKey(updated, cur.shuffle_key, 4),
         stem: updated.stem,
+        passage_text: passageText ?? cur.passage_text,
       };
       out[idx] = fields;
+      // If the passage was edited, propagate the new text to every other
+      // question in this session that shares the same passage_id.
+      if (passageText && cur.passage_id) {
+        for (let i = 0; i < out.length; i++) {
+          if (i !== idx && out[i].passage_id === cur.passage_id) {
+            out[i] = { ...out[i], passage_text: passageText };
+          }
+        }
+      }
       return out;
     });
   }

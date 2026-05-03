@@ -15,7 +15,7 @@ type Props = {
   publicSkill?: LSATSkill;
   isAdmin: boolean;
   onClose: () => void;
-  onUpdated?: (q: LSATQuestion) => void;
+  onUpdated?: (q: LSATQuestion, passageText?: string) => void;
 };
 
 export default function QuestionInfo({
@@ -40,6 +40,9 @@ export default function QuestionInfo({
   });
   const [correct, setCorrect] = useState<LSATAnswerLetter>("a");
   const [skill, setSkill] = useState<LSATSkill>("inference");
+  const [passageText, setPassageText] = useState<string>("");
+  const [hasPassage, setHasPassage] = useState<boolean>(false);
+  const [passageDirty, setPassageDirty] = useState<boolean>(false);
   const [saving, setSaving] = useState(false);
   const [savedMsg, setSavedMsg] = useState("");
 
@@ -49,7 +52,7 @@ export default function QuestionInfo({
     setLoading(true);
     fetch(`/api/lsat/admin/question?id=${encodeURIComponent(questionId)}`)
       .then((r) => r.json())
-      .then((d) => {
+      .then(async (d) => {
         if (cancelled) return;
         if (!d.ok) {
           setError(d.error || "Failed to load");
@@ -67,6 +70,27 @@ export default function QuestionInfo({
         });
         setCorrect(fresh.correct);
         setSkill(fresh.skill);
+        // If the question references a passage, pull the latest passage text
+        // from Redis so admin edits are never lost.
+        if (fresh.passage_id) {
+          setHasPassage(true);
+          try {
+            const pr = await fetch(
+              `/api/lsat/admin/passage?id=${encodeURIComponent(fresh.passage_id)}`,
+            );
+            const pd = await pr.json();
+            if (!cancelled && pd.ok) {
+              setPassageText(pd.text || "");
+              setPassageDirty(false);
+            }
+          } catch {
+            // network error — leave passage textarea empty; admin can still
+            // type in fresh content.
+          }
+        } else {
+          setHasPassage(false);
+          setPassageText("");
+        }
       })
       .catch(() => {
         if (!cancelled) setError("Failed to load");
@@ -92,6 +116,7 @@ export default function QuestionInfo({
     setSaving(true);
     setError("");
     setSavedMsg("");
+    // Question fields.
     const res = await fetch("/api/lsat/admin/question", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -108,14 +133,54 @@ export default function QuestionInfo({
       }),
     });
     const data = await res.json();
-    setSaving(false);
     if (!data.ok) {
+      setSaving(false);
       setError(data.error || "Save failed");
       return;
     }
+
+    // Passage, if dirty.
+    let passageSavedText: string | undefined;
+    if (hasPassage && passageDirty && q?.passage_id) {
+      const pr = await fetch("/api/lsat/admin/passage", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          passage_id: q.passage_id,
+          text: passageText,
+        }),
+      });
+      const pd = await pr.json();
+      if (!pd.ok) {
+        setSaving(false);
+        setError(pd.error || "Passage save failed");
+        return;
+      }
+      passageSavedText = passageText;
+      setPassageDirty(false);
+    }
+
+    setSaving(false);
     setSavedMsg("Saved.");
     setQ(data.question);
-    onUpdated?.(data.question);
+    onUpdated?.(data.question, passageSavedText);
+  }
+
+  async function reloadPassage() {
+    if (!q?.passage_id) return;
+    setError("");
+    try {
+      const r = await fetch(
+        `/api/lsat/admin/passage?id=${encodeURIComponent(q.passage_id)}`,
+      );
+      const d = await r.json();
+      if (d.ok) {
+        setPassageText(d.text || "");
+        setPassageDirty(false);
+      }
+    } catch {
+      setError("Could not reload passage.");
+    }
   }
 
   // Public view: just the tag, no edit.
@@ -164,6 +229,58 @@ export default function QuestionInfo({
           <p style={{ color: "var(--lsat-ink-soft)" }}>Loading…</p>
         ) : (
           <>
+            {hasPassage && q?.passage_id && (
+              <label>
+                <span
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "baseline",
+                  }}
+                >
+                  <span>
+                    Passage
+                    <span
+                      style={{
+                        fontFamily: "var(--lsat-mono, monospace)",
+                        fontStyle: "normal",
+                        color: "var(--lsat-ink-faint)",
+                        fontSize: "0.78rem",
+                        marginLeft: "0.4rem",
+                      }}
+                    >
+                      ({q.passage_id})
+                    </span>
+                  </span>
+                  <button
+                    type="button"
+                    onClick={reloadPassage}
+                    style={{
+                      background: "transparent",
+                      border: 0,
+                      color: "var(--lsat-ribbon-deep)",
+                      fontFamily: "var(--lsat-display)",
+                      fontStyle: "italic",
+                      fontSize: "0.78rem",
+                      cursor: "pointer",
+                      padding: 0,
+                    }}
+                  >
+                    reload from Redis
+                  </button>
+                </span>
+                <textarea
+                  value={passageText}
+                  onChange={(e) => {
+                    setPassageText(e.target.value);
+                    setPassageDirty(true);
+                  }}
+                  rows={10}
+                  style={{ minHeight: "10rem" }}
+                  placeholder="Passage / LG setup text…"
+                />
+              </label>
+            )}
             <label>
               Stem
               <textarea
