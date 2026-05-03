@@ -54,7 +54,10 @@ export type LSATGameMode =
   | "speed"
   | "skill-focus"
   | "section-focus"
-  | "marathon";
+  | "marathon"
+  | "spotter"
+  | "streak"
+  | "daily";
 
 export type LSATAnswerLetter = "a" | "b" | "c" | "d" | "e";
 

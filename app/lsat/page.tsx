@@ -4,10 +4,28 @@ import { arabicToRoman } from "@/lib/lsat-types";
 
 const chapters = [
   {
+    href: "/daily",
+    title: "Today's Edition",
+    meta: "five, daily",
+    sub: "The same five for everyone. One pass.",
+  },
+  {
     href: "/drill",
     title: "Adaptive Drill",
     meta: "fifteen, mixed",
     sub: "Weighted to your weaker skills.",
+  },
+  {
+    href: "/spotter",
+    title: "Skill Spotter",
+    meta: "sixty seconds, no choices",
+    sub: "Read the question. Name the skill.",
+  },
+  {
+    href: "/streak",
+    title: "The Streak",
+    meta: "endurance, untimed",
+    sub: "One wrong ends the run.",
   },
   {
     href: "/speed",

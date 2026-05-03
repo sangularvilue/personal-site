@@ -54,6 +54,8 @@ type Props = {
   timeLimitSec?: number;
   isAdmin: boolean;
   isAuthed: boolean;
+  // Streak mode: one wrong ends the run; show accumulated ribbons at top.
+  streakMode?: boolean;
 };
 
 export default function DrillEngine({
@@ -63,6 +65,7 @@ export default function DrillEngine({
   timeLimitSec = 0,
   isAdmin,
   isAuthed,
+  streakMode = false,
 }: Props) {
   const sessionId = useRef<string>("");
   const [questions, setQuestions] = useState<ClientQuestion[]>(initialQuestions);
@@ -198,6 +201,11 @@ export default function DrillEngine({
   }
 
   function next() {
+    // Streak mode: a wrong (or unverified) answer ends the run.
+    if (streakMode && result && !result.correct) {
+      finish();
+      return;
+    }
     if (idx >= questions.length - 1) {
       finish();
       return;
@@ -209,7 +217,19 @@ export default function DrillEngine({
 
   async function finish() {
     setDone(true);
-    if (isAuthed && score > 0) {
+    if (!isAuthed) return;
+    if (streakMode) {
+      // For streaks, the final "score" is the longest correct chain.
+      try {
+        await fetch("/api/lsat/streak/finish", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ length: streak }),
+        });
+      } catch {}
+      return;
+    }
+    if (score > 0) {
       await fetch("/api/lsat/score", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -243,6 +263,56 @@ export default function DrillEngine({
 
   if (done) {
     const correctN = answers.current.filter((a) => a.result.correct).length;
+    const finalLen = streakMode ? correctN : 0;
+    if (streakMode) {
+      return (
+        <div className="lsat-results">
+          <div className="lsat-fleuron" aria-hidden>
+            <span>❦</span>
+          </div>
+          <p
+            style={{
+              fontFamily: "var(--lsat-display)",
+              fontStyle: "italic",
+              fontSize: "1.05rem",
+              color: "var(--lsat-ink-soft)",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              marginBottom: "0.4rem",
+            }}
+          >
+            The Run Ends
+          </p>
+          <p className="lsat-results-score">{finalLen}</p>
+          <p className="lsat-results-detail">
+            ribbon{finalLen === 1 ? "" : "s"} kept in a row
+          </p>
+          <div className="lsat-ribbon-stack" style={{ justifyContent: "center" }}>
+            {answers.current
+              .filter((a) => a.result.correct)
+              .map((_, i) => (
+                <Ribbon
+                  key={i}
+                  variant="correct"
+                  width={14}
+                  height={36}
+                  className="lsat-ribbon-stack-item"
+                  style={{ transform: `rotate(${(i % 5) - 2}deg)` }}
+                />
+              ))}
+          </div>
+          <div className="lsat-results-actions">
+            <a href="/" className="primary">
+              Close the book
+            </a>
+            <button onClick={() => window.location.reload()}>
+              Begin again
+            </button>
+            <a href="/leaderboard">Leaderboard</a>
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="lsat-results">
         <div className="lsat-fleuron" aria-hidden>
@@ -362,21 +432,46 @@ export default function DrillEngine({
           {LSAT_SKILL_LABELS[q.skill]}
         </span>
         <span className="lsat-drill-progress">
-          {idx + 1} / {questions.length}
+          {streakMode ? `Q ${idx + 1}` : `${idx + 1} / ${questions.length}`}
         </span>
         {streak >= 2 && (
           <span className="lsat-drill-streak">streak {streak}</span>
         )}
-        <span
-          style={{
-            fontFamily: "var(--lsat-display)",
-            fontVariantNumeric: "tabular-nums oldstyle-nums",
-            fontSize: "1.1rem",
-          }}
-        >
-          {score.toLocaleString()}
-        </span>
+        {!streakMode && (
+          <span
+            style={{
+              fontFamily: "var(--lsat-display)",
+              fontVariantNumeric: "tabular-nums oldstyle-nums",
+              fontSize: "1.1rem",
+            }}
+          >
+            {score.toLocaleString()}
+          </span>
+        )}
       </div>
+      {streakMode && streak > 0 && (
+        <div
+          className="lsat-ribbon-stack"
+          style={{
+            margin: "0.4rem 0 1rem",
+            border: 0,
+            padding: "0.4rem 0.4rem 0",
+            justifyContent: "center",
+          }}
+          aria-label={`Streak of ${streak}`}
+        >
+          {Array.from({ length: streak }).map((_, i) => (
+            <Ribbon
+              key={i}
+              variant="correct"
+              width={12}
+              height={30}
+              className="lsat-ribbon-stack-item"
+              style={{ transform: `rotate(${(i % 5) - 2}deg)` }}
+            />
+          ))}
+        </div>
+      )}
       {timeLimitSec > 0 && (
         <div className="lsat-timer-bar">
           <div
@@ -476,8 +571,26 @@ export default function DrillEngine({
             )}
           </div>
           <button className="lsat-drill-next" onClick={next}>
-            {idx < questions.length - 1 ? "Turn the page" : "Close section"}
+            {streakMode && result && !result.correct
+              ? "End the run"
+              : idx < questions.length - 1
+                ? "Turn the page"
+                : "Close section"}
           </button>
+          {streakMode && streak > 0 && result && result.correct && (
+            <button
+              className="lsat-drill-next"
+              style={{
+                marginLeft: "0.6rem",
+                background: "transparent",
+                color: "var(--lsat-ink)",
+                borderColor: "var(--lsat-rule)",
+              }}
+              onClick={() => finish()}
+            >
+              Cash out at {streak}
+            </button>
+          )}
         </>
       )}
       {showInfo && (

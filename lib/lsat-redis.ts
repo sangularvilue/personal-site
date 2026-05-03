@@ -6,6 +6,7 @@ import type {
   LSATRatings,
   LSATGameMode,
   LSATAttempt,
+  LSATAnswerLetter,
   LSATSectionType,
 } from "./lsat-types";
 import { emptyRatings, LSAT_SKILLS } from "./lsat-types";
@@ -27,6 +28,14 @@ const K = {
     `lsat:lb:${game}:${skill}:${window}`,
   numAnswered: (uid: string, skill: LSATSkill) =>
     `lsat:num-answered:${uid}:${skill}`,
+  // Skill Spotter — stem-only classification game.
+  spotterAttempts: (uid: string) => `lsat:spotter:${uid}`,
+  spotterBest: (uid: string) => `lsat:spotter-best:${uid}`,
+  // Streak — endurance run; longest correct chain.
+  streakBest: (uid: string) => `lsat:streak-best:${uid}`,
+  // Daily Edition — fixed set of 5 questions per day.
+  dailySet: (date: string) => `lsat:daily:${date}`,
+  dailySubmission: (uid: string, date: string) => `lsat:daily-sub:${uid}:${date}`,
 };
 
 // ====== USERS ======
@@ -401,3 +410,132 @@ export function todayEst(): string {
   });
   return fmt.format(now);
 }
+
+// ====== SKILL SPOTTER ======
+
+export type SpotterAttempt = {
+  question_id: string;
+  predicted: LSATSkill;
+  actual: LSATSkill;
+  correct: boolean;
+  ms_to_answer: number;
+  answered_at: number;
+  session_id: string;
+};
+
+export async function logSpotterAttempt(
+  uid: string,
+  attempt: SpotterAttempt,
+): Promise<void> {
+  const r = getRedis();
+  await r.lpush(K.spotterAttempts(uid), JSON.stringify(attempt));
+  await r.ltrim(K.spotterAttempts(uid), 0, 4999);
+}
+
+export async function getSpotterBest(uid: string): Promise<number> {
+  const r = getRedis();
+  const v = await r.get<string | number>(K.spotterBest(uid));
+  if (typeof v === "number") return v;
+  if (typeof v === "string") return parseInt(v, 10) || 0;
+  return 0;
+}
+
+export async function setSpotterBest(uid: string, score: number): Promise<void> {
+  const r = getRedis();
+  const cur = await getSpotterBest(uid);
+  if (score > cur) await r.set(K.spotterBest(uid), score);
+}
+
+// ====== STREAK ======
+
+export async function getStreakBest(uid: string): Promise<number> {
+  const r = getRedis();
+  const v = await r.get<string | number>(K.streakBest(uid));
+  if (typeof v === "number") return v;
+  if (typeof v === "string") return parseInt(v, 10) || 0;
+  return 0;
+}
+
+export async function setStreakBest(uid: string, n: number): Promise<void> {
+  const r = getRedis();
+  const cur = await getStreakBest(uid);
+  if (n > cur) await r.set(K.streakBest(uid), n);
+}
+
+// ====== DAILY EDITION ======
+
+// Pick 5 question ids deterministically per date. Uses a hash-based seed so the
+// same date always maps to the same set, but varies day-to-day.
+function seededShuffle<T>(arr: T[], seed: number): T[] {
+  const out = [...arr];
+  let s = seed;
+  function next() {
+    s = (s * 1664525 + 1013904223) >>> 0;
+    return s / 0xffffffff;
+  }
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(next() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
+function dateSeed(dateEst: string): number {
+  let h = 0;
+  for (let i = 0; i < dateEst.length; i++) {
+    h = (h * 31 + dateEst.charCodeAt(i)) >>> 0;
+  }
+  return h;
+}
+
+export async function getDailySet(date: string): Promise<string[]> {
+  const r = getRedis();
+  const cached = await r.get<string | string[]>(K.dailySet(date));
+  if (cached) {
+    if (Array.isArray(cached)) return cached.filter((x): x is string => typeof x === "string");
+    try {
+      const parsed = JSON.parse(cached);
+      if (Array.isArray(parsed)) return parsed;
+    } catch {}
+  }
+  // Compute fresh: pick 5 ids deterministically from the full pool.
+  const all = await getAllQuestionIds();
+  if (all.length === 0) return [];
+  const shuffled = seededShuffle(all, dateSeed(date));
+  const picked = shuffled.slice(0, 5);
+  await r.set(K.dailySet(date), JSON.stringify(picked));
+  return picked;
+}
+
+export type DailySubmission = {
+  date: string;
+  picks: Record<string, LSATAnswerLetter | null>; // qid -> selected letter
+  correct_count: number;
+  score: number;
+  submitted_at: number;
+};
+
+export async function getDailySubmission(
+  uid: string,
+  date: string,
+): Promise<DailySubmission | null> {
+  const r = getRedis();
+  const v = await r.get<string | DailySubmission>(K.dailySubmission(uid, date));
+  if (!v) return null;
+  if (typeof v === "object") return v as DailySubmission;
+  try {
+    return JSON.parse(v);
+  } catch {
+    return null;
+  }
+}
+
+export async function setDailySubmission(
+  uid: string,
+  date: string,
+  sub: DailySubmission,
+): Promise<void> {
+  const r = getRedis();
+  await r.set(K.dailySubmission(uid, date), JSON.stringify(sub));
+}
+

@@ -10,6 +10,9 @@ import {
 
 const GAMES: Array<{ key: LSATGameMode; label: string }> = [
   { key: "drill", label: "Adaptive" },
+  { key: "spotter", label: "Spotter" },
+  { key: "streak", label: "Streak" },
+  { key: "daily", label: "Daily" },
   { key: "speed", label: "Speed" },
   { key: "skill-focus", label: "Skill" },
   { key: "section-focus", label: "Section" },

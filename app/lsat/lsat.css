@@ -1146,6 +1146,53 @@ html .lsat-root {
   line-height: 1.55;
 }
 
+/* ============================================================
+   Skill Spotter — eight-button grid for the rhythm classifier
+   ============================================================ */
+.lsat-spotter-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  margin-top: 1.2rem;
+}
+@media (min-width: 640px) {
+  .lsat-spotter-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.lsat-spotter-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  align-items: flex-start;
+  padding: 0.85rem 1rem;
+  background: var(--lsat-paper);
+  border: 1px solid var(--lsat-rule-soft);
+  border-radius: 0;
+  font-family: var(--lsat-display);
+  font-size: 1.05rem;
+  letter-spacing: 0.005em;
+  color: var(--lsat-ink);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+  position: relative;
+  min-height: 4.5rem;
+}
+.lsat-spotter-btn:hover {
+  background: var(--lsat-ribbon-soft);
+  border-color: var(--lsat-ribbon);
+  color: var(--lsat-ribbon-deep);
+  transform: translateY(-1px);
+}
+.lsat-spotter-num {
+  font-family: var(--lsat-display);
+  font-style: italic;
+  font-size: 0.78rem;
+  color: var(--lsat-ribbon);
+  letter-spacing: 0.04em;
+}
+
 /* Old style ledger table for me page */
 .lsat-ledger {
   width: 100%;
