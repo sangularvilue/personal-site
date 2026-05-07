@@ -524,7 +524,7 @@ export default function DrillEngine({
         />
       )}
 
-      {q.passage_text && (
+      {q.passage_text && q.passage_text.trim() && (
         <div className="lsat-passage" aria-label="Passage">
           {q.passage_text}
         </div>

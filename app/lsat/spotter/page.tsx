@@ -279,7 +279,7 @@ export default function SpotterPage() {
           PT&nbsp;{q.pt} · §{q.section_num} · Q&nbsp;{q.question_num} ({q.section_type})
         </span>
       </div>
-      {q.passage_text && (
+      {q.passage_text && q.passage_text.trim() && (
         <div className="lsat-passage" aria-label="Passage">
           {q.passage_text}
         </div>
