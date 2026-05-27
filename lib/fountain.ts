@@ -278,6 +278,68 @@ export async function deleteBallad(id: string): Promise<void> {
   await renumberBallads(existing.currentId);
 }
 
+export interface FountainBackup {
+  version: 1;
+  exportedAt: number;
+  currents: Array<Current & { ballads: Ballad[] }>;
+}
+
+export async function exportFountain(): Promise<FountainBackup> {
+  const currents = await getFountainTree();
+  return {
+    version: 1,
+    exportedAt: Date.now(),
+    currents,
+  };
+}
+
+export async function replaceFountain(backup: FountainBackup): Promise<void> {
+  if (!backup || backup.version !== 1 || !Array.isArray(backup.currents)) {
+    throw new Error("Invalid backup file");
+  }
+
+  const redis = getRedis();
+
+  // 1. Read existing keys so we can wipe them
+  const existingCurrentIds = await redis.zrange(CURRENTS_KEY, 0, -1);
+  const wipe = redis.pipeline();
+  for (const cid of existingCurrentIds) {
+    const balladIds = await redis.zrange(currentBalladsKey(cid as string), 0, -1);
+    for (const bid of balladIds) wipe.del(balladKey(bid as string));
+    wipe.del(currentBalladsKey(cid as string));
+    wipe.del(currentKey(cid as string));
+  }
+  wipe.del(CURRENTS_KEY);
+  await wipe.exec();
+
+  // 2. Write backup data, preserving ids/slugs so links stay stable
+  const write = redis.pipeline();
+  backup.currents.forEach((c, ci) => {
+    const ballads = Array.isArray(c.ballads) ? c.ballads : [];
+    const { ballads: _b, ...rest } = c;
+    void _b;
+    const current: Current = {
+      ...rest,
+      order: ci,
+    };
+    write.set(currentKey(current.id), current);
+    write.zadd(CURRENTS_KEY, { score: ci, member: current.id });
+    ballads.forEach((b, bi) => {
+      const ballad: Ballad = {
+        ...b,
+        currentId: current.id,
+        order: bi,
+      };
+      write.set(balladKey(ballad.id), ballad);
+      write.zadd(currentBalladsKey(current.id), {
+        score: bi,
+        member: ballad.id,
+      });
+    });
+  });
+  await write.exec();
+}
+
 export async function moveBallad(
   id: string,
   direction: "up" | "down"

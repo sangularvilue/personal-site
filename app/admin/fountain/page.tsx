@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getFountainTree } from "@/lib/fountain";
 import { FountainAdminList } from "./fountain-admin-list";
+import { FountainBackup } from "./fountain-backup";
 
 export const dynamic = "force-dynamic";
 
@@ -36,6 +37,10 @@ export default async function FountainAdmin() {
           </Link>
         </div>
       </header>
+
+      <div className="flex justify-end mb-6 -mt-2">
+        <FountainBackup />
+      </div>
 
       <FountainAdminList tree={tree} />
     </main>
