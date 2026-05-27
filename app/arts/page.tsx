@@ -3,6 +3,13 @@ import { getAllPosts, getAllTags, Post } from "@/lib/posts";
 import GlassCard from "../components/glass-card";
 import AmbientImage from "../components/ambient-image";
 
+const FOUNTAIN_TILE = {
+  href: "/fountain",
+  label: "Serial",
+  title: "The Fountain",
+  excerpt: "Currents and the ballads that run through them.",
+};
+
 export const dynamic = "force-dynamic";
 
 function readingTime(content: string): string {
@@ -241,12 +248,55 @@ export default async function Arts({
                   {label}
                 </h3>
                 <div className="space-y-3">
+                  {key === "stories" && (
+                    <GlassCard
+                      href={FOUNTAIN_TILE.href}
+                      className="cursor-pointer group"
+                    >
+                      <div className="p-4">
+                        <span className="text-[0.65rem] uppercase tracking-widest text-sand-dim font-semibold">
+                          {FOUNTAIN_TILE.label}
+                        </span>
+                        <h3 className="font-serif text-base font-medium text-text mt-1 mb-1.5 group-hover:text-sand transition-colors leading-snug">
+                          {FOUNTAIN_TILE.title}
+                        </h3>
+                        <p className="text-xs text-text-soft leading-relaxed font-serif italic line-clamp-2">
+                          {FOUNTAIN_TILE.excerpt}
+                        </p>
+                      </div>
+                    </GlassCard>
+                  )}
                   {posts.map((post) => (
                     <PostTile key={post.id} post={post} />
                   ))}
                 </div>
               </div>
             )
+          )}
+          {!sections.some((s) => s.key === "stories") && (
+            <div>
+              <h3 className="font-serif text-sand text-base font-medium mb-4 pb-2 border-b border-glass-border">
+                Stories
+              </h3>
+              <div className="space-y-3">
+                <GlassCard
+                  href={FOUNTAIN_TILE.href}
+                  className="cursor-pointer group"
+                >
+                  <div className="p-4">
+                    <span className="text-[0.65rem] uppercase tracking-widest text-sand-dim font-semibold">
+                      {FOUNTAIN_TILE.label}
+                    </span>
+                    <h3 className="font-serif text-base font-medium text-text mt-1 mb-1.5 group-hover:text-sand transition-colors leading-snug">
+                      {FOUNTAIN_TILE.title}
+                    </h3>
+                    <p className="text-xs text-text-soft leading-relaxed font-serif italic line-clamp-2">
+                      {FOUNTAIN_TILE.excerpt}
+                    </p>
+                  </div>
+                </GlassCard>
+              </div>
+            </div>
           )}
         </div>
       )}

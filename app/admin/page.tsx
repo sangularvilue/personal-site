@@ -30,6 +30,12 @@ export default async function AdminDashboard() {
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-serif text-sand text-lg font-medium">Posts</h2>
           <Link
+            href="/admin/fountain"
+            className="px-4 py-2 border border-glass-border rounded-xl text-text-soft text-sm font-mono hover:text-teal hover:border-teal/30 transition-all backdrop-blur-sm"
+          >
+            the fountain
+          </Link>
+          <Link
             href="/admin/posts/new"
             className="px-4 py-2 bg-sand/10 border border-sand/20 rounded-xl text-sand text-sm font-mono hover:bg-sand/20 transition-all backdrop-blur-sm"
           >
