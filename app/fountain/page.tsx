@@ -17,15 +17,9 @@ export default async function FountainTOC() {
 
       <article>
         <header className="mb-12 pb-6 border-b border-glass-border">
-          <span className="text-[0.72rem] uppercase tracking-widest text-sand-dim font-semibold">
-            A serial story
-          </span>
-          <h1 className="font-serif text-sand text-[clamp(2rem,5vw,3rem)] font-medium mt-2 mb-3">
+          <h1 className="font-serif text-sand text-[clamp(2rem,5vw,3rem)] font-medium">
             The Fountain
           </h1>
-          <p className="text-sm text-text-soft font-serif italic">
-            Currents and the ballads that run through them.
-          </p>
         </header>
 
         {tree.length === 0 ? (
