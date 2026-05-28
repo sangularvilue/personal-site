@@ -247,6 +247,9 @@ export default async function Arts({
                   {label}
                 </h3>
                 <div className="space-y-3">
+                  {posts.map((post) => (
+                    <PostTile key={post.id} post={post} />
+                  ))}
                   {key === "stories" && (
                     <GlassCard
                       href={FOUNTAIN_TILE.href}
@@ -262,9 +265,6 @@ export default async function Arts({
                       </div>
                     </GlassCard>
                   )}
-                  {posts.map((post) => (
-                    <PostTile key={post.id} post={post} />
-                  ))}
                 </div>
               </div>
             )
