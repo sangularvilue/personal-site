@@ -7,7 +7,6 @@ const FOUNTAIN_TILE = {
   href: "/fountain",
   label: "Serial",
   title: "The Fountain",
-  excerpt: "Currents and the ballads that run through them.",
 };
 
 export const dynamic = "force-dynamic";
@@ -257,12 +256,9 @@ export default async function Arts({
                         <span className="text-[0.65rem] uppercase tracking-widest text-sand-dim font-semibold">
                           {FOUNTAIN_TILE.label}
                         </span>
-                        <h3 className="font-serif text-base font-medium text-text mt-1 mb-1.5 group-hover:text-sand transition-colors leading-snug">
+                        <h3 className="font-serif text-base font-medium text-text mt-1 group-hover:text-sand transition-colors leading-snug">
                           {FOUNTAIN_TILE.title}
                         </h3>
-                        <p className="text-xs text-text-soft leading-relaxed font-serif italic line-clamp-2">
-                          {FOUNTAIN_TILE.excerpt}
-                        </p>
                       </div>
                     </GlassCard>
                   )}
@@ -287,12 +283,9 @@ export default async function Arts({
                     <span className="text-[0.65rem] uppercase tracking-widest text-sand-dim font-semibold">
                       {FOUNTAIN_TILE.label}
                     </span>
-                    <h3 className="font-serif text-base font-medium text-text mt-1 mb-1.5 group-hover:text-sand transition-colors leading-snug">
+                    <h3 className="font-serif text-base font-medium text-text mt-1 group-hover:text-sand transition-colors leading-snug">
                       {FOUNTAIN_TILE.title}
                     </h3>
-                    <p className="text-xs text-text-soft leading-relaxed font-serif italic line-clamp-2">
-                      {FOUNTAIN_TILE.excerpt}
-                    </p>
                   </div>
                 </GlassCard>
               </div>
