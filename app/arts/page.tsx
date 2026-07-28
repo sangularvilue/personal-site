@@ -25,6 +25,16 @@ const SECTIONS = [
   { key: "stories", label: "Stories" },
 ] as const;
 
+// Tailwind needs literal class names, so map column count to a static class
+const GRID_COLS: Record<number, string> = {
+  1: "lg:grid-cols-1",
+  2: "lg:grid-cols-2",
+  3: "lg:grid-cols-3",
+  4: "lg:grid-cols-4",
+  5: "lg:grid-cols-5",
+  6: "lg:grid-cols-6",
+};
+
 function PostTile({ post }: { post: Post }) {
   return (
     <GlassCard href={`/arts/${post.slug}`} className="cursor-pointer group">
@@ -144,21 +154,31 @@ export default async function Arts({
     );
   }
 
-  // Group posts by section (a post appears in the first matching section)
-  const sections = SECTIONS.map(({ key, label }) => ({
-    key,
-    label,
-    posts: allPosts.filter((p) => p.tags.includes(key)),
-  })).filter((s) => s.posts.length > 0);
+  // Three most recently published pieces, by first-submission date
+  const recent = [...allPosts]
+    .sort((a, b) => b.createdAt - a.createdAt)
+    .slice(0, 3);
 
-  // Posts that don't match any section
+  // Group posts by section. Stories always shows — it holds the Fountain card.
+  const sections = SECTIONS.map(({ key, label }) => ({
+    key: key as string,
+    label: label as string,
+    posts: allPosts.filter((p) => p.tags.includes(key)),
+  })).filter((s) => s.posts.length > 0 || s.key === "stories");
+
+  // Posts that don't match any section land in the trailing "Other" column
   const sectionKeys = new Set<string>(SECTIONS.map((s) => s.key));
   const uncategorized = allPosts.filter(
     (p) => !p.tags.some((t) => sectionKeys.has(t))
   );
 
+  const columns = [
+    ...sections,
+    { key: "other", label: "Other", posts: uncategorized },
+  ];
+
   return (
-    <main className="min-h-screen px-[clamp(1.5rem,5vw,4rem)] py-12 max-w-[1100px] mx-auto animate-rise">
+    <main className="min-h-screen px-[clamp(1.5rem,5vw,4rem)] py-12 max-w-[1280px] mx-auto animate-rise">
       <header className="mb-12 pb-6 border-b border-glass-border">
         <Link
           href="/"
@@ -238,10 +258,28 @@ export default async function Arts({
           </p>
         </div>
       ) : (
-        // Column layout — each section is a column with tiles
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
-          {[...sections, ...(uncategorized.length > 0 ? [{ key: "other", label: "Other", posts: uncategorized }] : [])].map(
-            ({ key, label, posts }) => (
+        <>
+          {/* Recent — the three newest pieces, above the columns */}
+          {recent.length > 0 && (
+            <section className="glass-subtle p-5 mb-10">
+              <h3 className="font-serif text-sand text-base font-medium mb-4 pb-2 border-b border-glass-border">
+                Recent
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-start">
+                {recent.map((post) => (
+                  <PostTile key={post.id} post={post} />
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Column layout — each section is a column with tiles */}
+          <div
+            className={`grid grid-cols-1 sm:grid-cols-2 ${
+              GRID_COLS[columns.length] ?? "lg:grid-cols-5"
+            } gap-5 items-start`}
+          >
+            {columns.map(({ key, label, posts }) => (
               <div key={key}>
                 <h3 className="font-serif text-sand text-base font-medium mb-4 pb-2 border-b border-glass-border">
                   {label}
@@ -265,33 +303,16 @@ export default async function Arts({
                       </div>
                     </GlassCard>
                   )}
+                  {posts.length === 0 && key !== "stories" && (
+                    <p className="text-xs text-text-soft/50 font-serif italic">
+                      Nothing here yet.
+                    </p>
+                  )}
                 </div>
               </div>
-            )
-          )}
-          {!sections.some((s) => s.key === "stories") && (
-            <div>
-              <h3 className="font-serif text-sand text-base font-medium mb-4 pb-2 border-b border-glass-border">
-                Stories
-              </h3>
-              <div className="space-y-3">
-                <GlassCard
-                  href={FOUNTAIN_TILE.href}
-                  className="cursor-pointer group"
-                >
-                  <div className="p-4">
-                    <span className="text-[0.65rem] uppercase tracking-widest text-sand-dim font-semibold">
-                      {FOUNTAIN_TILE.label}
-                    </span>
-                    <h3 className="font-serif text-base font-medium text-text mt-1 group-hover:text-sand transition-colors leading-snug">
-                      {FOUNTAIN_TILE.title}
-                    </h3>
-                  </div>
-                </GlassCard>
-              </div>
-            </div>
-          )}
-        </div>
+            ))}
+          </div>
+        </>
       )}
 
       {/* RSS link */}
