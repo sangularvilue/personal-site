@@ -3,12 +3,6 @@ import { getAllPosts, getAllTags, Post } from "@/lib/posts";
 import GlassCard from "../components/glass-card";
 import AmbientImage from "../components/ambient-image";
 
-const FOUNTAIN_TILE = {
-  href: "/fountain",
-  label: "Serial",
-  title: "The Fountain",
-};
-
 export const dynamic = "force-dynamic";
 
 function readingTime(content: string): string {
@@ -159,12 +153,12 @@ export default async function Arts({
     .sort((a, b) => b.createdAt - a.createdAt)
     .slice(0, 3);
 
-  // Group posts by section. Stories always shows — it holds the Fountain card.
+  // Group posts by section (a post appears in every section it's tagged for)
   const sections = SECTIONS.map(({ key, label }) => ({
     key: key as string,
     label: label as string,
     posts: allPosts.filter((p) => p.tags.includes(key)),
-  })).filter((s) => s.posts.length > 0 || s.key === "stories");
+  })).filter((s) => s.posts.length > 0);
 
   // Posts that don't match any section land in the trailing "Other" column
   const sectionKeys = new Set<string>(SECTIONS.map((s) => s.key));
@@ -288,22 +282,7 @@ export default async function Arts({
                   {posts.map((post) => (
                     <PostTile key={post.id} post={post} />
                   ))}
-                  {key === "stories" && (
-                    <GlassCard
-                      href={FOUNTAIN_TILE.href}
-                      className="cursor-pointer group"
-                    >
-                      <div className="p-4">
-                        <span className="text-[0.65rem] uppercase tracking-widest text-sand-dim font-semibold">
-                          {FOUNTAIN_TILE.label}
-                        </span>
-                        <h3 className="font-serif text-base font-medium text-text mt-1 group-hover:text-sand transition-colors leading-snug">
-                          {FOUNTAIN_TILE.title}
-                        </h3>
-                      </div>
-                    </GlassCard>
-                  )}
-                  {posts.length === 0 && key !== "stories" && (
+                  {posts.length === 0 && (
                     <p className="text-xs text-text-soft/50 font-serif italic">
                       Nothing here yet.
                     </p>
