@@ -690,139 +690,79 @@
   margin-top: 18px;
   color: var(--fog);
 }
-.tt-history-stats {
+.tt-history-lenses {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  margin: 58px 0 38px;
-  background: #334968;
+  gap: 24px;
+  margin-top: 58px;
 }
-.tt-history-stats > div {
-  min-height: 135px;
-  padding: 20px;
-  background: #0c1930;
+.tt-history-lens {
+  border-top: 2px solid var(--mint);
+  padding-top: 17px;
 }
-.tt-history-stats span,
-.tt-history-stats small {
-  display: block;
-  color: var(--fog);
-  font-size: 12px;
+.tt-history-lens:nth-child(2) {
+  border-top-color: var(--pollen);
 }
-.tt-history-stats strong {
-  display: block;
-  margin: 9px 0 5px;
-  color: var(--pollen);
-  font:
-    400 clamp(25px, 3vw, 39px)/1 Fraunces,
-    Georgia,
-    serif;
+.tt-history-lens:nth-child(3) {
+  border-top-color: #8ea8cc;
 }
-.tt-history-grid {
-  display: grid;
-  grid-template-columns: 1.3fr 0.7fr;
-  gap: 34px;
-}
-.tt-history-grid section,
-.tt-history-trend {
-  padding-top: 18px;
-  border-top: 1px solid #405678;
-}
-.tt-history-grid h2,
-.tt-history-trend h2 {
-  margin: 0 0 17px;
-  font:
-    400 27px Fraunces,
-    Georgia,
-    serif;
-}
-.tt-history-map {
-  position: relative;
-  overflow: hidden;
-  aspect-ratio: 2 / 1;
-  border: 1px solid #334968;
-  background:
-    linear-gradient(#06142bd9, #06142bd9),
-    url("/thenthere/earth-natural.webp") center / cover;
-}
-.tt-history-map svg {
-  width: 100%;
-  height: 100%;
-}
-.tt-history-map line {
-  stroke: #fde593a8;
-  stroke-width: 0.25;
-}
-.tt-history-map circle.tt-history-guess,
-.tt-history-map i.tt-history-guess {
-  fill: #fde593;
-  background: #fde593;
-}
-.tt-history-map circle.tt-history-answer,
-.tt-history-map i.tt-history-answer {
-  fill: var(--mint);
-  background: var(--mint);
-}
-.tt-history-map p {
-  position: absolute;
-  right: 9px;
-  bottom: 7px;
+.tt-history-lens-head h2 {
   margin: 0;
-  padding: 5px 7px;
-  background: #071426df;
-  color: #d5deeb;
-  font-size: 10px;
+  font:
+    400 29px Fraunces,
+    Georgia,
+    serif;
 }
-.tt-history-map p i {
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  margin: 0 4px 0 7px;
-  border-radius: 50%;
-}
-.tt-history-fields > div {
-  display: grid;
-  grid-template-columns: minmax(80px, 1fr) 1.4fr 34px;
-  gap: 9px;
-  align-items: center;
-  margin: 12px 0;
-  color: #d5deeb;
-  font-size: 12px;
-}
-.tt-history-fields i {
-  display: block;
-  height: 5px;
-  overflow: hidden;
-  background: #203554;
-}
-.tt-history-fields i b {
-  display: block;
-  height: 100%;
-  background: var(--mint);
-}
-.tt-history-fields strong {
-  color: var(--pollen);
-  font-size: 12px;
-  text-align: right;
-}
-.tt-history-fields p {
+.tt-history-lens-head p {
+  min-height: 40px;
+  margin: 8px 0 16px;
   color: var(--fog);
   font-size: 13px;
+  line-height: 1.45;
 }
-.tt-history-trend {
-  margin-top: 42px;
+.tt-history-provisional {
+  margin: 0 0 16px;
+  color: #9eb0c7;
+  font-size: 11px;
+  line-height: 1.4;
 }
-.tt-history-trend > div {
+.tt-history-directions {
+  display: grid;
+  gap: 15px;
+}
+.tt-history-directions > div {
+  border-top: 1px solid #334968;
+}
+.tt-history-directions h3 {
+  margin: 11px 0 4px;
+  color: var(--mint);
+  font-size: 12px;
+  font-weight: 700;
+}
+.tt-history-directions > div + div h3 {
+  color: var(--pollen);
+}
+.tt-history-directions p {
   display: flex;
-  align-items: end;
-  gap: 5px;
-  height: 120px;
-  padding: 12px 0 0;
-  border-bottom: 1px solid #405678;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+  padding: 8px 0;
+  border-top: 1px solid #213653;
 }
-.tt-history-trend span {
-  min-width: 7px;
-  flex: 1;
-  background: linear-gradient(#2fc472, #1d4f7a);
+.tt-history-directions p:first-of-type {
+  border-top: 0;
+}
+.tt-history-directions b {
+  color: #edf3fb;
+  font-size: 13px;
+  line-height: 1.3;
+}
+.tt-history-directions span {
+  flex: 0 0 auto;
+  color: #94a8c0;
+  font-size: 10px;
+  text-align: right;
 }
 .tt-history-empty {
   display: grid;
@@ -881,12 +821,8 @@
   .tt-final > strong {
     font-size: clamp(86px, 28vw, 155px);
   }
-  .tt-history-stats,
-  .tt-history-grid {
+  .tt-history-lenses {
     grid-template-columns: 1fr;
-  }
-  .tt-history-stats {
-    gap: 1px;
     margin-top: 38px;
   }
   .tt-history-content {
