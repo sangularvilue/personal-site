@@ -490,6 +490,21 @@
 .tt-leader li strong {
   color: var(--pollen);
 }
+.tt-leader li.is-you {
+  margin: 0 -11px;
+  padding-inline: 11px;
+  border-radius: 5px;
+  background: #14304f;
+  box-shadow: inset 2px 0 0 var(--mint);
+}
+.tt-leader li.is-you b {
+  color: var(--mint);
+}
+.tt-rank {
+  margin: 0 0 22px;
+  color: var(--mint);
+  font-size: 12px;
+}
 .tt-leader label {
   margin-bottom: 8px;
   color: var(--fog);

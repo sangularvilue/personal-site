@@ -2,17 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Globe, { GlobePoint } from "./Globe";
+import { EVENTS, FOCUSES, type Event } from "./events";
 
-type Event = GlobePoint & {
-  title: string;
-  year: number;
-  place: string;
-  field: string;
-  weight: number;
-  years?: [number, number];
-  spaceScale?: number;
-  timeScale?: number;
-};
 type Result = {
   points: number;
   distance: number;
@@ -22,489 +13,7 @@ type Result = {
   spaceScale: number;
 };
 type BoardRow = { name: string; score: number };
-type Focus = {
-  name: string;
-  note: string;
-  years: [number, number];
-  view: GlobePoint & { distance: number };
-  deck: Event[];
-};
-
-const EVENTS: Event[] = [
-  [
-    "Constantine wins the Battle of the Milvian Bridge.",
-    312,
-    41.94,
-    12.47,
-    "Rome, Italy",
-    "Imperial politics",
-    4,
-  ],
-  [
-    "Pride and Prejudice is first published.",
-    1813,
-    51.51,
-    -0.13,
-    "London, England",
-    "Literature",
-    3,
-  ],
-  [
-    "The Gutenberg Bible comes off the press.",
-    1455,
-    50,
-    8.27,
-    "Mainz, Germany",
-    "Technology",
-    4,
-  ],
-  [
-    "Mansa Musa arrives in Cairo on his pilgrimage.",
-    1324,
-    30.04,
-    31.24,
-    "Cairo, Egypt",
-    "Economic history",
-    3,
-  ],
-  [
-    "Mehmed II captures Constantinople.",
-    1453,
-    41.01,
-    28.98,
-    "Constantinople",
-    "Military history",
-    5,
-  ],
-  [
-    "Haiti declares its independence.",
-    1804,
-    19.45,
-    -72.68,
-    "Gonaïves, Haiti",
-    "Revolution",
-    4,
-  ],
-  [
-    "The Meiji Restoration is proclaimed.",
-    1868,
-    35.68,
-    139.76,
-    "Tokyo, Japan",
-    "State formation",
-    4,
-  ],
-  [
-    "The Wright brothers make the first controlled powered flight.",
-    1903,
-    36.02,
-    -75.67,
-    "Kitty Hawk, USA",
-    "Aviation",
-    3,
-  ],
-  [
-    "India becomes independent from British rule.",
-    1947,
-    28.61,
-    77.21,
-    "New Delhi, India",
-    "Decolonization",
-    5,
-  ],
-  [
-    "The double-helix structure of DNA is published.",
-    1953,
-    52.21,
-    0.12,
-    "Cambridge, England",
-    "Science",
-    2,
-  ],
-  [
-    "The Treaty of Tordesillas divides new lands between two crowns.",
-    1494,
-    41.5,
-    -5,
-    "Tordesillas, Spain",
-    "Diplomacy",
-    4,
-  ],
-  [
-    "Hiram Bingham reaches Machu Picchu.",
-    1911,
-    -13.16,
-    -72.55,
-    "Cusco Region, Peru",
-    "Archaeology",
-    2,
-  ],
-  [
-    "French soldiers uncover the Rosetta Stone.",
-    1799,
-    31.4,
-    30.42,
-    "Rashid, Egypt",
-    "Linguistics",
-    2,
-  ],
-  [
-    "King John seals Magna Carta.",
-    1215,
-    51.44,
-    -0.57,
-    "Runnymede, England",
-    "Legal history",
-    4,
-  ],
-  [
-    "The Zulu army defeats a British column at Isandlwana.",
-    1879,
-    -28.36,
-    30.65,
-    "Isandlwana, South Africa",
-    "Colonial history",
-    3,
-  ],
-  [
-    "The Song dynasty is founded.",
-    960,
-    34.8,
-    114.31,
-    "Kaifeng, China",
-    "Dynastic history",
-    3,
-  ],
-  [
-    "Ashoka conquers Kalinga.",
-    -261,
-    20.27,
-    85.84,
-    "Odisha, India",
-    "Ancient history",
-    3,
-  ],
-  [
-    "Writing emerges in the city of Uruk.",
-    -3200,
-    31.32,
-    45.64,
-    "Uruk, Mesopotamia",
-    "Writing systems",
-    3,
-  ],
-  [
-    "Akhenaten establishes a new capital at Amarna.",
-    -1346,
-    27.65,
-    30.9,
-    "Amarna, Egypt",
-    "Religious history",
-    2,
-  ],
-  [
-    "The first modern Olympic Games open.",
-    1896,
-    37.98,
-    23.73,
-    "Athens, Greece",
-    "Sport",
-    2,
-  ],
-  [
-    "The gold rush begins after discovery at Sutter’s Mill.",
-    1848,
-    38.8,
-    -120.89,
-    "Coloma, USA",
-    "Migration",
-    2,
-  ],
-  [
-    "The Berlin Conference convenes to regulate European colonization.",
-    1884,
-    52.52,
-    13.4,
-    "Berlin, Germany",
-    "Geopolitics",
-    5,
-  ],
-  [
-    "The first successful smallpox vaccination is administered.",
-    1796,
-    51.71,
-    -2.5,
-    "Berkeley, England",
-    "Medicine",
-    2,
-  ],
-  [
-    "The Panama Canal opens to traffic.",
-    1914,
-    9.08,
-    -79.68,
-    "Panama",
-    "Infrastructure",
-    3,
-  ],
-].map(
-  ([title, year, lat, lon, place, field, weight]) =>
-    ({ title, year, lat, lon, place, field, weight }) as Event,
-);
-
-EVENTS.push(
-  {
-    title: "The first modern World Series begins.",
-    year: 1903,
-    lat: 42.35,
-    lon: -71.1,
-    place: "Boston, USA",
-    field: "Baseball",
-    weight: 2,
-    years: [1800, 2026],
-    spaceScale: 700,
-    timeScale: 18,
-  },
-  {
-    title: "Jackie Robinson makes his major-league debut.",
-    year: 1947,
-    lat: 40.67,
-    lon: -73.97,
-    place: "Brooklyn, USA",
-    field: "Baseball",
-    weight: 2,
-    years: [1800, 2026],
-    spaceScale: 500,
-    timeScale: 12,
-  },
-  {
-    title: "Babe Ruth hits his sixtieth home run of the season.",
-    year: 1927,
-    lat: 40.83,
-    lon: -73.93,
-    place: "New York, USA",
-    field: "Baseball",
-    weight: 1,
-    years: [1800, 2026],
-    spaceScale: 450,
-    timeScale: 10,
-  },
-  {
-    title: "The first international cricket match is played.",
-    year: 1844,
-    lat: 40.73,
-    lon: -74,
-    place: "New York, USA",
-    field: "Sport",
-    weight: 1,
-    years: [1700, 2026],
-    spaceScale: 800,
-    timeScale: 20,
-  },
-);
-
-const e = (
-  title: string,
-  year: number,
-  lat: number,
-  lon: number,
-  place: string,
-  field: string,
-): Event => ({ title, year, lat, lon, place, field, weight: 3 });
-const FOCUSES: Focus[] = [
-  {
-    name: "The Second World War",
-    note: "A global war, fifteen years close",
-    years: [1931, 1946],
-    view: { lat: 45, lon: 25, distance: 2.65 },
-    deck: [
-      e(
-        "Germany invades Poland.",
-        1939,
-        52.23,
-        21.01,
-        "Warsaw, Poland",
-        "European theater",
-      ),
-      e(
-        "The evacuation from Dunkirk begins.",
-        1940,
-        51.04,
-        2.38,
-        "Dunkirk, France",
-        "European theater",
-      ),
-      e(
-        "Japan attacks Pearl Harbor.",
-        1941,
-        21.36,
-        -157.95,
-        "Oahu, Hawaii",
-        "Pacific theater",
-      ),
-      e(
-        "The Battle of Stalingrad ends.",
-        1943,
-        48.71,
-        44.51,
-        "Stalingrad",
-        "Eastern Front",
-      ),
-      e(
-        "Allied forces land in Normandy.",
-        1944,
-        49.34,
-        -0.62,
-        "Normandy, France",
-        "European theater",
-      ),
-      e(
-        "An atomic bomb is dropped on Hiroshima.",
-        1945,
-        34.39,
-        132.45,
-        "Hiroshima, Japan",
-        "Pacific theater",
-      ),
-      e(
-        "Japan formally surrenders aboard the USS Missouri.",
-        1945,
-        35.29,
-        139.67,
-        "Tokyo Bay",
-        "Pacific theater",
-      ),
-    ],
-  },
-  {
-    name: "Japanese history",
-    note: "An archipelago across twelve centuries",
-    years: [700, 1950],
-    view: { lat: 37, lon: 138, distance: 2.05 },
-    deck: [
-      e(
-        "The imperial capital moves to Heian-kyō.",
-        794,
-        35.01,
-        135.77,
-        "Kyoto, Japan",
-        "Heian period",
-      ),
-      e(
-        "The Kamakura shogunate is established.",
-        1192,
-        35.32,
-        139.55,
-        "Kamakura, Japan",
-        "Kamakura period",
-      ),
-      e(
-        "The Battle of Sekigahara establishes Tokugawa dominance.",
-        1600,
-        35.37,
-        136.46,
-        "Sekigahara, Japan",
-        "Sengoku period",
-      ),
-      e(
-        "The Tokugawa shogunate is established.",
-        1603,
-        35.68,
-        139.76,
-        "Edo, Japan",
-        "Edo period",
-      ),
-      e(
-        "Commodore Perry enters Edo Bay.",
-        1853,
-        35.24,
-        139.72,
-        "Uraga, Japan",
-        "Bakumatsu",
-      ),
-      e(
-        "The Meiji Restoration is proclaimed.",
-        1868,
-        35.68,
-        139.76,
-        "Tokyo, Japan",
-        "Meiji period",
-      ),
-      e(
-        "The Great Kantō earthquake strikes.",
-        1923,
-        35.44,
-        139.64,
-        "Kantō, Japan",
-        "Social history",
-      ),
-    ],
-  },
-  {
-    name: "The Scientific Revolution",
-    note: "Observation changes the world",
-    years: [1450, 1750],
-    view: { lat: 49, lon: 11, distance: 2.3 },
-    deck: [
-      e(
-        "Copernicus’s De revolutionibus is published.",
-        1543,
-        54.35,
-        18.65,
-        "Gdańsk, Poland",
-        "Astronomy",
-      ),
-      e(
-        "Tycho Brahe begins building Uraniborg.",
-        1576,
-        55.91,
-        12.69,
-        "Hven, Denmark",
-        "Astronomy",
-      ),
-      e(
-        "Galileo demonstrates his telescope in Venice.",
-        1609,
-        45.44,
-        12.33,
-        "Venice, Italy",
-        "Astronomy",
-      ),
-      e(
-        "William Harvey publishes his account of blood circulation.",
-        1628,
-        50.11,
-        8.68,
-        "Frankfurt, Germany",
-        "Medicine",
-      ),
-      e(
-        "The Royal Society is founded.",
-        1660,
-        51.51,
-        -0.12,
-        "London, England",
-        "Institutions",
-      ),
-      e(
-        "Newton’s Principia is published.",
-        1687,
-        51.51,
-        -0.12,
-        "London, England",
-        "Physics",
-      ),
-      e(
-        "Leeuwenhoek reports microorganisms.",
-        1676,
-        52.01,
-        4.36,
-        "Delft, Netherlands",
-        "Microscopy",
-      ),
-    ],
-  },
-];
+const NAME_KEY = "thenthere:name";
 
 const FALLBACK: BoardRow[] = [
   { name: "atlas_finch", score: 2468 },
@@ -616,6 +125,12 @@ export default function ThenThere() {
       .then((d) => setBoard(d.scores))
       .catch(() => {});
   }, []);
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(NAME_KEY);
+      if (saved) setName(saved.slice(0, 18));
+    } catch {}
+  }, []);
   const stopHold = useCallback(() => {
     if (hold.current) clearInterval(hold.current);
     hold.current = null;
@@ -657,15 +172,26 @@ export default function ThenThere() {
     setTotal(0);
     setFinished(false);
     setPosted(false);
-    setName("");
   };
+  const rank = posted
+    ? (() => {
+        const i = board.findIndex(
+          (r) => r.name === name.trim() && r.score === Math.round(total),
+        );
+        return i === -1 ? null : i;
+      })()
+    : null;
   const submit = async () => {
-    if (!name.trim() || posted) return;
+    const entrant = name.trim();
+    if (!entrant || posted) return;
+    try {
+      localStorage.setItem(NAME_KEY, entrant);
+    } catch {}
     try {
       const r = await fetch("/api/thenthere/leaderboard", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ name: name.trim(), score: Math.round(total) }),
+        body: JSON.stringify({ name: entrant, score: Math.round(total) }),
       });
       if (r.ok) setBoard((await r.json()).scores);
     } catch {}
@@ -693,14 +219,28 @@ export default function ThenThere() {
             <h2>♜ Today’s leaders</h2>
             <ol>
               {board.slice(0, 5).map((row, i) => (
-                <li key={`${row.name}-${i}`}>
+                <li
+                  key={`${row.name}-${i}`}
+                  className={
+                    posted &&
+                    row.name === name.trim() &&
+                    row.score === Math.round(total)
+                      ? "is-you"
+                      : ""
+                  }
+                >
                   <span>{i + 1}</span>
                   <b>{row.name}</b>
                   <strong>{row.score.toLocaleString()}</strong>
                 </li>
               ))}
             </ol>
-            <label>Post your score</label>
+            {posted && rank !== null && rank > 4 && (
+              <p className="tt-rank">
+                You placed #{rank + 1} of {board.length} today.
+              </p>
+            )}
+            <label>{posted ? "Posted as" : "Post your score"}</label>
             <div>
               <input
                 value={name}
