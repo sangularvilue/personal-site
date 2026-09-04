@@ -36,6 +36,7 @@ export default function ThemeToggle() {
   }
 
   if (!mounted) return null;
+  if (typeof window !== "undefined" && (window.location.host.startsWith("thenthere.") || window.location.pathname.startsWith("/thenthere"))) return null;
 
   return (
     <button

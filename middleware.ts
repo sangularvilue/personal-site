@@ -41,6 +41,14 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // thenthere.grannis.xyz → rewrite to the daily history game
+  if (hostname.startsWith("thenthere.")) {
+    if (pathname.startsWith("/api/") || pathname.startsWith("/thenthere/")) return NextResponse.next();
+    const url = request.nextUrl.clone();
+    url.pathname = pathname === "/" ? "/thenthere" : `/thenthere${pathname}`;
+    return NextResponse.rewrite(url);
+  }
+
   // admin.grannis.xyz → rewrite to /admin routes (with auth)
   if (hostname.startsWith("admin.")) {
     // Map subdomain paths to /admin/* paths
