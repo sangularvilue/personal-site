@@ -9,6 +9,9 @@ type Event = GlobePoint & {
   place: string;
   field: string;
   weight: number;
+  years?: [number, number];
+  spaceScale?: number;
+  timeScale?: number;
 };
 type Result = {
   points: number;
@@ -16,6 +19,7 @@ type Result = {
   yearError: number;
   metric: number;
   eraScale: number;
+  spaceScale: number;
 };
 type BoardRow = { name: string; score: number };
 type Focus = {
@@ -246,6 +250,57 @@ const EVENTS: Event[] = [
 ].map(
   ([title, year, lat, lon, place, field, weight]) =>
     ({ title, year, lat, lon, place, field, weight }) as Event,
+);
+
+EVENTS.push(
+  {
+    title: "The first modern World Series begins.",
+    year: 1903,
+    lat: 42.35,
+    lon: -71.1,
+    place: "Boston, USA",
+    field: "Baseball",
+    weight: 2,
+    years: [1800, 2026],
+    spaceScale: 700,
+    timeScale: 18,
+  },
+  {
+    title: "Jackie Robinson makes his major-league debut.",
+    year: 1947,
+    lat: 40.67,
+    lon: -73.97,
+    place: "Brooklyn, USA",
+    field: "Baseball",
+    weight: 2,
+    years: [1800, 2026],
+    spaceScale: 500,
+    timeScale: 12,
+  },
+  {
+    title: "Babe Ruth hits his sixtieth home run of the season.",
+    year: 1927,
+    lat: 40.83,
+    lon: -73.93,
+    place: "New York, USA",
+    field: "Baseball",
+    weight: 1,
+    years: [1800, 2026],
+    spaceScale: 450,
+    timeScale: 10,
+  },
+  {
+    title: "The first international cricket match is played.",
+    year: 1844,
+    lat: 40.73,
+    lon: -74,
+    place: "New York, USA",
+    field: "Sport",
+    weight: 1,
+    years: [1700, 2026],
+    spaceScale: 800,
+    timeScale: 20,
+  },
 );
 
 const e = (
@@ -509,17 +564,26 @@ function greatCircle(a: GlobePoint, b: GlobePoint) {
 function scoreGuess(guess: GlobePoint, year: number, event: Event): Result {
   const distance = greatCircle(guess, event),
     yearError = Math.abs(year - event.year),
-    eraScale = Math.max(6, Math.min(140, (2026 - event.year) * 0.075));
-  const metric = Math.hypot(distance / 1800, yearError / eraScale),
+    eraScale =
+      event.timeScale ??
+      Math.max(6, Math.min(140, (2026 - event.year) * 0.075)),
+    spaceScale = event.spaceScale ?? 1800;
+  const metric = Math.hypot(distance / spaceScale, yearError / eraScale),
     points = Math.round((500 / (1 + metric ** 1.65)) * 10) / 10;
-  return { points, distance, yearError, metric, eraScale };
+  return { points, distance, yearError, metric, eraScale, spaceScale };
 }
 
 export default function ThenThere() {
   const daily = useMemo(dailyGame, []),
     questions = daily.questions,
-    focus = daily.focus,
-    initialYear = focus ? (focus.years[0] + focus.years[1]) / 2 : 1000;
+    focus = daily.focus;
+  const startYear = (item: Event) =>
+    focus
+      ? (focus.years[0] + focus.years[1]) / 2
+      : item.years
+        ? (item.years[0] + item.years[1]) / 2
+        : 1000;
+  const initialYear = startYear(questions[0]);
   const [round, setRound] = useState(0),
     [year, setYear] = useState(initialYear),
     [zoom, setZoom] = useState(0);
@@ -532,10 +596,16 @@ export default function ThenThere() {
     [posted, setPosted] = useState(false),
     hold = useRef<ReturnType<typeof setInterval> | null>(null);
   const event = questions[round],
-    bounds: [number, number] = focus?.years || [-4000, 2026],
+    bounds: [number, number] = focus?.years || event.years || [-4000, 2026],
     span = Math.min(ZOOM_SPANS[zoom], bounds[1] - bounds[0]),
     min = Math.max(bounds[0], year - span / 2),
     max = Math.min(bounds[1], year + span / 2);
+  const nudge =
+    zoom >= 4 ? 1 : zoom === 3 ? 5 : zoom === 2 ? 20 : zoom === 1 ? 100 : 500;
+  const nudgeYear = (amount: number) => {
+    setYear((y) => Math.max(bounds[0], Math.min(bounds[1], y + amount)));
+    setResult(null);
+  };
   useEffect(() => {
     document.body.classList.add("then-there-mode");
     return () => document.body.classList.remove("then-there-mode");
@@ -575,7 +645,7 @@ export default function ThenThere() {
     setRound((r) => r + 1);
     setGuess(null);
     setResult(null);
-    setYear(initialYear);
+    setYear(startYear(questions[round + 1]));
     setZoom(0);
   };
   const reset = () => {
@@ -654,7 +724,9 @@ export default function ThenThere() {
           <div>
             {focus && (
               <div className="tt-focus">
-                <b>Today’s focus</b><span>{focus.name}</span><em>{focus.note}</em>
+                <b>Today’s focus</b>
+                <span>{focus.name}</span>
+                <em>{focus.note}</em>
               </div>
             )}
             <p className="tt-kicker">
@@ -695,12 +767,38 @@ export default function ThenThere() {
             <span>{year < 0 ? "BC" : "AD"}</span>
           </div>
           <div className="tt-zoom">
-            <span>◷ Scale: {ZOOM_LABELS[zoom]}</span>
-            <div>
+            <button
+              onClick={() => setZoom((z) => Math.max(0, z - 1))}
+              disabled={zoom === 0}
+              aria-label="Zoom timeline out"
+            >
+              −
+            </button>
+            <span>
+              <small>Timeline scale</small>
+              {ZOOM_LABELS[zoom]}
+            </span>
+            <div className="tt-zoom-bars">
               {ZOOM_LABELS.map((_, i) => (
                 <i key={i} className={i <= zoom ? "on" : ""} />
               ))}
             </div>
+            <button
+              onClick={() =>
+                setZoom((z) => Math.min(ZOOM_SPANS.length - 1, z + 1))
+              }
+              disabled={zoom === ZOOM_SPANS.length - 1}
+              aria-label="Zoom timeline in"
+            >
+              +
+            </button>
+          </div>
+          <div className="tt-window">
+            <button onClick={() => nudgeYear(-nudge)}>← {nudge}y</button>
+            <span>
+              Available: {yearLabel(bounds[0])}–{yearLabel(bounds[1])}
+            </span>
+            <button onClick={() => nudgeYear(nudge)}>{nudge}y →</button>
           </div>
           <div
             className="tt-timeline"
@@ -728,8 +826,8 @@ export default function ThenThere() {
             </div>
           </div>
           <p className="tt-note">
-            Drag to travel. Press and hold the timeline to zoom from millennia
-            down to days.
+            Drag the date. Use +/− for deliberate zoom, or press and hold the
+            slider to zoom continuously.
           </p>
           {result ? (
             <div className="tt-result">
@@ -764,9 +862,11 @@ export default function ThenThere() {
           )}
           <div className="tt-rule">
             <span>Surface-distance scale</span>
-            <b>1,800 km</b>
+            <b>{(event.spaceScale ?? 1800).toLocaleString()} km</b>
             <span>Date scale</span>
-            <b>Era-adjusted</b>
+            <b>
+              {event.timeScale ? `${event.timeScale} years` : "Era-adjusted"}
+            </b>
             <span>Distance</span>
             <b>L²</b>
             <span>Perfect round</span>

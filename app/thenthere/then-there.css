@@ -112,9 +112,25 @@
   border-radius: 4px;
   background: #102845;
 }
-.tt-focus b { color: var(--mint); font-size: 10px; text-transform: uppercase; letter-spacing: .12em; }
-.tt-focus span { color: #fff; font: 500 14px Fraunces, Georgia, serif; }
-.tt-focus em { grid-column: 2; color: var(--fog); font-size: 10px; font-style: normal; }
+.tt-focus b {
+  color: var(--mint);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.tt-focus span {
+  color: #fff;
+  font:
+    500 14px Fraunces,
+    Georgia,
+    serif;
+}
+.tt-focus em {
+  grid-column: 2;
+  color: var(--fog);
+  font-size: 10px;
+  font-style: normal;
+}
 .tt-kicker span {
   margin-left: 10px;
   padding-left: 10px;
@@ -223,15 +239,45 @@
   font-weight: 800;
 }
 .tt-zoom {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 34px auto 1fr 34px;
+  gap: 11px;
   align-items: center;
   margin-top: 30px;
   color: var(--fog);
   font-size: 12px;
 }
-.tt-zoom div {
+.tt-zoom > button {
+  width: 34px;
+  height: 34px;
+  border: 1px solid #506684;
+  border-radius: 50%;
+  background: #10213d;
+  color: var(--pollen);
+  font-size: 20px;
+  cursor: pointer;
+}
+.tt-zoom > button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.tt-zoom > span {
   display: flex;
+  flex-direction: column;
+  min-width: 74px;
+  color: #fff;
+  font-weight: 700;
+}
+.tt-zoom > span small {
+  color: var(--fog);
+  font-size: 9px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.tt-zoom-bars {
+  display: flex;
+  justify-content: flex-end;
   gap: 5px;
 }
 .tt-zoom i {
@@ -243,9 +289,28 @@
 .tt-zoom i.on {
   background: var(--pollen);
 }
+.tt-window {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 11px;
+}
+.tt-window span {
+  color: #8192aa;
+  font-size: 10px;
+  text-align: center;
+}
+.tt-window button {
+  border: 0;
+  background: transparent;
+  color: var(--mint);
+  font-size: 11px;
+  cursor: pointer;
+}
 .tt-timeline {
   position: relative;
-  margin: 20px 0 34px;
+  margin: 8px 0 26px;
   padding-top: 20px;
   touch-action: none;
 }
