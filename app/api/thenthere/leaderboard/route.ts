@@ -13,7 +13,9 @@ type BoardRow = { name: string; score: number };
 
 const PLAYER_COOKIE = "then-there-player";
 const RETENTION_SECONDS = 60 * 60 * 24 * 370;
-const boardKey = (date: string) => `then-there:leaderboard:${date}`;
+// A fresh namespace intentionally leaves the former client-trusted board
+// behind; every row here has been recomputed by this route.
+const boardKey = (date: string) => `then-there:verified-leaderboard:${date}`;
 const submissionKey = (date: string, playerId: string) =>
   `then-there:submission:${date}:${playerId}`;
 const historyKey = (playerId: string) => `then-there:history:${playerId}`;
