@@ -33,6 +33,7 @@ export default function Globe({
   const markers = useRef<{
     guess?: THREE.Mesh;
     answer?: THREE.Mesh;
+    route?: THREE.Line;
     scene?: THREE.Scene;
   }>({});
   onGuessRef.current = onGuess;
@@ -114,6 +115,15 @@ export default function Globe({
       texture.dispose();
       globe.geometry.dispose();
       (globe.material as THREE.Material).dispose();
+      [
+        markers.current.guess,
+        markers.current.answer,
+        markers.current.route,
+      ].forEach((marker) => {
+        if (!marker) return;
+        marker.geometry.dispose();
+        (marker.material as THREE.Material).dispose();
+      });
       renderer.dispose();
       mount.replaceChildren();
     };
@@ -154,6 +164,47 @@ export default function Globe({
       s.scene.add(s.answer);
     }
   }, [answer]);
+  useEffect(() => {
+    const s = markers.current;
+    if (!s.scene) return;
+    if (s.route) {
+      s.scene.remove(s.route);
+      s.route.geometry.dispose();
+      (s.route.material as THREE.Material).dispose();
+      delete s.route;
+    }
+    if (!guess || !answer) return;
+
+    // A lifted great-circle path gives the reveal a physical sense of the
+    // miss without drawing an arbitrary flat line across the map.
+    const from = toVector(guess, 1).normalize();
+    const to = toVector(answer, 1).normalize();
+    const angle = Math.acos(THREE.MathUtils.clamp(from.dot(to), -1, 1));
+    const sinAngle = Math.sin(angle);
+    const points: THREE.Vector3[] = [];
+    for (let i = 0; i <= 64; i++) {
+      const t = i / 64;
+      const direction =
+        sinAngle < 0.0001
+          ? from.clone()
+          : from
+              .clone()
+              .multiplyScalar(Math.sin((1 - t) * angle) / sinAngle)
+              .add(to.clone().multiplyScalar(Math.sin(t * angle) / sinAngle));
+      const lift =
+        1.028 + Math.sin(Math.PI * t) * (0.045 + 0.12 * (angle / Math.PI));
+      points.push(direction.normalize().multiplyScalar(lift));
+    }
+    s.route = new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints(points),
+      new THREE.LineBasicMaterial({
+        color: 0xfde593,
+        transparent: true,
+        opacity: 0.9,
+      }),
+    );
+    s.scene.add(s.route);
+  }, [guess, answer]);
   return (
     <div
       ref={mountRef}

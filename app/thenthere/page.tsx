@@ -12,6 +12,8 @@ type Result = {
   metric: number;
   eraScale: number;
   spaceScale: number;
+  spaceLoss: number;
+  timeLoss: number;
 };
 type BoardRow = { name: string; score: number };
 const NAME_KEY = "thenthere:name";
@@ -60,10 +62,25 @@ function scoreGuess(guess: GlobePoint, year: number, event: Event): Result {
     eraScale =
       event.timeScale ??
       Math.max(6, Math.min(140, (2026 - event.year) * 0.075)),
-    spaceScale = event.spaceScale ?? 1800;
-  const metric = Math.hypot(distance / spaceScale, yearError / eraScale),
-    points = Math.round((500 / (1 + metric ** 1.65)) * 10) / 10;
-  return { points, distance, yearError, metric, eraScale, spaceScale };
+    spaceScale = event.spaceScale ?? 1800,
+    spaceError = distance / spaceScale,
+    timeError = yearError / eraScale;
+  const metric = Math.hypot(spaceError, timeError),
+    points = Math.round((500 / (1 + metric ** 1.65)) * 10) / 10,
+    loss = 500 - points,
+    spaceShare = metric ? spaceError ** 2 / metric ** 2 : 0.5,
+    spaceLoss = Math.round(loss * spaceShare * 10) / 10,
+    timeLoss = Math.round((loss - spaceLoss) * 10) / 10;
+  return {
+    points,
+    distance,
+    yearError,
+    metric,
+    eraScale,
+    spaceScale,
+    spaceLoss,
+    timeLoss,
+  };
 }
 
 export default function ThenThere() {
@@ -250,6 +267,8 @@ export default function ThenThere() {
               guess{" "}
               {result && (
                 <>
+                  <i className="route-line" />
+                  route
                   <span className="answer-dot" />
                   answer
                 </>
@@ -270,19 +289,32 @@ export default function ThenThere() {
           />
           {result ? (
             <div className="tt-result">
-              <div>
-                <span>+ {result.points.toFixed(1)}</span> points
+              <div className="tt-result-score">
+                <span>+ {result.points.toFixed(1)}</span>
+                <small>of 500 points</small>
               </div>
               <p>
                 <b>{event.place}</b> · {yearLabel(event.year)}
               </p>
-              <ul>
-                <li>{Math.round(result.distance).toLocaleString()} km away</li>
-                <li>
-                  {Math.round(result.yearError).toLocaleString()} years off
-                </li>
-                <li>L² distance {result.metric.toFixed(2)}</li>
-              </ul>
+              <div className="tt-result-breakdown" aria-label="Score breakdown">
+                <div>
+                  <span>Place</span>
+                  <b>−{result.spaceLoss.toFixed(1)} pts</b>
+                  <small>
+                    {Math.round(result.distance).toLocaleString()} km away
+                  </small>
+                </div>
+                <div>
+                  <span>Time</span>
+                  <b>−{result.timeLoss.toFixed(1)} pts</b>
+                  <small>
+                    {Math.round(result.yearError).toLocaleString()} years off
+                  </small>
+                </div>
+              </div>
+              <p className="tt-metric-note">
+                Combined L² distance: {result.metric.toFixed(2)}
+              </p>
               <button onClick={advance}>
                 {round === 5 ? "See today’s score" : "Next event"} →
               </button>

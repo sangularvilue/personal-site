@@ -211,6 +211,13 @@
   margin-left: 7px;
   background: var(--mint);
 }
+.route-line {
+  width: 15px !important;
+  height: 2px !important;
+  margin-left: 7px;
+  border-radius: 0 !important;
+  background: var(--pollen);
+}
 .tt-time {
   display: flex;
   flex-direction: column;
@@ -316,6 +323,15 @@
   background: var(--mint);
   box-shadow: 0 0 0 2px #06101f;
 }
+.tt-track-error {
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  min-width: 2px;
+  border-radius: 999px;
+  background: repeating-linear-gradient(90deg, #fde593 0 3px, #d1a748 3px 5px);
+  opacity: 0.9;
+}
 .tt-track-ticks {
   position: relative;
   height: 18px;
@@ -366,6 +382,15 @@
   font-size: 14px;
   line-height: 1.5;
 }
+.tt-answer-swatch {
+  display: inline-block;
+  width: 16px;
+  height: 3px;
+  margin: 0 5px 3px 0;
+  border-radius: 99px;
+  background: var(--pollen);
+  vertical-align: middle;
+}
 .tt-lock,
 .tt-result button,
 .tt-final button,
@@ -406,16 +431,21 @@
   border-top: 1px solid #405678;
   padding-top: 18px;
 }
-.tt-result > div {
-  color: var(--fog);
+.tt-result-score {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+}
+.tt-result-score span {
+  color: var(--pollen);
   font:
-    400 18px Fraunces,
+    400 34px Fraunces,
     Georgia,
     serif;
 }
-.tt-result > div span {
-  color: var(--pollen);
-  font-size: 34px;
+.tt-result-score small {
+  color: var(--fog);
+  font-size: 12px;
 }
 .tt-result p {
   margin: 8px 0 14px;
@@ -424,19 +454,37 @@
 .tt-result p b {
   color: #fff;
 }
-.tt-result ul {
-  display: flex;
+.tt-result-breakdown {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 7px;
-  margin: 0 0 14px;
-  padding: 0;
-  list-style: none;
+  margin: 0 0 8px;
 }
-.tt-result li {
-  flex: 1;
-  padding: 8px;
+.tt-result-breakdown > div {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 8px;
+  padding: 10px;
   border: 1px solid #334968;
+  background: #0c1930;
+}
+.tt-result-breakdown span {
   color: var(--fog);
-  text-align: center;
+  font-size: 11px;
+}
+.tt-result-breakdown b {
+  color: var(--pollen);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.tt-result-breakdown small {
+  grid-column: 1 / -1;
+  color: #d5deeb;
+  font-size: 11px;
+}
+.tt-metric-note {
+  margin: 0 0 14px !important;
+  color: #7f93ad !important;
   font-size: 11px;
 }
 .tt-result button {

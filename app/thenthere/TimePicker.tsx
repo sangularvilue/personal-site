@@ -165,6 +165,8 @@ export default function TimePicker({
   const era = year < 0 ? "BC" : "AD";
   const pos = scale.toPos(year);
   const answerPos = answer === null ? null : scale.toPos(clamp(answer, lo, hi));
+  const errorStart = answerPos === null ? 0 : Math.min(pos, answerPos);
+  const errorWidth = answerPos === null ? 0 : Math.abs(pos - answerPos);
 
   return (
     <div className="tt-picker">
@@ -225,11 +227,21 @@ export default function TimePicker({
         <div className="tt-track-rail">
           <div className="tt-track-fill" style={{ width: `${pos * 100}%` }} />
           {answerPos !== null && (
-            <i
-              className="tt-track-answer"
-              style={{ left: `${answerPos * 100}%` }}
-              aria-hidden="true"
-            />
+            <>
+              <i
+                className="tt-track-error"
+                style={{
+                  left: `${errorStart * 100}%`,
+                  width: `${errorWidth * 100}%`,
+                }}
+                aria-hidden="true"
+              />
+              <i
+                className="tt-track-answer"
+                style={{ left: `${answerPos * 100}%` }}
+                aria-hidden="true"
+              />
+            </>
           )}
           <i
             className="tt-track-handle"
@@ -270,11 +282,20 @@ export default function TimePicker({
       </div>
 
       <p className="tt-note">
-        Drag the track, type the year, or nudge it. Range for this question:{" "}
-        <b>
-          {yearLabel(lo)} – {yearLabel(hi)}
-        </b>
-        .
+        {answer === null ? (
+          <>
+            Drag the track, type the year, or nudge it. Range for this question:{" "}
+            <b>
+              {yearLabel(lo)} – {yearLabel(hi)}
+            </b>
+            .
+          </>
+        ) : (
+          <>
+            <span className="tt-answer-swatch" /> Your year to the correct date:{" "}
+            <b>{yearLabel(answer)}</b>.
+          </>
+        )}
       </p>
     </div>
   );
