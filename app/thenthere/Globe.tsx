@@ -58,7 +58,6 @@ export default function Globe({
       new THREE.SphereGeometry(1, 128, 96),
       new THREE.MeshStandardMaterial({ map: texture, roughness: 0.88 }),
     );
-    globe.rotation.y = -0.12;
     scene.add(globe);
     scene.add(new THREE.HemisphereLight(0xd9efff, 0x071021, 2.1));
     const sun = new THREE.DirectionalLight(0xffffff, 2.6);
