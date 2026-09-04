@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Globe, { GlobePoint } from "./Globe";
 import { EVENTS, FOCUSES, type Event } from "./events";
+import TimePicker, { yearLabel } from "./TimePicker";
 
 type Result = {
   points: number;
@@ -20,15 +21,6 @@ const FALLBACK: BoardRow[] = [
   { name: "yearzero", score: 2312 },
   { name: "cicero_7", score: 2190 },
 ];
-const ZOOM_SPANS = [6026, 1200, 240, 40, 4, 0.2],
-  ZOOM_LABELS = [
-    "millennia",
-    "centuries",
-    "decades",
-    "years",
-    "months",
-    "days",
-  ];
 function dailyGame() {
   let seed =
     [...new Date().toISOString().slice(0, 10)].reduce(
@@ -52,14 +44,6 @@ function dailyGame() {
       .slice(0, 6)
       .map((x) => x.event),
   };
-}
-function yearLabel(year: number, detailed = false) {
-  if (detailed && Math.abs(year - Math.round(year)) > 0.005) {
-    const whole = Math.floor(year),
-      month = Math.max(1, Math.min(12, Math.round((year - whole) * 12 + 1)));
-    return `${new Date(2000, month - 1).toLocaleString("en", { month: "short" })} ${Math.abs(whole)} ${whole < 0 ? "BC" : "AD"}`;
-  }
-  return `${Math.round(Math.abs(year))} ${year < 0 ? "BC" : "AD"}`;
 }
 function greatCircle(a: GlobePoint, b: GlobePoint) {
   const r = Math.PI / 180,
@@ -94,27 +78,16 @@ export default function ThenThere() {
         : 1000;
   const initialYear = startYear(questions[0]);
   const [round, setRound] = useState(0),
-    [year, setYear] = useState(initialYear),
-    [zoom, setZoom] = useState(0);
+    [year, setYear] = useState(initialYear);
   const [guess, setGuess] = useState<GlobePoint | null>(null),
     [result, setResult] = useState<Result | null>(null),
     [total, setTotal] = useState(0),
     [finished, setFinished] = useState(false);
   const [name, setName] = useState(""),
     [board, setBoard] = useState<BoardRow[]>(FALLBACK),
-    [posted, setPosted] = useState(false),
-    hold = useRef<ReturnType<typeof setInterval> | null>(null);
+    [posted, setPosted] = useState(false);
   const event = questions[round],
-    bounds: [number, number] = focus?.years || event.years || [-4000, 2026],
-    span = Math.min(ZOOM_SPANS[zoom], bounds[1] - bounds[0]),
-    min = Math.max(bounds[0], year - span / 2),
-    max = Math.min(bounds[1], year + span / 2);
-  const nudge =
-    zoom >= 4 ? 1 : zoom === 3 ? 5 : zoom === 2 ? 20 : zoom === 1 ? 100 : 500;
-  const nudgeYear = (amount: number) => {
-    setYear((y) => Math.max(bounds[0], Math.min(bounds[1], y + amount)));
-    setResult(null);
-  };
+    bounds: [number, number] = focus?.years || event.years || [-4000, 2026];
   useEffect(() => {
     document.body.classList.add("then-there-mode");
     return () => document.body.classList.remove("then-there-mode");
@@ -131,18 +104,6 @@ export default function ThenThere() {
       if (saved) setName(saved.slice(0, 18));
     } catch {}
   }, []);
-  const stopHold = useCallback(() => {
-    if (hold.current) clearInterval(hold.current);
-    hold.current = null;
-  }, []);
-  const startHold = () => {
-    stopHold();
-    hold.current = setInterval(
-      () => setZoom((z) => Math.min(ZOOM_SPANS.length - 1, z + 1)),
-      620,
-    );
-  };
-  useEffect(() => stopHold, [stopHold]);
   const choose = (p: GlobePoint) => {
     if (!result) setGuess(p);
   };
@@ -161,12 +122,10 @@ export default function ThenThere() {
     setGuess(null);
     setResult(null);
     setYear(startYear(questions[round + 1]));
-    setZoom(0);
   };
   const reset = () => {
     setRound(0);
     setYear(initialYear);
-    setZoom(0);
     setGuess(null);
     setResult(null);
     setTotal(0);
@@ -299,76 +258,16 @@ export default function ThenThere() {
           </div>
         </div>
         <aside className="tt-time">
-          <div className="tt-year">
-            <p>Your year</p>
-            <strong>
-              {yearLabel(year, zoom > 3).replace(/ (BC|AD)$/, "")}
-            </strong>
-            <span>{year < 0 ? "BC" : "AD"}</span>
-          </div>
-          <div className="tt-zoom">
-            <button
-              onClick={() => setZoom((z) => Math.max(0, z - 1))}
-              disabled={zoom === 0}
-              aria-label="Zoom timeline out"
-            >
-              −
-            </button>
-            <span>
-              <small>Timeline scale</small>
-              {ZOOM_LABELS[zoom]}
-            </span>
-            <div className="tt-zoom-bars">
-              {ZOOM_LABELS.map((_, i) => (
-                <i key={i} className={i <= zoom ? "on" : ""} />
-              ))}
-            </div>
-            <button
-              onClick={() =>
-                setZoom((z) => Math.min(ZOOM_SPANS.length - 1, z + 1))
-              }
-              disabled={zoom === ZOOM_SPANS.length - 1}
-              aria-label="Zoom timeline in"
-            >
-              +
-            </button>
-          </div>
-          <div className="tt-window">
-            <button onClick={() => nudgeYear(-nudge)}>← {nudge}y</button>
-            <span>
-              Available: {yearLabel(bounds[0])}–{yearLabel(bounds[1])}
-            </span>
-            <button onClick={() => nudgeYear(nudge)}>{nudge}y →</button>
-          </div>
-          <div
-            className="tt-timeline"
-            onPointerDown={startHold}
-            onPointerUp={stopHold}
-            onPointerCancel={stopHold}
-            onPointerLeave={stopHold}
-          >
-            <input
-              type="range"
-              aria-label="Choose a year"
-              min={min}
-              max={max}
-              step={zoom === 5 ? 1 / 365 : zoom === 4 ? 1 / 12 : 1}
-              value={year}
-              onChange={(e) => {
-                setYear(Number(e.target.value));
-                setResult(null);
-              }}
-            />
-            <div>
-              <span>{yearLabel(min)}</span>
-              <span>{yearLabel((min + max) / 2)}</span>
-              <span>{yearLabel(max)}</span>
-            </div>
-          </div>
-          <p className="tt-note">
-            Drag the date. Use +/− for deliberate zoom, or press and hold the
-            slider to zoom continuously.
-          </p>
+          <TimePicker
+            year={year}
+            bounds={bounds}
+            answer={result ? event.year : null}
+            disabled={!!result}
+            onChange={(y) => {
+              setYear(y);
+              setResult(null);
+            }}
+          />
           {result ? (
             <div className="tt-result">
               <div>

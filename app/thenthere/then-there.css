@@ -220,128 +220,144 @@
   background: #091429c9;
   backdrop-filter: blur(12px);
 }
-.tt-year p {
-  margin: 0;
+.tt-year label {
+  display: block;
+  margin-bottom: 6px;
   color: var(--fog);
   font-size: 13px;
 }
-.tt-year strong {
+.tt-year-entry {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+.tt-year-entry input {
+  width: 4.2ch;
+  padding: 0;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
   color: var(--pollen);
   font:
-    400 clamp(68px, 8.5vw, 120px)/0.9 Fraunces,
+    400 clamp(62px, 7.6vw, 104px)/0.95 Fraunces,
     Georgia,
     serif;
   letter-spacing: -0.06em;
+  text-align: left;
+  outline: none;
 }
-.tt-year > span {
-  margin-left: 10px;
-  color: var(--pollen);
-  font-weight: 800;
+.tt-year-entry input:focus {
+  border-bottom-color: var(--mint);
 }
-.tt-zoom {
-  display: grid;
-  grid-template-columns: 34px auto 1fr 34px;
-  gap: 11px;
-  align-items: center;
-  margin-top: 30px;
-  color: var(--fog);
-  font-size: 12px;
+.tt-year-entry input:disabled {
+  color: #7f93ad;
 }
-.tt-zoom > button {
-  width: 34px;
-  height: 34px;
-  border: 1px solid #506684;
-  border-radius: 50%;
+.tt-era {
+  padding: 5px 11px;
+  border: 1px solid #42597a;
+  border-radius: 999px;
   background: #10213d;
   color: var(--pollen);
-  font-size: 20px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
   cursor: pointer;
 }
-.tt-zoom > button:disabled {
-  opacity: 0.35;
+.tt-era:disabled {
+  opacity: 0.45;
   cursor: default;
 }
-.tt-zoom > span {
-  display: flex;
-  flex-direction: column;
-  min-width: 74px;
-  color: #fff;
-  font-weight: 700;
-}
-.tt-zoom > span small {
-  color: var(--fog);
-  font-size: 9px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-.tt-zoom-bars {
-  display: flex;
-  justify-content: flex-end;
-  gap: 5px;
-}
-.tt-zoom i {
-  width: 12px;
-  height: 3px;
-  border-radius: 4px;
-  background: #3d5373;
-}
-.tt-zoom i.on {
-  background: var(--pollen);
-}
-.tt-window {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  margin-top: 11px;
-}
-.tt-window span {
-  color: #8192aa;
-  font-size: 10px;
-  text-align: center;
-}
-.tt-window button {
-  border: 0;
-  background: transparent;
-  color: var(--mint);
-  font-size: 11px;
+
+/* Stable track: the domain is the whole range and never recenters, so the
+   handle stays exactly where the pointer puts it. */
+.tt-track {
+  margin: 26px 0 6px;
+  padding: 14px 0 4px;
+  outline: none;
+  touch-action: none;
   cursor: pointer;
 }
-.tt-timeline {
+.tt-track-rail {
   position: relative;
-  margin: 8px 0 26px;
-  padding-top: 20px;
-  touch-action: none;
+  height: 8px;
+  border-radius: 999px;
+  background: #16294a;
 }
-.tt-timeline input {
-  width: 100%;
-  height: 48px;
-  margin: 0;
-  appearance: none;
-  background: transparent;
-  cursor: grab;
+.tt-track:focus-visible .tt-track-rail {
+  box-shadow: 0 0 0 3px #2fc47255;
 }
-.tt-timeline input::-webkit-slider-runnable-track {
-  height: 4px;
-  border-radius: 4px;
-  background: linear-gradient(90deg, var(--mint), #425777);
+.tt-track-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #1d4f7a, var(--mint));
 }
-.tt-timeline input::-webkit-slider-thumb {
-  width: 52px;
-  height: 52px;
-  margin-top: -24px;
-  appearance: none;
-  border: 2px solid var(--pollen);
+.tt-track-handle {
+  position: absolute;
+  top: 50%;
+  width: 22px;
+  height: 22px;
+  margin: -11px 0 0 -11px;
+  border: 3px solid #06101f;
   border-radius: 50%;
-  background: var(--ink);
-  box-shadow: 0 0 0 7px #fde59316;
+  background: var(--pollen);
+  box-shadow: 0 2px 10px #0009;
 }
-.tt-timeline > div {
+.tt-track.is-dragging .tt-track-handle {
+  transform: scale(1.12);
+}
+.tt-track-answer {
+  position: absolute;
+  top: 50%;
+  width: 3px;
+  height: 26px;
+  margin: -13px 0 0 -1.5px;
+  border-radius: 2px;
+  background: var(--mint);
+  box-shadow: 0 0 0 2px #06101f;
+}
+.tt-track-ticks {
+  position: relative;
+  height: 18px;
+  margin-top: 12px;
+}
+.tt-track-ticks span {
+  position: absolute;
+  transform: translateX(-50%);
+  color: #7f93ad;
+  font-size: 10px;
+  white-space: nowrap;
+}
+.tt-track-ticks span:first-child {
+  transform: none;
+}
+.tt-track-ticks span:last-child {
+  transform: translateX(-100%);
+}
+.tt-steps {
   display: flex;
-  justify-content: space-between;
-  color: #8192aa;
+  gap: 5px;
+  margin: 6px 0 18px;
+}
+.tt-steps button {
+  flex: 1;
+  min-width: 0;
+  padding: 7px 0;
+  border: 1px solid #2c4262;
+  border-radius: 6px;
+  background: #0e1e38;
+  color: #b9c8dc;
   font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+.tt-steps button:hover:not(:disabled) {
+  border-color: var(--mint);
+  color: #fff;
+}
+.tt-steps button:disabled {
+  opacity: 0.35;
+  cursor: default;
 }
 .tt-note {
   max-width: 380px;
@@ -578,8 +594,11 @@
   .tt-time {
     padding: 32px 20px 40px;
   }
-  .tt-year strong {
-    font-size: 72px;
+  .tt-year-entry input {
+    font-size: 66px;
+  }
+  .tt-steps button {
+    font-size: 10px;
   }
   .tt-rule {
     display: none;
