@@ -33,13 +33,160 @@ export type HistoryRun = {
 
 export const ROUNDS_PER_GAME = 6;
 export const MAX_ROUND_POINTS = 500;
+const SCHEDULE_START = "2026-09-04";
+const SCHEDULE_DAYS = 100;
+
+type ScheduledLens = {
+  name: string;
+  note: string;
+  includes: (event: ThenThereEvent) => boolean;
+};
+
+const fieldSet = (...fields: string[]) => new Set(fields);
+const SCHEDULED_LENSES: ScheduledLens[] = [
+  {
+    name: "Wars and diplomacy",
+    note: "States collide, bargain, and redraw the map.",
+    includes: (event) =>
+      fieldSet(
+        "Military history",
+        "Diplomacy",
+        "Geopolitics",
+        "Naval history",
+      ).has(event.field),
+  },
+  {
+    name: "Exploration and the map",
+    note: "Routes, frontiers, voyages, and the changing shape of the known world.",
+    includes: (event) =>
+      fieldSet(
+        "Exploration",
+        "Cartography",
+        "Colonial history",
+        "Space exploration",
+      ).has(event.field),
+  },
+  {
+    name: "Ideas in motion",
+    note: "Science, medicine, philosophy, and the institutions that carried them.",
+    includes: (event) =>
+      fieldSet(
+        "Science",
+        "Medicine",
+        "Physics",
+        "Chemistry",
+        "Biology",
+        "Mathematics",
+        "Philosophy",
+        "Political thought",
+      ).has(event.field),
+  },
+  {
+    name: "Revolutions and rights",
+    note: "Power changes hands, and people claim a new political order.",
+    includes: (event) =>
+      fieldSet(
+        "Revolution",
+        "Civil rights",
+        "Decolonization",
+        "Women’s history",
+        "Labor history",
+        "Human rights",
+      ).has(event.field),
+  },
+  {
+    name: "The built world",
+    note: "Architecture, infrastructure, engineering, and the systems beneath daily life.",
+    includes: (event) =>
+      fieldSet(
+        "Architecture",
+        "Engineering",
+        "Infrastructure",
+        "Technology",
+        "Communications",
+      ).has(event.field),
+  },
+  {
+    name: "Empires and states",
+    note: "Courts, law, religion, and the long work of organizing power.",
+    includes: (event) =>
+      fieldSet(
+        "Imperial politics",
+        "State formation",
+        "Dynastic history",
+        "Legal history",
+        "Religious history",
+        "Constitutional history",
+      ).has(event.field),
+  },
+  {
+    name: "Culture and expression",
+    note: "Books, music, art, language, and public imagination.",
+    includes: (event) =>
+      fieldSet(
+        "Literature",
+        "Music",
+        "Art",
+        "Film",
+        "Theater",
+        "Linguistics",
+        "Writing systems",
+      ).has(event.field),
+  },
+  {
+    name: "Crisis and recovery",
+    note: "Disaster, disease, migration, and the difficult work of rebuilding.",
+    includes: (event) =>
+      fieldSet("Disaster", "Epidemics", "Migration", "Archaeology").has(
+        event.field,
+      ),
+  },
+  {
+    name: "Sport and spectacle",
+    note: "Competition, crowds, and the political life of play.",
+    includes: (event) =>
+      fieldSet(
+        "Baseball",
+        "Sport",
+        "Tennis",
+        "Cycling",
+        "Football",
+        "Olympics",
+        "Athletics",
+        "Boxing",
+        "Hockey",
+      ).has(event.field),
+  },
+  {
+    name: "Markets and modern life",
+    note: "Trade, computing, aviation, and the forces remaking the present.",
+    includes: (event) =>
+      fieldSet(
+        "Economic history",
+        "Trade",
+        "Computing",
+        "Aviation",
+        "Political history",
+      ).has(event.field),
+  },
+];
 
 export function todayKey(date = new Date()) {
   return date.toISOString().slice(0, 10);
 }
 
+function scheduledLens(date: string) {
+  const start = Date.parse(`${SCHEDULE_START}T00:00:00.000Z`);
+  const current = Date.parse(`${date}T00:00:00.000Z`);
+  const offset = Math.round((current - start) / 86_400_000);
+  if (!Number.isFinite(offset) || offset < 0 || offset >= SCHEDULE_DAYS)
+    return null;
+  return SCHEDULED_LENSES[offset % SCHEDULED_LENSES.length];
+}
+
 export function dailyGame(date = todayKey()): {
   focus: Focus | null;
+  edition: Pick<ScheduledLens, "name" | "note"> | null;
   questions: ThenThereEvent[];
 } {
   let seed =
@@ -53,11 +200,19 @@ export function dailyGame(date = todayKey()): {
     seed ^= seed << 5;
     return (seed >>> 0) / 4294967296;
   };
-  const focus =
-      seed % 5 === 0 ? FOCUSES[Math.floor(rand() * FOCUSES.length)] : null,
-    deck = focus?.deck || EVENTS;
+  const edition = scheduledLens(date),
+    focus = edition
+      ? null
+      : seed % 5 === 0
+        ? FOCUSES[Math.floor(rand() * FOCUSES.length)]
+        : null,
+    themedDeck = edition ? EVENTS.filter(edition.includes) : EVENTS,
+    deck =
+      focus?.deck ||
+      (themedDeck.length >= ROUNDS_PER_GAME ? themedDeck : EVENTS);
   return {
     focus,
+    edition,
     questions: [...deck]
       .map((event) => ({ event, rank: rand() / event.weight }))
       .sort((a, b) => a.rank - b.rank)

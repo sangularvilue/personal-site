@@ -25,6 +25,25 @@ export default async function AdminDashboard() {
         </Link>
       </header>
 
+      <section className="mb-12 pb-10 border-b border-glass-border">
+        <div className="flex items-center justify-between gap-6">
+          <div>
+            <h2 className="font-serif text-sand text-lg font-medium">
+              Then There
+            </h2>
+            <p className="text-xs text-text-soft mt-1">
+              Rehearse any past or scheduled daily deck.
+            </p>
+          </div>
+          <Link
+            href="/admin/thenthere"
+            className="shrink-0 px-4 py-2 bg-teal/10 border border-teal/20 rounded-xl text-teal text-sm font-mono hover:bg-teal/20 transition-all backdrop-blur-sm"
+          >
+            open decks
+          </Link>
+        </div>
+      </section>
+
       {/* Posts section */}
       <section className="mb-12">
         <div className="flex items-center justify-between mb-4">
@@ -67,10 +86,7 @@ export default async function AdminDashboard() {
                       {new Date(post.createdAt).toLocaleDateString()}
                     </span>
                     {post.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-[0.6rem] text-sand-dim"
-                      >
+                      <span key={tag} className="text-[0.6rem] text-sand-dim">
                         #{tag}
                       </span>
                     ))}

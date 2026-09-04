@@ -634,6 +634,19 @@
   font-size: 11px;
   line-height: 1.45;
 }
+.tt-admin-return {
+  width: max-content;
+  padding: 10px 14px;
+  border: 1px solid #4a6080;
+  border-radius: 7px;
+  color: var(--mint);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.tt-admin-return:hover {
+  border-color: var(--mint);
+}
 .tt-confidence-note {
   margin: -8px 0 12px !important;
   color: var(--mint) !important;
@@ -763,6 +776,48 @@
   color: #94a8c0;
   font-size: 10px;
   text-align: right;
+}
+.tt-history-trend {
+  margin-top: 54px;
+  padding-top: 18px;
+  border-top: 1px solid #405678;
+}
+.tt-history-trend-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: end;
+}
+.tt-history-trend h2 {
+  margin: 0;
+  font:
+    400 28px Fraunces,
+    Georgia,
+    serif;
+}
+.tt-history-trend p {
+  margin: 6px 0 0;
+  color: var(--fog);
+  font-size: 13px;
+}
+.tt-history-trend strong {
+  color: var(--pollen);
+  font-size: 13px;
+  white-space: nowrap;
+}
+.tt-history-trend-bars {
+  display: flex;
+  align-items: end;
+  gap: 5px;
+  height: 132px;
+  margin-top: 22px;
+  padding: 12px 0 0;
+  border-bottom: 1px solid #405678;
+}
+.tt-history-trend-bars span {
+  min-width: 8px;
+  flex: 1;
+  background: linear-gradient(#3dcf7b, #1d4f7a);
 }
 .tt-history-empty {
   display: grid;

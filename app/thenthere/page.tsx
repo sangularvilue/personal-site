@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
 import Globe, { GlobePoint } from "./Globe";
 import type { Event } from "./events";
 import { dailyGame, scoreGuess, type Guess, type ScoreResult } from "./game";
@@ -11,10 +12,24 @@ type BoardRow = { name: string; score: number };
 const NAME_KEY = "thenthere:name";
 const TUTORIAL_KEY = "thenthere:practice-complete";
 
-export default function ThenThere() {
-  const daily = useMemo(dailyGame, []),
+function ThenThere() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const requestedDate = searchParams.get("date");
+  const isCalendarDate =
+    requestedDate &&
+    /^\d{4}-\d{2}-\d{2}$/.test(requestedDate) &&
+    new Date(`${requestedDate}T00:00:00.000Z`).toISOString().slice(0, 10) ===
+      requestedDate;
+  const previewDate =
+    pathname.endsWith("/thenthere/play") && isCalendarDate
+      ? requestedDate
+      : undefined;
+  const isPreview = Boolean(previewDate);
+  const daily = useMemo(() => dailyGame(previewDate), [previewDate]),
     questions = daily.questions,
-    focus = daily.focus;
+    focus = daily.focus,
+    edition = daily.edition;
   const startYear = (item: Event) =>
     focus
       ? (focus.years[0] + focus.years[1]) / 2
@@ -43,11 +58,13 @@ export default function ThenThere() {
     return () => document.body.classList.remove("then-there-mode");
   }, []);
   useEffect(() => {
+    if (isPreview) return;
     try {
       setPractice(!localStorage.getItem(TUTORIAL_KEY));
     } catch {}
-  }, []);
+  }, [isPreview]);
   useEffect(() => {
+    if (isPreview) return;
     fetch("/api/thenthere/leaderboard")
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((d) => {
@@ -55,7 +72,7 @@ export default function ThenThere() {
         setClaimed(Boolean(d.submitted));
       })
       .catch(() => {});
-  }, []);
+  }, [isPreview]);
   useEffect(() => {
     try {
       const saved = localStorage.getItem(NAME_KEY);
@@ -105,7 +122,8 @@ export default function ThenThere() {
     : null;
   const submit = async () => {
     const entrant = name.trim();
-    if (!entrant || posted || claimed || answers.length !== 6) return;
+    if (isPreview || !entrant || posted || claimed || answers.length !== 6)
+      return;
     setSubmitError("");
     try {
       localStorage.setItem(NAME_KEY, entrant);
@@ -152,22 +170,29 @@ export default function ThenThere() {
     } catch {}
     setPractice(false);
   };
-  if (practice) return <PracticeRound onComplete={completePractice} />;
+  if (practice && !isPreview)
+    return <PracticeRound onComplete={completePractice} />;
   if (finished)
     return (
       <main className="tt-shell">
-        <Header total={total} />
+        <Header total={total} previewDate={previewDate} />
         <section className="tt-end">
           <div className="tt-final">
-            <p>Today’s expedition</p>
+            <p>
+              {isPreview
+                ? `Scheduled deck · ${previewDate}`
+                : "Today’s expedition"}
+            </p>
             <strong>{Math.round(total).toLocaleString()}</strong>
             <span>out of 3,000</span>
             <h1>
-              {total > 2200
-                ? "You knew where history stood."
-                : total > 1400
-                  ? "A respectable passage through time."
-                  : "The map remembers. Try again tomorrow."}
+              {isPreview
+                ? "Deck rehearsed. The public record is untouched."
+                : total > 2200
+                  ? "You knew where history stood."
+                  : total > 1400
+                    ? "A respectable passage through time."
+                    : "The map remembers. Try again tomorrow."}
             </h1>
             <div className="tt-final-actions">
               <button onClick={share}>{shareState || "Share result"}</button>
@@ -177,73 +202,94 @@ export default function ThenThere() {
             </div>
           </div>
           <aside className="tt-leader">
-            <h2>♜ Today’s leaders</h2>
-            {board.length ? (
-              <ol>
-                {board.slice(0, 5).map((row, i) => (
-                  <li
-                    key={`${row.name}-${i}`}
-                    className={
-                      posted &&
-                      row.name === name.trim() &&
-                      row.score === Math.round(total)
-                        ? "is-you"
-                        : ""
-                    }
-                  >
-                    <span>{i + 1}</span>
-                    <b>{row.name}</b>
-                    <strong>{row.score.toLocaleString()}</strong>
-                  </li>
-                ))}
-              </ol>
+            {isPreview ? (
+              <>
+                <h2>Scheduled rehearsal</h2>
+                <p className="tt-empty-board">
+                  This run has no leaderboard, verification, or field-notes
+                  entry. It is only a view of the deck selected for this date.
+                </p>
+                <a className="tt-admin-return" href="/admin/thenthere">
+                  Choose another date
+                </a>
+              </>
             ) : (
-              <p className="tt-empty-board">
-                Be the first verified expedition today.
-              </p>
+              <>
+                <h2>♜ Today’s leaders</h2>
+                {board.length ? (
+                  <ol>
+                    {board.slice(0, 5).map((row, i) => (
+                      <li
+                        key={`${row.name}-${i}`}
+                        className={
+                          posted &&
+                          row.name === name.trim() &&
+                          row.score === Math.round(total)
+                            ? "is-you"
+                            : ""
+                        }
+                      >
+                        <span>{i + 1}</span>
+                        <b>{row.name}</b>
+                        <strong>{row.score.toLocaleString()}</strong>
+                      </li>
+                    ))}
+                  </ol>
+                ) : (
+                  <p className="tt-empty-board">
+                    Be the first verified expedition today.
+                  </p>
+                )}
+                {posted && rank !== null && rank > 4 && (
+                  <p className="tt-rank">
+                    You placed #{rank + 1} of {board.length} today.
+                  </p>
+                )}
+                <label>
+                  {posted || claimed ? "Verified run" : "Verify your score"}
+                </label>
+                <div>
+                  <input
+                    value={name}
+                    onChange={(e) => setName(e.target.value.slice(0, 18))}
+                    placeholder="your name"
+                    disabled={posted || claimed}
+                  />
+                  <button
+                    onClick={submit}
+                    disabled={!name.trim() || posted || claimed}
+                  >
+                    {posted
+                      ? "Verified"
+                      : claimed
+                        ? "Already verified"
+                        : "Verify"}
+                  </button>
+                </div>
+                {submitError && (
+                  <p className="tt-submit-error">{submitError}</p>
+                )}
+                <p className="tt-board-note">
+                  Scores are computed from your six guesses on our server. One
+                  verified run per browser each day.
+                </p>
+              </>
             )}
-            {posted && rank !== null && rank > 4 && (
-              <p className="tt-rank">
-                You placed #{rank + 1} of {board.length} today.
-              </p>
-            )}
-            <label>
-              {posted || claimed ? "Verified run" : "Verify your score"}
-            </label>
-            <div>
-              <input
-                value={name}
-                onChange={(e) => setName(e.target.value.slice(0, 18))}
-                placeholder="your name"
-                disabled={posted || claimed}
-              />
-              <button
-                onClick={submit}
-                disabled={!name.trim() || posted || claimed}
-              >
-                {posted ? "Verified" : claimed ? "Already verified" : "Verify"}
-              </button>
-            </div>
-            {submitError && <p className="tt-submit-error">{submitError}</p>}
-            <p className="tt-board-note">
-              Scores are computed from your six guesses on our server. One
-              verified run per browser each day.
-            </p>
           </aside>
         </section>
       </main>
     );
   return (
     <main className="tt-shell">
-      <Header total={total} round={round} />
+      <Header total={total} round={round} previewDate={previewDate} />
       <section className="tt-play">
         <div className="tt-prompt">
           <div>
-            {focus && (
+            {(focus || edition) && (
               <div className="tt-focus">
                 <b>Today’s focus</b>
-                <span>{focus.name}</span>
-                <em>{focus.note}</em>
+                <span>{focus?.name || edition?.name}</span>
+                <em>{focus?.note || edition?.note}</em>
               </div>
             )}
             <p className="tt-kicker">
@@ -357,18 +403,32 @@ export default function ThenThere() {
   );
 }
 
-function Header({ total, round }: { total: number; round?: number }) {
+function Header({
+  total,
+  round,
+  previewDate,
+}: {
+  total: number;
+  round?: number;
+  previewDate?: string;
+}) {
   return (
     <header className="tt-top">
       <div className="tt-brand">
-        <a href="/" className="tt-mark">
+        <a href={previewDate ? "/admin/thenthere" : "/"} className="tt-mark">
           <span>then</span>
           <i>/</i>
           <span>there</span>
         </a>
-        <a href="/thenthere/history" className="tt-history-link">
-          field notes
-        </a>
+        {previewDate ? (
+          <span className="tt-history-link">
+            scheduled deck · {previewDate}
+          </span>
+        ) : (
+          <a href="/thenthere/history" className="tt-history-link">
+            field notes
+          </a>
+        )}
       </div>
       {round !== undefined ? (
         <div className="tt-rounds">
@@ -386,5 +446,13 @@ function Header({ total, round }: { total: number; round?: number }) {
       )}
       <div className="tt-score">{Math.round(total).toLocaleString()} pts</div>
     </header>
+  );
+}
+
+export default function ThenTherePage() {
+  return (
+    <Suspense fallback={<main className="tt-shell" />}>
+      <ThenThere />
+    </Suspense>
   );
 }

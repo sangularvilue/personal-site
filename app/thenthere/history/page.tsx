@@ -119,6 +119,31 @@ function InsightList({
   );
 }
 
+function ScoreTrend({ runs }: { runs: HistoryRun[] }) {
+  const recent = runs.slice(-30);
+  const latest = recent.at(-1);
+  return (
+    <section className="tt-history-trend">
+      <div className="tt-history-trend-head">
+        <div>
+          <h2>Score over time</h2>
+          <p>One bar per verified expedition.</p>
+        </div>
+        {latest && <strong>{latest.score.toLocaleString()} / 3,000</strong>}
+      </div>
+      <div className="tt-history-trend-bars" aria-label="Score over time">
+        {recent.map((run) => (
+          <span
+            key={run.date}
+            title={`${run.date}: ${run.score} / 3,000`}
+            style={{ height: `${Math.max(8, (run.score / 3000) * 100)}%` }}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export default function HistoryPage() {
   const [runs, setRuns] = useState<HistoryRun[] | null>(null);
   useEffect(() => {
@@ -199,6 +224,7 @@ export default function HistoryPage() {
               locationOnly
             />
           </div>
+          <ScoreTrend runs={summary.ordered} />
         </section>
       )}
     </main>
