@@ -530,7 +530,7 @@ const ROWS: Row[] = [
     4,
   ],
   [
-    "Hannibal leads an army with war elephants over a mountain range in the Second Punic War.",
+    "Hannibal leads an army across a mountain range during the Second Punic War.",
     -218,
     45.0,
     6.9,

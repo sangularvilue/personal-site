@@ -2,86 +2,14 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Globe, { GlobePoint } from "./Globe";
-import { EVENTS, FOCUSES, type Event } from "./events";
+import type { Event } from "./events";
+import { dailyGame, scoreGuess, type Guess, type ScoreResult } from "./game";
+import PracticeRound from "./PracticeRound";
 import TimePicker, { yearLabel } from "./TimePicker";
 
-type Result = {
-  points: number;
-  distance: number;
-  yearError: number;
-  metric: number;
-  eraScale: number;
-  spaceScale: number;
-  spaceLoss: number;
-  timeLoss: number;
-};
 type BoardRow = { name: string; score: number };
 const NAME_KEY = "thenthere:name";
-
-const FALLBACK: BoardRow[] = [
-  { name: "atlas_finch", score: 2468 },
-  { name: "yearzero", score: 2312 },
-  { name: "cicero_7", score: 2190 },
-];
-function dailyGame() {
-  let seed =
-    [...new Date().toISOString().slice(0, 10)].reduce(
-      (n, c) => Math.imul(n ^ c.charCodeAt(0), 16777619),
-      2166136261,
-    ) >>> 0;
-  const rand = () => {
-    seed ^= seed << 13;
-    seed ^= seed >>> 17;
-    seed ^= seed << 5;
-    return (seed >>> 0) / 4294967296;
-  };
-  const focus =
-      seed % 5 === 0 ? FOCUSES[Math.floor(rand() * FOCUSES.length)] : null,
-    deck = focus?.deck || EVENTS;
-  return {
-    focus,
-    questions: [...deck]
-      .map((event) => ({ event, rank: rand() / event.weight }))
-      .sort((a, b) => a.rank - b.rank)
-      .slice(0, 6)
-      .map((x) => x.event),
-  };
-}
-function greatCircle(a: GlobePoint, b: GlobePoint) {
-  const r = Math.PI / 180,
-    dLat = (b.lat - a.lat) * r,
-    dLon = (b.lon - a.lon) * r,
-    h =
-      Math.sin(dLat / 2) ** 2 +
-      Math.cos(a.lat * r) * Math.cos(b.lat * r) * Math.sin(dLon / 2) ** 2;
-  return 6371 * 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
-}
-function scoreGuess(guess: GlobePoint, year: number, event: Event): Result {
-  const distance = greatCircle(guess, event),
-    yearError = Math.abs(year - event.year),
-    eraScale =
-      event.timeScale ??
-      Math.max(6, Math.min(140, (2026 - event.year) * 0.075)),
-    spaceScale = event.spaceScale ?? 1800,
-    spaceError = distance / spaceScale,
-    timeError = yearError / eraScale;
-  const metric = Math.hypot(spaceError, timeError),
-    points = Math.round((500 / (1 + metric ** 1.65)) * 10) / 10,
-    loss = 500 - points,
-    spaceShare = metric ? spaceError ** 2 / metric ** 2 : 0.5,
-    spaceLoss = Math.round(loss * spaceShare * 10) / 10,
-    timeLoss = Math.round((loss - spaceLoss) * 10) / 10;
-  return {
-    points,
-    distance,
-    yearError,
-    metric,
-    eraScale,
-    spaceScale,
-    spaceLoss,
-    timeLoss,
-  };
-}
+const TUTORIAL_KEY = "thenthere:practice-complete";
 
 export default function ThenThere() {
   const daily = useMemo(dailyGame, []),
@@ -97,12 +25,17 @@ export default function ThenThere() {
   const [round, setRound] = useState(0),
     [year, setYear] = useState(initialYear);
   const [guess, setGuess] = useState<GlobePoint | null>(null),
-    [result, setResult] = useState<Result | null>(null),
+    [result, setResult] = useState<ScoreResult | null>(null),
     [total, setTotal] = useState(0),
     [finished, setFinished] = useState(false);
   const [name, setName] = useState(""),
-    [board, setBoard] = useState<BoardRow[]>(FALLBACK),
-    [posted, setPosted] = useState(false);
+    [board, setBoard] = useState<BoardRow[]>([]),
+    [answers, setAnswers] = useState<Guess[]>([]),
+    [posted, setPosted] = useState(false),
+    [claimed, setClaimed] = useState(false),
+    [submitError, setSubmitError] = useState(""),
+    [shareState, setShareState] = useState(""),
+    [practice, setPractice] = useState(false);
   const event = questions[round],
     bounds: [number, number] = focus?.years || event.years || [-4000, 2026];
   useEffect(() => {
@@ -110,9 +43,17 @@ export default function ThenThere() {
     return () => document.body.classList.remove("then-there-mode");
   }, []);
   useEffect(() => {
+    try {
+      setPractice(!localStorage.getItem(TUTORIAL_KEY));
+    } catch {}
+  }, []);
+  useEffect(() => {
     fetch("/api/thenthere/leaderboard")
       .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then((d) => setBoard(d.scores))
+      .then((d) => {
+        setBoard(d.scores);
+        setClaimed(Boolean(d.submitted));
+      })
       .catch(() => {});
   }, []);
   useEffect(() => {
@@ -126,8 +67,10 @@ export default function ThenThere() {
   };
   const lock = () => {
     if (!guess || result) return;
-    const next = scoreGuess(guess, year, event);
+    const roundGuess = { ...guess, year };
+    const next = scoreGuess(roundGuess, event);
     setResult(next);
+    setAnswers((current) => [...current, roundGuess]);
     setTotal((t) => Math.round((t + next.points) * 10) / 10);
   };
   const advance = () => {
@@ -146,8 +89,11 @@ export default function ThenThere() {
     setGuess(null);
     setResult(null);
     setTotal(0);
+    setAnswers([]);
     setFinished(false);
     setPosted(false);
+    setSubmitError("");
+    setShareState("");
   };
   const rank = posted
     ? (() => {
@@ -159,7 +105,8 @@ export default function ThenThere() {
     : null;
   const submit = async () => {
     const entrant = name.trim();
-    if (!entrant || posted) return;
+    if (!entrant || posted || claimed || answers.length !== 6) return;
+    setSubmitError("");
     try {
       localStorage.setItem(NAME_KEY, entrant);
     } catch {}
@@ -167,12 +114,45 @@ export default function ThenThere() {
       const r = await fetch("/api/thenthere/leaderboard", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ name: entrant, score: Math.round(total) }),
+        body: JSON.stringify({ name: entrant, answers }),
       });
-      if (r.ok) setBoard((await r.json()).scores);
-    } catch {}
-    setPosted(true);
+      const data = await r.json();
+      if (!r.ok) {
+        setSubmitError(data.error || "Could not verify this run.");
+        if (r.status === 409) setClaimed(true);
+        return;
+      }
+      setBoard(data.scores);
+      setTotal(data.score);
+      setPosted(true);
+      setClaimed(true);
+    } catch {
+      setSubmitError(
+        "Could not verify this run. Check your connection and try again.",
+      );
+    }
   };
+  const share = async () => {
+    const text = `then/there · ${Math.round(total).toLocaleString()} / 3,000\nSix events. One map. One timeline.\nhttps://thenthere.grannis.xyz`;
+    const browser = navigator as {
+      share?: (data: ShareData) => Promise<void>;
+      clipboard?: Clipboard;
+    };
+    try {
+      if (browser.share) await browser.share({ title: "then/there", text });
+      else await browser.clipboard?.writeText(text);
+      setShareState(browser.share ? "Shared" : "Copied");
+    } catch {
+      setShareState("");
+    }
+  };
+  const completePractice = () => {
+    try {
+      localStorage.setItem(TUTORIAL_KEY, "1");
+    } catch {}
+    setPractice(false);
+  };
+  if (practice) return <PracticeRound onComplete={completePractice} />;
   if (finished)
     return (
       <main className="tt-shell">
@@ -189,45 +169,66 @@ export default function ThenThere() {
                   ? "A respectable passage through time."
                   : "The map remembers. Try again tomorrow."}
             </h1>
-            <button onClick={reset}>↻ Play again</button>
+            <div className="tt-final-actions">
+              <button onClick={share}>{shareState || "Share result"}</button>
+              <button className="tt-quiet-button" onClick={reset}>
+                ↻ Play again
+              </button>
+            </div>
           </div>
           <aside className="tt-leader">
             <h2>♜ Today’s leaders</h2>
-            <ol>
-              {board.slice(0, 5).map((row, i) => (
-                <li
-                  key={`${row.name}-${i}`}
-                  className={
-                    posted &&
-                    row.name === name.trim() &&
-                    row.score === Math.round(total)
-                      ? "is-you"
-                      : ""
-                  }
-                >
-                  <span>{i + 1}</span>
-                  <b>{row.name}</b>
-                  <strong>{row.score.toLocaleString()}</strong>
-                </li>
-              ))}
-            </ol>
+            {board.length ? (
+              <ol>
+                {board.slice(0, 5).map((row, i) => (
+                  <li
+                    key={`${row.name}-${i}`}
+                    className={
+                      posted &&
+                      row.name === name.trim() &&
+                      row.score === Math.round(total)
+                        ? "is-you"
+                        : ""
+                    }
+                  >
+                    <span>{i + 1}</span>
+                    <b>{row.name}</b>
+                    <strong>{row.score.toLocaleString()}</strong>
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              <p className="tt-empty-board">
+                Be the first verified expedition today.
+              </p>
+            )}
             {posted && rank !== null && rank > 4 && (
               <p className="tt-rank">
                 You placed #{rank + 1} of {board.length} today.
               </p>
             )}
-            <label>{posted ? "Posted as" : "Post your score"}</label>
+            <label>
+              {posted || claimed ? "Verified run" : "Verify your score"}
+            </label>
             <div>
               <input
                 value={name}
                 onChange={(e) => setName(e.target.value.slice(0, 18))}
                 placeholder="your name"
-                disabled={posted}
+                disabled={posted || claimed}
               />
-              <button onClick={submit} disabled={!name.trim() || posted}>
-                {posted ? "Posted" : "Join board"}
+              <button
+                onClick={submit}
+                disabled={!name.trim() || posted || claimed}
+              >
+                {posted ? "Verified" : claimed ? "Already verified" : "Verify"}
               </button>
             </div>
+            {submitError && <p className="tt-submit-error">{submitError}</p>}
+            <p className="tt-board-note">
+              Scores are computed from your six guesses on our server. One
+              verified run per browser each day.
+            </p>
           </aside>
         </section>
       </main>
@@ -296,6 +297,13 @@ export default function ThenThere() {
               <p>
                 <b>{event.place}</b> · {yearLabel(event.year)}
               </p>
+              {(result.spaceScale >= 2000 || result.eraScale >= 60) && (
+                <p className="tt-confidence-note">
+                  {result.spaceScale >= 2000 && "Regional location accepted"}
+                  {result.spaceScale >= 2000 && result.eraScale >= 60 && " · "}
+                  {result.eraScale >= 60 && "Date is approximate"}
+                </p>
+              )}
               <div className="tt-result-breakdown" aria-label="Score breakdown">
                 <div>
                   <span>Place</span>
@@ -352,11 +360,16 @@ export default function ThenThere() {
 function Header({ total, round }: { total: number; round?: number }) {
   return (
     <header className="tt-top">
-      <a href="/" className="tt-mark">
-        <span>then</span>
-        <i>/</i>
-        <span>there</span>
-      </a>
+      <div className="tt-brand">
+        <a href="/" className="tt-mark">
+          <span>then</span>
+          <i>/</i>
+          <span>there</span>
+        </a>
+        <a href="/thenthere/history" className="tt-history-link">
+          field notes
+        </a>
+      </div>
       {round !== undefined ? (
         <div className="tt-rounds">
           {[0, 1, 2, 3, 4, 5].map((i) => (
