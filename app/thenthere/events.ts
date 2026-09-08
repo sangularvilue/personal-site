@@ -287,7 +287,7 @@ const ROWS: Row[] = [
     4,
   ],
   [
-    "Hiram Bingham reaches Machu Picchu.",
+    "Hiram Bingham arrives at an Inca mountain citadel after climbing from the Urubamba valley.",
     1911,
     -13.16,
     -72.55,
@@ -807,7 +807,7 @@ const ROWS: Row[] = [
     { timeScale: 40 },
   ],
   [
-    "Norse voyagers settle at L’Anse aux Meadows.",
+    "Norse voyagers establish a settlement on the far side of the North Atlantic.",
     1000,
     51.6,
     -55.53,
@@ -956,7 +956,7 @@ const ROWS: Row[] = [
     { timeScale: 30 },
   ],
   [
-    "Zheng He’s first treasure fleet sets sail.",
+    "Zheng He’s first treasure fleet departs on its inaugural Indian Ocean voyage.",
     1405,
     32.06,
     118.8,
@@ -1002,7 +1002,7 @@ const ROWS: Row[] = [
     5,
   ],
   [
-    "Vasco da Gama completes the first sea route from Europe to India.",
+    "Vasco da Gama’s fleet arrives on India’s Malabar Coast, completing the first sea route from Europe.",
     1498,
     11.25,
     75.78,
@@ -1048,7 +1048,7 @@ const ROWS: Row[] = [
     5,
   ],
   [
-    "The Victoria completes the first circumnavigation of the globe.",
+    "The Victoria returns to Spain, completing the first circumnavigation of the globe.",
     1522,
     36.53,
     -6.29,
@@ -1735,7 +1735,7 @@ const ROWS: Row[] = [
     4,
   ],
   [
-    "A journalist finds the missing missionary explorer beside a great lake.",
+    "Henry Morton Stanley arrives at a lakeside trading town and meets David Livingstone.",
     1871,
     -4.91,
     29.67,
@@ -2899,7 +2899,7 @@ const EXPANDED_ROWS: Row[] = [
     { spaceScale: 2200, timeScale: 30 },
   ],
   [
-    "A bathyscaphe carries humans to the deepest known part of the ocean.",
+    "The bathyscaphe Trieste reaches the ocean’s deepest known point with two people aboard.",
     1960,
     11.35,
     142.2,
