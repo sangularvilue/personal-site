@@ -537,7 +537,8 @@ const ROWS: Row[] = [
     "Western Alps",
     "Military history",
     3,
-    { spaceScale: 1200 },
+    // The precise pass is debated, so this is intentionally regional.
+    { spaceScale: 2500, timeScale: 60 },
   ],
   [
     "Julius Caesar is assassinated in the Senate.",

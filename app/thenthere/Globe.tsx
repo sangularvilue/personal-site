@@ -92,9 +92,9 @@ export default function Globe({
       const hit = raycaster.intersectObject(globe)[0];
       if (hit?.uv)
         onGuessRef.current({
-          // SphereGeometry's v=0 is the north pole. The old conversion
-          // reversed that axis, mirroring every selected point by latitude.
-          lat: 90 - hit.uv.y * 180,
+          // SphereGeometry stores v inverted (north is 1), so this keeps the
+          // selected point aligned with the globe texture.
+          lat: hit.uv.y * 180 - 90,
           lon: hit.uv.x * 360 - 180,
         });
     };

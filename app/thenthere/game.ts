@@ -244,10 +244,7 @@ export function scoreGuess(guess: Guess, event: ThenThereEvent): ScoreResult {
     spaceError = distance / spaceScale,
     timeError = yearError / eraScale,
     metric = Math.hypot(spaceError, timeError),
-    // A miss should teach rather than end the round. Keep the same L2
-    // relationship, but give a wider shoulder before the score falls away.
-    points =
-      Math.round((MAX_ROUND_POINTS / (1 + (metric / 1.2) ** 1.45)) * 10) / 10,
+    points = Math.round((MAX_ROUND_POINTS / (1 + metric ** 1.65)) * 10) / 10,
     loss = MAX_ROUND_POINTS - points,
     spaceShare = metric ? spaceError ** 2 / metric ** 2 : 0.5,
     spaceLoss = Math.round(loss * spaceShare * 10) / 10,
