@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
@@ -30,7 +30,9 @@ export default function Globe({
 }) {
   const mountRef = useRef<HTMLDivElement>(null),
     onGuessRef = useRef(onGuess),
-    controlsRef = useRef<OrbitControls | null>(null);
+    controlsRef = useRef<OrbitControls | null>(null),
+    modeRef = useRef<"place" | "rotate">("place");
+  const [mode, setMode] = useState<"place" | "rotate">("place");
   const markers = useRef<{
     guess?: THREE.Mesh;
     answer?: THREE.Mesh;
@@ -47,7 +49,7 @@ export default function Globe({
     if (view) camera.position.copy(toVector(view, view.distance));
     else camera.position.set(0, 0.08, 3.25);
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2.5));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     mount.appendChild(renderer.domElement);
     const texture = new THREE.TextureLoader().load(
@@ -56,7 +58,7 @@ export default function Globe({
     texture.colorSpace = THREE.SRGBColorSpace;
     texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
     const globe = new THREE.Mesh(
-      new THREE.SphereGeometry(1, 128, 96),
+      new THREE.SphereGeometry(1, 256, 192),
       new THREE.MeshStandardMaterial({ map: texture, roughness: 0.88 }),
     );
     scene.add(globe);
@@ -67,22 +69,17 @@ export default function Globe({
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enablePan = false;
     controls.enableZoom = true;
-    controls.minDistance = 1.2;
+    controls.minDistance = 1.08;
     controls.maxDistance = 5.2;
     controls.zoomSpeed = 0.8;
-    controls.rotateSpeed = 0.55;
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.08;
+    controls.rotateSpeed = 0.3;
+    controls.enableDamping = false;
+    controls.enableRotate = false;
     controlsRef.current = controls;
     const raycaster = new THREE.Raycaster(),
       pointer = new THREE.Vector2();
-    let down: { x: number; y: number } | null = null;
-    const pointerDown = (e: PointerEvent) => {
-      down = { x: e.clientX, y: e.clientY };
-    };
-    const pointerUp = (e: PointerEvent) => {
-      if (!down || Math.hypot(e.clientX - down.x, e.clientY - down.y) > 7)
-        return;
+    let markingPointer: number | null = null;
+    const markAt = (e: PointerEvent) => {
       const rect = renderer.domElement.getBoundingClientRect();
       pointer.set(
         ((e.clientX - rect.left) / rect.width) * 2 - 1,
@@ -98,8 +95,27 @@ export default function Globe({
           lon: hit.uv.x * 360 - 180,
         });
     };
+    const pointerDown = (e: PointerEvent) => {
+      if (modeRef.current !== "place" || e.button !== 0) return;
+      e.preventDefault();
+      markingPointer = e.pointerId;
+      renderer.domElement.setPointerCapture(e.pointerId);
+      markAt(e);
+    };
+    const pointerMove = (e: PointerEvent) => {
+      if (markingPointer === e.pointerId) markAt(e);
+    };
+    const stopMarking = (e: PointerEvent) => {
+      if (markingPointer !== e.pointerId) return;
+      markAt(e);
+      markingPointer = null;
+      if (renderer.domElement.hasPointerCapture(e.pointerId))
+        renderer.domElement.releasePointerCapture(e.pointerId);
+    };
     renderer.domElement.addEventListener("pointerdown", pointerDown);
-    renderer.domElement.addEventListener("pointerup", pointerUp);
+    renderer.domElement.addEventListener("pointermove", pointerMove);
+    renderer.domElement.addEventListener("pointerup", stopMarking);
+    renderer.domElement.addEventListener("pointercancel", stopMarking);
     const resize = () => {
       const { width, height } = mount.getBoundingClientRect();
       renderer.setSize(width, height, false);
@@ -119,6 +135,10 @@ export default function Globe({
     return () => {
       cancelAnimationFrame(frame);
       observer.disconnect();
+      renderer.domElement.removeEventListener("pointerdown", pointerDown);
+      renderer.domElement.removeEventListener("pointermove", pointerMove);
+      renderer.domElement.removeEventListener("pointerup", stopMarking);
+      renderer.domElement.removeEventListener("pointercancel", stopMarking);
       controls.dispose();
       if (controlsRef.current === controls) controlsRef.current = null;
       texture.dispose();
@@ -137,6 +157,11 @@ export default function Globe({
       mount.replaceChildren();
     };
   }, []);
+  useEffect(() => {
+    modeRef.current = mode;
+    const controls = controlsRef.current;
+    if (controls) controls.enableRotate = mode === "rotate";
+  }, [mode]);
   useEffect(() => {
     const s = markers.current;
     if (!s.scene) return;
@@ -234,8 +259,28 @@ export default function Globe({
       <div
         ref={mountRef}
         className={`tt-globe ${locked ? "is-locked" : ""}`}
-        aria-label="Interactive globe. Drag to rotate; click to choose a place."
+        aria-label={`Interactive globe. ${
+          mode === "place" ? "Drag to move your pin." : "Drag to rotate."
+        }`}
       />
+      <div className="tt-globe-tools" aria-label="Globe controls">
+        <button
+          type="button"
+          className={mode === "place" ? "is-active" : ""}
+          onClick={() => setMode("place")}
+          aria-pressed={mode === "place"}
+        >
+          Place pin
+        </button>
+        <button
+          type="button"
+          className={mode === "rotate" ? "is-active" : ""}
+          onClick={() => setMode("rotate")}
+          aria-pressed={mode === "rotate"}
+        >
+          Rotate
+        </button>
+      </div>
       <div className="tt-globe-zoom" aria-label="Globe zoom controls">
         <button
           type="button"

@@ -204,6 +204,34 @@
   background: #0c1830e8;
   box-shadow: 0 8px 20px #0006;
 }
+.tt-globe-tools {
+  position: absolute;
+  top: 13%;
+  left: 3%;
+  display: flex;
+  overflow: hidden;
+  border: 1px solid #617697;
+  border-radius: 7px;
+  background: #0c1830e8;
+  box-shadow: 0 8px 20px #0006;
+}
+.tt-globe-tools button {
+  border: 0;
+  border-right: 1px solid #435979;
+  background: transparent;
+  color: #cbd8e8;
+  padding: 8px 10px;
+  font-size: 11px;
+  cursor: pointer;
+}
+.tt-globe-tools button:last-child {
+  border-right: 0;
+}
+.tt-globe-tools button:hover,
+.tt-globe-tools button.is-active {
+  background: #193458;
+  color: #fff;
+}
 .tt-globe-zoom button {
   width: 34px;
   height: 32px;
@@ -516,6 +544,17 @@
   color: #d5deeb;
   font-size: 12px;
   line-height: 1.45;
+}
+.tt-context a {
+  display: inline-block;
+  margin-top: 8px;
+  color: var(--mint);
+  font-size: 11px;
+  text-decoration-color: #5f927f;
+  text-underline-offset: 3px;
+}
+.tt-context a:hover {
+  color: #d5ffe7;
 }
 .tt-result-breakdown {
   display: grid;

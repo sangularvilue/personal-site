@@ -9,6 +9,7 @@ import PracticeRound from "./PracticeRound";
 import TimePicker, { yearLabel } from "./TimePicker";
 
 type BoardRow = { name: string; score: number };
+type EventContext = { summary: string; title: string; url: string };
 const NAME_KEY = "thenthere:name";
 const TUTORIAL_KEY = "thenthere:practice-complete";
 
@@ -50,7 +51,11 @@ function ThenThere() {
     [claimed, setClaimed] = useState(false),
     [submitError, setSubmitError] = useState(""),
     [shareState, setShareState] = useState(""),
-    [practice, setPractice] = useState(false);
+    [practice, setPractice] = useState(false),
+    [context, setContext] = useState<EventContext | null>(null),
+    [contextState, setContextState] = useState<"idle" | "loading" | "error">(
+      "idle",
+    );
   const event = questions[round],
     bounds: [number, number] = focus?.years || event.years || [-4000, 2026];
   useEffect(() => {
@@ -79,6 +84,30 @@ function ThenThere() {
       if (saved) setName(saved.slice(0, 18));
     } catch {}
   }, []);
+  useEffect(() => {
+    if (!result) {
+      setContext(null);
+      setContextState("idle");
+      return;
+    }
+    const controller = new AbortController();
+    setContext(null);
+    setContextState("loading");
+    fetch(`/api/thenthere/context?title=${encodeURIComponent(event.title)}`, {
+      signal: controller.signal,
+    })
+      .then((response) => (response.ok ? response.json() : Promise.reject()))
+      .then((data: EventContext) => {
+        setContext(data);
+        setContextState("idle");
+      })
+      .catch((error: unknown) => {
+        if (error instanceof DOMException && error.name === "AbortError")
+          return;
+        setContextState("error");
+      });
+    return () => controller.abort();
+  }, [event.title, result]);
   const choose = (p: GlobePoint) => {
     if (!result) setGuess(p);
   };
@@ -308,7 +337,8 @@ function ThenThere() {
             />
             {!guess && (
               <p className="tt-globe-hint">
-                Drag to rotate · scroll or +/− to zoom · click to mark
+                Place pin: drag it under your finger · use Rotate to turn the
+                globe · scroll or +/− to zoom
               </p>
             )}
             <div className="tt-globe-key">
@@ -345,12 +375,30 @@ function ThenThere() {
               <p>
                 <b>{event.place}</b> · {yearLabel(event.year)}
               </p>
-              {EVENT_CONTEXT[event.title] && (
-                <aside className="tt-context" aria-label="What happened">
-                  <b>What happened</b>
-                  <p>{EVENT_CONTEXT[event.title]}</p>
-                </aside>
-              )}
+              <aside
+                className="tt-context"
+                aria-live="polite"
+                aria-label="What happened"
+              >
+                <b>What happened</b>
+                {contextState === "loading" && (
+                  <p>Finding a short historical note…</p>
+                )}
+                {context && (
+                  <>
+                    <p>{context.summary}</p>
+                    <a href={context.url} target="_blank" rel="noreferrer">
+                      Read {context.title} on Wikipedia ↗
+                    </a>
+                  </>
+                )}
+                {contextState === "error" && (
+                  <p>
+                    {EVENT_CONTEXT[event.title] ??
+                      "A short explainer could not load. Try again in a moment."}
+                  </p>
+                )}
+              </aside>
               {(result.spaceScale >= 2000 || result.eraScale >= 60) && (
                 <p className="tt-confidence-note">
                   {result.spaceScale >= 2000 && "Regional location accepted"}
