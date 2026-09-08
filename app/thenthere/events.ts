@@ -808,7 +808,7 @@ const ROWS: Row[] = [
     { timeScale: 40 },
   ],
   [
-    "A young Moroccan jurist sets out on travels that will cross much of the known world.",
+    "Ibn Battuta, a 21-year-old jurist, begins a pilgrimage that will become a thirty-year journey.",
     1325,
     35.77,
     -5.8,
@@ -2428,7 +2428,7 @@ const ROWS: Row[] = [
     4,
   ],
   [
-    "Crowds breach a wall dividing a city, and the guards stand aside.",
+    "At a televised press conference, Günter Schabowski mistakenly says new travel rules take effect immediately.",
     1989,
     52.52,
     13.4,
@@ -2614,6 +2614,18 @@ export const EVENTS: Event[] = ROWS.map(
     ...calibration,
   }),
 );
+
+// A short answer-side note turns an opaque clue into a useful historical
+// moment. These stay out of the prompt so the location and date are still
+// genuinely guessed rather than read.
+export const EVENT_CONTEXT: Record<string, string> = {
+  "At a televised press conference, Günter Schabowski mistakenly says new travel rules take effect immediately.":
+    "Schabowski had been given a draft easing East German travel restrictions. His muddled answer sent people to the checkpoints that night, accelerating the fall of the Berlin Wall.",
+  "Ibn Battuta, a 21-year-old jurist, begins a pilgrimage that will become a thirty-year journey.":
+    "His first destination was Mecca, but the journey grew into travels across North and East Africa, the Middle East, Central Asia, India, and China. Later he dictated the Rihla, one of history’s great travel accounts.",
+  "Hannibal leads an army across a mountain range during the Second Punic War.":
+    "Hannibal’s force crossed from Gaul into Italy with elephants, an audacious opening move in the Second Punic War. The exact pass is still debated, so the game accepts a broad Alpine region.",
+};
 
 const e = (
   title: string,

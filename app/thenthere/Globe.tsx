@@ -29,7 +29,8 @@ export default function Globe({
   view?: GlobePoint & { distance: number };
 }) {
   const mountRef = useRef<HTMLDivElement>(null),
-    onGuessRef = useRef(onGuess);
+    onGuessRef = useRef(onGuess),
+    controlsRef = useRef<OrbitControls | null>(null);
   const markers = useRef<{
     guess?: THREE.Mesh;
     answer?: THREE.Mesh;
@@ -65,8 +66,14 @@ export default function Globe({
     scene.add(sun);
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enablePan = false;
-    controls.enableZoom = false;
+    controls.enableZoom = true;
+    controls.minDistance = 1.2;
+    controls.maxDistance = 5.2;
+    controls.zoomSpeed = 0.8;
     controls.rotateSpeed = 0.55;
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controlsRef.current = controls;
     const raycaster = new THREE.Raycaster(),
       pointer = new THREE.Vector2();
     let down: { x: number; y: number } | null = null;
@@ -85,7 +92,9 @@ export default function Globe({
       const hit = raycaster.intersectObject(globe)[0];
       if (hit?.uv)
         onGuessRef.current({
-          lat: hit.uv.y * 180 - 90,
+          // SphereGeometry's v=0 is the north pole. The old conversion
+          // reversed that axis, mirroring every selected point by latitude.
+          lat: 90 - hit.uv.y * 180,
           lon: hit.uv.x * 360 - 180,
         });
     };
@@ -111,6 +120,7 @@ export default function Globe({
       cancelAnimationFrame(frame);
       observer.disconnect();
       controls.dispose();
+      if (controlsRef.current === controls) controlsRef.current = null;
       texture.dispose();
       globe.geometry.dispose();
       (globe.material as THREE.Material).dispose();
@@ -204,11 +214,46 @@ export default function Globe({
     );
     s.scene.add(s.route);
   }, [guess, answer]);
+  const nudgeZoom = (direction: 1 | -1) => {
+    const controls = controlsRef.current;
+    if (!controls) return;
+    const camera = controls.object;
+    const offset = camera.position.clone().sub(controls.target);
+    const nextDistance = THREE.MathUtils.clamp(
+      offset.length() * (direction === 1 ? 0.78 : 1.28),
+      controls.minDistance,
+      controls.maxDistance,
+    );
+    camera.position.copy(
+      controls.target.clone().add(offset.setLength(nextDistance)),
+    );
+    controls.update();
+  };
   return (
-    <div
-      ref={mountRef}
-      className={`tt-globe ${locked ? "is-locked" : ""}`}
-      aria-label="Interactive globe. Drag to rotate; click to choose a place."
-    />
+    <div className="tt-globe-shell">
+      <div
+        ref={mountRef}
+        className={`tt-globe ${locked ? "is-locked" : ""}`}
+        aria-label="Interactive globe. Drag to rotate; click to choose a place."
+      />
+      <div className="tt-globe-zoom" aria-label="Globe zoom controls">
+        <button
+          type="button"
+          onClick={() => nudgeZoom(-1)}
+          aria-label="Zoom globe out"
+          title="Zoom out"
+        >
+          −
+        </button>
+        <button
+          type="button"
+          onClick={() => nudgeZoom(1)}
+          aria-label="Zoom globe in"
+          title="Zoom in"
+        >
+          +
+        </button>
+      </div>
+    </div>
   );
 }

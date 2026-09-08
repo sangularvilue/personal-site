@@ -7,12 +7,16 @@ export async function middleware(request: NextRequest) {
 
   // rrt.grannis.xyz → proxy Railroad Tiles from Render
   if (hostname.startsWith("rrt.")) {
-    return NextResponse.rewrite(new URL("https://railroad-ink.onrender.com" + pathname));
+    return NextResponse.rewrite(
+      new URL("https://railroad-ink.onrender.com" + pathname),
+    );
   }
 
   // tictactoe.grannis.xyz → proxy Hyper Tic Tac Toe from Firebase
   if (hostname.startsWith("tictactoe.")) {
-    return NextResponse.rewrite(new URL("https://hypertictactoe-60d85.web.app" + pathname));
+    return NextResponse.rewrite(
+      new URL("https://hypertictactoe-60d85.web.app" + pathname),
+    );
   }
 
   // fedcourts.grannis.xyz → rewrite to /fedcourts routes
@@ -43,7 +47,21 @@ export async function middleware(request: NextRequest) {
 
   // thenthere.grannis.xyz → rewrite to the daily history game
   if (hostname.startsWith("thenthere.")) {
-    if (pathname.startsWith("/api/") || pathname.startsWith("/thenthere/")) return NextResponse.next();
+    // The game gets a small, authenticated control room on the same host so
+    // preview cookies stay scoped to this subdomain.
+    if (pathname.startsWith("/admin")) {
+      if (pathname !== "/admin/login") {
+        const token = request.cookies.get("admin_token")?.value;
+        if (!token || !(await verifyToken(token))) {
+          const loginUrl = request.nextUrl.clone();
+          loginUrl.pathname = "/admin/login";
+          return NextResponse.redirect(loginUrl);
+        }
+      }
+      return NextResponse.next();
+    }
+    if (pathname.startsWith("/api/") || pathname.startsWith("/thenthere/"))
+      return NextResponse.next();
     const url = request.nextUrl.clone();
     url.pathname = pathname === "/" ? "/thenthere" : `/thenthere${pathname}`;
     return NextResponse.rewrite(url);

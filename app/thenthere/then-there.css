@@ -180,6 +180,11 @@
   cursor: grab;
   touch-action: none;
 }
+.tt-globe-shell {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
 .tt-globe:active {
   cursor: grabbing;
 }
@@ -187,6 +192,35 @@
   display: block;
   width: 100% !important;
   height: 100% !important;
+}
+.tt-globe-zoom {
+  position: absolute;
+  right: 3%;
+  top: 13%;
+  display: grid;
+  overflow: hidden;
+  border: 1px solid #617697;
+  border-radius: 7px;
+  background: #0c1830e8;
+  box-shadow: 0 8px 20px #0006;
+}
+.tt-globe-zoom button {
+  width: 34px;
+  height: 32px;
+  border: 0;
+  border-bottom: 1px solid #435979;
+  background: transparent;
+  color: var(--pollen);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+.tt-globe-zoom button:last-child {
+  border-bottom: 0;
+}
+.tt-globe-zoom button:hover {
+  background: #193458;
+  color: #fff;
 }
 .tt-globe-hint {
   position: absolute;
@@ -466,6 +500,22 @@
 }
 .tt-result p b {
   color: #fff;
+}
+.tt-context {
+  margin: 0 0 14px;
+  padding: 11px 12px;
+  border-left: 2px solid var(--mint);
+  background: #102642;
+}
+.tt-context > b {
+  color: var(--mint);
+  font-size: 11px;
+}
+.tt-context p {
+  margin: 5px 0 0;
+  color: #d5deeb;
+  font-size: 12px;
+  line-height: 1.45;
 }
 .tt-result-breakdown {
   display: grid;

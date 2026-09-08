@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import Globe, { GlobePoint } from "./Globe";
-import type { Event } from "./events";
+import { EVENT_CONTEXT, type Event } from "./events";
 import { dailyGame, scoreGuess, type Guess, type ScoreResult } from "./game";
 import PracticeRound from "./PracticeRound";
 import TimePicker, { yearLabel } from "./TimePicker";
@@ -307,7 +307,9 @@ function ThenThere() {
               view={focus?.view}
             />
             {!guess && (
-              <p className="tt-globe-hint">Drag to rotate · click to mark</p>
+              <p className="tt-globe-hint">
+                Drag to rotate · scroll or +/− to zoom · click to mark
+              </p>
             )}
             <div className="tt-globe-key">
               <span className="guess-dot" />
@@ -343,6 +345,12 @@ function ThenThere() {
               <p>
                 <b>{event.place}</b> · {yearLabel(event.year)}
               </p>
+              {EVENT_CONTEXT[event.title] && (
+                <aside className="tt-context" aria-label="What happened">
+                  <b>What happened</b>
+                  <p>{EVENT_CONTEXT[event.title]}</p>
+                </aside>
+              )}
               {(result.spaceScale >= 2000 || result.eraScale >= 60) && (
                 <p className="tt-confidence-note">
                   {result.spaceScale >= 2000 && "Regional location accepted"}
