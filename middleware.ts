@@ -50,6 +50,13 @@ export async function middleware(request: NextRequest) {
     // The game gets a small, authenticated control room on the same host so
     // preview cookies stay scoped to this subdomain.
     if (pathname.startsWith("/admin")) {
+      // On the game host, the useful control-room landing page is the deck
+      // launcher rather than the general site CMS dashboard.
+      if (pathname === "/admin") {
+        const launcherUrl = request.nextUrl.clone();
+        launcherUrl.pathname = "/admin/thenthere";
+        return NextResponse.redirect(launcherUrl);
+      }
       if (pathname !== "/admin/login") {
         const token = request.cookies.get("admin_token")?.value;
         if (!token || !(await verifyToken(token))) {
