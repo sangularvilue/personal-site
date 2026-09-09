@@ -5,14 +5,15 @@
  *   1. place leaks     -- the clue names its own answer location
  *   2. unwinnable      -- the answer year falls outside the timeline window the
  *                         picker offers, so the player cannot reach it
- *   3. oblique actors  -- the clue says "a Khmer king" instead of Suryavarman II
+ *   3. vague clues     -- no proper noun anywhere, so nothing identifies the
+ *                         event: "a Khmer king", or "a Caribbean capital"
  *   4. duplicate titles
  *   5. orphaned keys   -- QUESTION_RULES / EVENT_CONTEXT keyed by a title that
  *                         no longer exists, silently detaching its calibration
  *
- * Exits non-zero if 1, 2, 4 or 5 regress. Oblique actors are reported for
- * review rather than enforced, because some events genuinely have no individual
- * actor (an earthquake, a smog, the invention of writing).
+ * All five are enforced. A few events genuinely have no nameable actor and are
+ * still unmistakable (Krakatoa, the Great Smog); those are allowlisted by title
+ * in VAGUE_BUT_UNMISTAKABLE rather than waved through as a class.
  */
 const fs = require("fs");
 const path = require("path");
@@ -110,7 +111,7 @@ for (const [title, year, , , , field, , calibration] of rows) {
   if (year < lo || year > hi) unwinnable.push({ title, year, field, lo, hi });
 }
 
-// ── 3. oblique actors ─────────────────────────────────────────────────────
+// ── 3. vague clues ────────────────────────────────────────────────────────
 const WEAK = new Set(
   (
     "the a an of and in on at to for from with by into over under out off up as is are was were " +
@@ -122,8 +123,26 @@ const WEAK = new Set(
     "swiss turkish ukrainian vietnamese welsh zulu allied allies nazi union confederate"
   ).split(" "),
 );
-const oblique = rows.filter(
+// A clue with no proper noun anywhere has nothing to identify it by. Usually
+// that means an actor described by role ("a Khmer king") -- but it also
+// catches clues that de-leaking hollowed out, like "a catastrophic earthquake
+// levels a Caribbean capital", which fits a dozen cities across two
+// centuries. A handful of events have no nameable actor and are still
+// unmistakable; those are listed here, and anything new must be justified the
+// same way or fixed.
+const VAGUE_BUT_UNMISTAKABLE = new Set([
+  "The earliest known writing appears on clay tablets in a Sumerian city.",
+  "The first international cricket match is played.",
+  "The Mexica found a city on an island in a highland lake.",
+  "A volcanic island explodes, and the sound is heard thousands of miles away.",
+  "An earthquake and tsunami trigger meltdowns at a coastal nuclear plant.",
+  "A lethal winter smog settles over a major capital.",
+  "The first legal same-sex civil marriages take place.",
+]);
+
+const vague = rows.filter(
   ([title]) =>
+    !VAGUE_BUT_UNMISTAKABLE.has(title) &&
     !title
       .split(/[\s,.;:'’"“”()-]+/)
       .filter(Boolean)
@@ -145,9 +164,11 @@ const dupes = [...seen].filter(([, n]) => n > 1);
 // 40 km. So also require the wording to overlap: a shared proper noun, or two
 
 const STOP = new Set(
-  ("the a an of and or in on at to for from with by into over under out off up his her its their " +
+  (
+    "the a an of and or in on at to for from with by into over under out off up his her its their " +
     "is are was were be been begins begin completes complete first second third new after before " +
-    "that which who whom this these those but not all one two three has have had").split(" "),
+    "that which who whom this these those but not all one two three has have had"
+  ).split(" "),
 );
 const contentWords = (title) =>
   title
@@ -226,11 +247,16 @@ near.forEach((n) =>
 );
 console.log(`orphaned lookup keys: ${orphans.length}`);
 orphans.forEach((o) => console.log(`  ${o}`));
-console.log(`oblique actors (review only): ${oblique.length}`);
-oblique.forEach((r) => console.log(`  ${r[1]}  ${r[0]}`));
+console.log(`vague clues (nothing to identify them by): ${vague.length}`);
+vague.forEach((r) => console.log(`  ${r[1]}  ${r[0]}`));
 
 const failures =
-  leaks.length + unwinnable.length + dupes.length + near.length + orphans.length;
+  leaks.length +
+  unwinnable.length +
+  dupes.length +
+  near.length +
+  orphans.length +
+  vague.length;
 if (failures) {
   console.error(`\nFAIL: ${failures} enforced issue(s).`);
   process.exit(1);

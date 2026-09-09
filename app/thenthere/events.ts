@@ -2007,15 +2007,6 @@ const ROWS: Row[] = [
     4,
   ],
   [
-    "Gödel publishes his incompleteness theorems.",
-    1931,
-    48.21,
-    16.37,
-    "Vienna, Austria",
-    "Mathematics",
-    2,
-  ],
-  [
     "Hitler is appointed Chancellor of Germany.",
     1933,
     52.52,
@@ -2692,7 +2683,7 @@ const EXPANDED_ROWS: Row[] = [
     2,
   ],
   [
-    "A toxic gas leak escapes from a pesticide plant before dawn.",
+    "A gas leak at a Union Carbide pesticide plant kills thousands as they sleep.",
     1984,
     23.258,
     77.413,
@@ -2710,7 +2701,7 @@ const EXPANDED_ROWS: Row[] = [
     2,
   ],
   [
-    "A catastrophic earthquake levels a Caribbean capital.",
+    "An earthquake kills over two hundred thousand people and topples the presidential palace of the poorest country in the Americas.",
     2010,
     18.54,
     -72.34,
