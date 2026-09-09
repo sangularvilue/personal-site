@@ -29,8 +29,7 @@ function ThenThere() {
   const isPreview = Boolean(previewDate);
   const daily = useMemo(() => dailyGame(previewDate), [previewDate]),
     questions = daily.questions,
-    focus = daily.focus,
-    edition = daily.edition;
+    focus = daily.focus;
   const startYear = (item: Event) =>
     focus
       ? (focus.years[0] + focus.years[1]) / 2
@@ -314,11 +313,11 @@ function ThenThere() {
       <section className="tt-play">
         <div className="tt-prompt">
           <div>
-            {(focus || edition) && (
+            {focus && (
               <div className="tt-focus">
                 <b>Today’s focus</b>
-                <span>{focus?.name || edition?.name}</span>
-                <em>{focus?.note || edition?.note}</em>
+                <span>{focus.name}</span>
+                <em>{focus.note}</em>
               </div>
             )}
             <p className="tt-kicker">

@@ -33,196 +33,104 @@ export type HistoryRun = {
 
 export const ROUNDS_PER_GAME = 6;
 export const MAX_ROUND_POINTS = 500;
-const SCHEDULE_START = "2026-09-04";
-const SCHEDULE_DAYS = 100;
+// Day 0 of the question rotation. Editions used to be themed, one subject per
+// day; now every day draws from the whole bank so the six questions feel
+// unrelated to each other.
+const ROTATION_START = "2026-09-04";
 
-type ScheduledLens = {
-  name: string;
-  note: string;
-  includes: (event: ThenThereEvent) => boolean;
-};
-
-const fieldSet = (...fields: string[]) => new Set(fields);
-const SCHEDULED_LENSES: ScheduledLens[] = [
-  {
-    name: "Wars and diplomacy",
-    note: "States collide, bargain, and redraw the map.",
-    includes: (event) =>
-      fieldSet(
-        "Military history",
-        "Diplomacy",
-        "Geopolitics",
-        "Naval history",
-      ).has(event.field),
-  },
-  {
-    name: "Exploration and the map",
-    note: "Routes, frontiers, voyages, and the changing shape of the known world.",
-    includes: (event) =>
-      fieldSet(
-        "Exploration",
-        "Cartography",
-        "Colonial history",
-        "Space exploration",
-      ).has(event.field),
-  },
-  {
-    name: "Ideas in motion",
-    note: "Science, medicine, philosophy, and the institutions that carried them.",
-    includes: (event) =>
-      fieldSet(
-        "Science",
-        "Medicine",
-        "Physics",
-        "Chemistry",
-        "Biology",
-        "Mathematics",
-        "Philosophy",
-        "Political thought",
-        "Astronomy",
-        "Reformation",
-      ).has(event.field),
-  },
-  {
-    name: "Revolutions and rights",
-    note: "Power changes hands, and people claim a new political order.",
-    includes: (event) =>
-      fieldSet(
-        "Revolution",
-        "Civil rights",
-        "Decolonization",
-        "Women’s history",
-        "Labor history",
-        "Human rights",
-      ).has(event.field),
-  },
-  {
-    name: "The built world",
-    note: "Architecture, infrastructure, engineering, and the systems beneath daily life.",
-    includes: (event) =>
-      fieldSet(
-        "Architecture",
-        "Engineering",
-        "Infrastructure",
-        "Technology",
-        "Communications",
-      ).has(event.field),
-  },
-  {
-    name: "Empires and states",
-    note: "Courts, law, religion, and the long work of organizing power.",
-    includes: (event) =>
-      fieldSet(
-        "Imperial politics",
-        "State formation",
-        "Dynastic history",
-        "Legal history",
-        "Religious history",
-        "Constitutional history",
-        "Ancient history",
-        "Medieval history",
-      ).has(event.field),
-  },
-  {
-    name: "Culture and expression",
-    note: "Books, music, art, language, and public imagination.",
-    includes: (event) =>
-      fieldSet(
-        "Literature",
-        "Music",
-        "Art",
-        "Film",
-        "Theater",
-        "Linguistics",
-        "Writing systems",
-      ).has(event.field),
-  },
-  {
-    name: "Crisis and recovery",
-    note: "Disaster, disease, migration, and the difficult work of rebuilding.",
-    includes: (event) =>
-      fieldSet("Disaster", "Epidemics", "Migration", "Archaeology").has(
-        event.field,
-      ),
-  },
-  {
-    name: "Sport and spectacle",
-    note: "Competition, crowds, and the political life of play.",
-    includes: (event) =>
-      fieldSet(
-        "Baseball",
-        "Sport",
-        "Tennis",
-        "Cycling",
-        "Football",
-        "Olympics",
-        "Athletics",
-        "Boxing",
-        "Hockey",
-      ).has(event.field),
-  },
-  {
-    name: "Markets and modern life",
-    note: "Trade, computing, aviation, and the forces remaking the present.",
-    includes: (event) =>
-      fieldSet(
-        "Economic history",
-        "Trade",
-        "Computing",
-        "Aviation",
-        "Political history",
-        "Social history",
-      ).has(event.field),
-  },
-];
+// A focus day -- a restricted map and timeline around one subject -- is a
+// deliberate change of pace, so it lands on a fixed cadence rather than at
+// random. One day in fourteen.
+const FOCUS_EVERY = 14;
 
 export function todayKey(date = new Date()) {
   return date.toISOString().slice(0, 10);
 }
 
-function scheduledLens(date: string) {
-  const start = Date.parse(`${SCHEDULE_START}T00:00:00.000Z`);
+function dayIndex(date: string) {
+  const start = Date.parse(`${ROTATION_START}T00:00:00.000Z`);
   const current = Date.parse(`${date}T00:00:00.000Z`);
   const offset = Math.round((current - start) / 86_400_000);
-  if (!Number.isFinite(offset) || offset < 0 || offset >= SCHEDULE_DAYS)
-    return null;
-  return SCHEDULED_LENSES[offset % SCHEDULED_LENSES.length];
+  return Number.isFinite(offset) ? offset : 0;
 }
 
-export function dailyGame(date = todayKey()): {
-  focus: Focus | null;
-  edition: Pick<ScheduledLens, "name" | "note"> | null;
-  questions: ThenThereEvent[];
-} {
-  let seed =
-    [...date].reduce(
-      (n, c) => Math.imul(n ^ c.charCodeAt(0), 16777619),
-      2166136261,
-    ) >>> 0;
+/**
+ * A deterministic shuffle of 0..n-1, fixed for the lifetime of the bank.
+ *
+ * The schedule needs two things that pull against each other: a day's six
+ * questions should look unrelated, and no question should come round again
+ * soon. Drawing six at random each day satisfies the first and fails the
+ * second -- with 453 events, repeats inside a fortnight are common.
+ *
+ * So instead the whole bank is shuffled once and dealt out six a day,
+ * wrapping round at the end. Every event appears once per pass, which with
+ * 453 events is a gap of roughly seventy-five days.
+ */
+function permutation(n: number) {
+  let seed = (Math.imul(1, 2654435761) ^ 0x9e3779b9) >>> 0;
   const rand = () => {
     seed ^= seed << 13;
     seed ^= seed >>> 17;
     seed ^= seed << 5;
     return (seed >>> 0) / 4294967296;
   };
-  const edition = scheduledLens(date),
-    focus = edition
-      ? null
-      : seed % 5 === 0
-        ? FOCUSES[Math.floor(rand() * FOCUSES.length)]
-        : null,
-    themedDeck = edition ? EVENTS.filter(edition.includes) : EVENTS,
-    deck =
-      focus?.deck ||
-      (themedDeck.length >= ROUNDS_PER_GAME ? themedDeck : EVENTS);
+  const order = Array.from({ length: n }, (_, i) => i);
+  for (let i = n - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  return order;
+}
+
+export function dailyGame(date = todayKey()): {
+  focus: Focus | null;
+  questions: ThenThereEvent[];
+} {
+  const index = dayIndex(date);
+
+  // Focus days are the exception: a fixed deck on a restricted map, cycling
+  // through the available subjects.
+  if (FOCUSES.length && index % FOCUS_EVERY === 0) {
+    const focus =
+      FOCUSES[
+        ((Math.floor(index / FOCUS_EVERY) % FOCUSES.length) + FOCUSES.length) %
+          FOCUSES.length
+      ];
+    if (focus.deck.length >= ROUNDS_PER_GAME) {
+      let seed = (Math.imul(index + 7, 2246822519) ^ 0x85ebca6b) >>> 0;
+      const rand = () => {
+        seed ^= seed << 13;
+        seed ^= seed >>> 17;
+        seed ^= seed << 5;
+        return (seed >>> 0) / 4294967296;
+      };
+      return {
+        focus,
+        questions: [...focus.deck]
+          .map((event) => ({ event, rank: rand() }))
+          .sort((a, b) => a.rank - b.rank)
+          .slice(0, ROUNDS_PER_GAME)
+          .map((x) => x.event),
+      };
+    }
+  }
+
+  // One fixed shuffle of the whole bank, dealt six a day and wrapping round.
+  //
+  // A per-epoch reshuffle looked tidier but had a hole at the seam: an event
+  // dealt on the last day of one shuffle could be dealt again on the first day
+  // of the next, which in practice produced repeats four days apart. Dealing
+  // cyclically from a single permutation removes the seam, so the gap between
+  // one appearance and the next is always about a full pass of the bank.
+  const order = permutation(EVENTS.length);
+  const n = order.length;
+  const from = (((index * ROUNDS_PER_GAME) % n) + n) % n;
   return {
-    focus,
-    edition,
-    questions: [...deck]
-      .map((event) => ({ event, rank: rand() / event.weight }))
-      .sort((a, b) => a.rank - b.rank)
-      .slice(0, ROUNDS_PER_GAME)
-      .map((x) => x.event),
+    focus: null,
+    questions: Array.from(
+      { length: ROUNDS_PER_GAME },
+      (_, k) => EVENTS[order[(from + k) % n]],
+    ),
   };
 }
 

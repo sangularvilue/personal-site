@@ -1,10 +1,17 @@
-// Coverage report: events per scheduled lens, per field, and per era.
-// Shows where the bank is too thin for a 6-question deck to feel varied.
+/**
+ * Coverage report for the Then There question bank: spread by era, region and
+ * subject. Run: node scripts/thenthere-coverage.cjs
+ *
+ * Days are no longer themed -- each draws six questions from the whole bank --
+ * so this is about whether the bank itself is lopsided, not about whether any
+ * single themed deck can be filled.
+ */
 const fs = require("fs");
 const path = require("path");
-const dir = path.join(__dirname, "../app/thenthere");
-const src = fs.readFileSync(path.join(dir, "events.ts"), "utf8");
-const game = fs.readFileSync(path.join(dir, "game.ts"), "utf8");
+const src = fs.readFileSync(
+  path.join(__dirname, "../app/thenthere/events.ts"),
+  "utf8",
+);
 
 function rowsOf(name) {
   const s = src.indexOf(`const ${name}: Row[] = [`);
@@ -20,36 +27,17 @@ const rows = [
   ...rowsOf("ADDED_ROWS"),
 ];
 
-// Pull each lens name and the field list it gates on.
-const lenses = [];
-const re =
-  /name:\s*"([^"]+)",\s*\n\s*note:[\s\S]*?fieldSet\(([\s\S]*?)\)\.has/g;
-let m;
-while ((m = re.exec(game))) {
-  const fields = [...m[2].matchAll(/"([^"]+)"/g)].map((f) => f[1]);
-  lenses.push({ name: m[1], fields: new Set(fields) });
-}
+const bar = (n, max, width = 34) =>
+  "#".repeat(Math.max(1, Math.round((n / max) * width)));
 
 console.log(`events: ${rows.length}\n`);
-console.log("LENS COVERAGE (a deck needs 6)");
-for (const l of lenses) {
-  const hits = rows.filter((r) => l.fields.has(r[5]));
-  const flag = hits.length < 18 ? "  <-- thin" : "";
-  console.log(`  ${String(hits.length).padStart(3)}  ${l.name}${flag}`);
-}
 
-const covered = new Set(lenses.flatMap((l) => [...l.fields]));
-const orphanFields = [...new Set(rows.map((r) => r[5]))].filter(
-  (f) => !covered.has(f),
-);
-console.log(
-  `\nfields in no lens (${orphanFields.length}): ${orphanFields.join(", ")}`,
-);
-
-console.log("\nERA SPREAD");
+console.log("ERA SPREAD");
 const eras = [
-  ["pre-500 BC", -9999, -500],
-  ["500 BC-500 AD", -500, 500],
+  ["pre-1000 BC", -9999, -1000],
+  ["1000-500 BC", -1000, -500],
+  ["500 BC-1 AD", -500, 1],
+  ["1-500", 1, 500],
   ["500-1000", 500, 1000],
   ["1000-1500", 1000, 1500],
   ["1500-1700", 1500, 1700],
@@ -59,27 +47,47 @@ const eras = [
   ["1950-2000", 1950, 2000],
   ["2000-", 2000, 9999],
 ];
-for (const [label, lo, hi] of eras) {
-  const n = rows.filter((r) => r[1] >= lo && r[1] < hi).length;
-  console.log(`  ${String(n).padStart(3)}  ${label}`);
-}
+const eraCounts = eras.map(([l, lo, hi]) => [
+  l,
+  rows.filter((r) => r[1] >= lo && r[1] < hi).length,
+]);
+const eraMax = Math.max(...eraCounts.map(([, n]) => n));
+for (const [label, n] of eraCounts)
+  console.log(
+    `  ${String(n).padStart(3)}  ${label.padEnd(12)} ${bar(n, eraMax)}`,
+  );
 
-console.log("\nCONTINENT SPREAD (rough, by lon/lat box)");
+console.log("\nREGION SPREAD (rough lat/lon boxes)");
 const box = (lat, lon) =>
-  lat > 5 && lon > -25 && lon < 45
+  lat > 34 && lon > -25 && lon < 45
     ? "Europe"
-    : lat <= 37 && lon > -20 && lon < 52
-      ? "Africa"
+    : lat <= 40 && lon > -20 && lon < 52
+      ? "Africa / Near East"
       : lon >= 45 && lon < 150 && lat > -10
         ? "Asia"
         : lat > 12 && lon >= -170 && lon <= -50
           ? "N America"
-          : lat <= 12 && lon >= -85 && lon <= -34
-            ? "S America"
+          : lat <= 12 && lon >= -95 && lon <= -34
+            ? "Latin America"
             : lon >= 110 && lat < -10
               ? "Oceania"
-              : "other";
+              : "other / ocean";
 const cont = {};
-for (const r of rows) cont[box(r[2], r[3])] = (cont[box(r[2], r[3])] || 0) + 1;
+for (const r of rows) {
+  const k = box(r[2], r[3]);
+  cont[k] = (cont[k] || 0) + 1;
+}
+const contMax = Math.max(...Object.values(cont));
 for (const [k, v] of Object.entries(cont).sort((a, b) => b[1] - a[1]))
-  console.log(`  ${String(v).padStart(3)}  ${k}`);
+  console.log(`  ${String(v).padStart(3)}  ${k.padEnd(18)} ${bar(v, contMax)}`);
+
+console.log("\nTHINNEST SUBJECTS (fewer than 4 events)");
+const fields = {};
+for (const r of rows) fields[r[5]] = (fields[r[5]] || 0) + 1;
+const thin = Object.entries(fields)
+  .filter(([, n]) => n < 4)
+  .sort((a, b) => a[1] - b[1]);
+console.log(
+  thin.length ? thin.map(([f, n]) => `  ${n}  ${f}`).join("\n") : "  (none)",
+);
+console.log(`\ndistinct subjects: ${Object.keys(fields).length}`);

@@ -135,6 +135,62 @@ const seen = new Map();
 for (const [title] of rows) seen.set(title, (seen.get(title) || 0) + 1);
 const dupes = [...seen].filter(([, n]) => n > 1);
 
+// Identical titles are the easy case. The same event worded two ways is the
+// one that actually slipped through: "Alexander routs Darius III at Gaugamela"
+// and "Alexander the Great routs Darius III in the battle that opens Persia
+// to him" were separate rows.
+//
+// Same year plus nearby coordinates is not enough on its own -- Jackie
+// Robinson's debut and the invention of the transistor are both 1947 within
+// 40 km. So also require the wording to overlap: a shared proper noun, or two
+
+const STOP = new Set(
+  ("the a an of and or in on at to for from with by into over under out off up his her its their " +
+    "is are was were be been begins begin completes complete first second third new after before " +
+    "that which who whom this these those but not all one two three has have had").split(" "),
+);
+const contentWords = (title) =>
+  title
+    .split(/[^A-Za-zÀ-ÿ’]+/)
+    .filter((w) => w.length > 3 && !STOP.has(w.toLowerCase()));
+const properNouns = (title) =>
+  new Set(
+    contentWords(title).filter(
+      (w) => /^[A-ZÀ-Ý]/.test(w) && !WEAK.has(w.toLowerCase()),
+    ),
+  );
+
+const near = [];
+for (let i = 0; i < rows.length; i++) {
+  for (let j = i + 1; j < rows.length; j++) {
+    const a = rows[i],
+      b = rows[j];
+    if (a[1] !== b[1]) continue;
+    const dLat = ((a[2] - b[2]) * Math.PI) / 180;
+    const dLon =
+      (((a[3] - b[3]) * Math.PI) / 180) *
+      Math.cos((((a[2] + b[2]) / 2) * Math.PI) / 180);
+    const km = 6371 * Math.hypot(dLat, dLon);
+    if (km >= 250) continue;
+
+    const pa = properNouns(a[0]),
+      pb = properNouns(b[0]);
+    const sharedProper = [...pa].filter((w) => pb.has(w));
+    const wa = new Set(contentWords(a[0]).map((w) => w.toLowerCase()));
+    const shared = contentWords(b[0])
+      .map((w) => w.toLowerCase())
+      .filter((w) => wa.has(w));
+    if (sharedProper.length >= 1 || new Set(shared).size >= 2)
+      near.push({
+        a: a[0],
+        b: b[0],
+        year: a[1],
+        km: Math.round(km),
+        shared: [...new Set(shared)].join(","),
+      });
+  }
+}
+
 // ── 5. orphaned lookup keys ───────────────────────────────────────────────
 const titles = new Set(rows.map((r) => r[0]));
 const orphans = [];
@@ -160,13 +216,17 @@ unwinnable.forEach((u) =>
 );
 console.log(`duplicate titles: ${dupes.length}`);
 dupes.forEach(([t]) => console.log(`  ${t}`));
+console.log(`same event worded twice: ${near.length}`);
+near.forEach((n) =>
+  console.log(`  ${n.year}, ${n.km} km apart:\n    ${n.a}\n    ${n.b}`),
+);
 console.log(`orphaned lookup keys: ${orphans.length}`);
 orphans.forEach((o) => console.log(`  ${o}`));
 console.log(`oblique actors (review only): ${oblique.length}`);
 oblique.forEach((r) => console.log(`  ${r[1]}  ${r[0]}`));
 
 const failures =
-  leaks.length + unwinnable.length + dupes.length + orphans.length;
+  leaks.length + unwinnable.length + dupes.length + near.length + orphans.length;
 if (failures) {
   console.error(`\nFAIL: ${failures} enforced issue(s).`);
   process.exit(1);
