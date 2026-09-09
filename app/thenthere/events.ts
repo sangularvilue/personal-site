@@ -157,13 +157,13 @@ const QUESTION_RULES: Record<string, Calibration> = {
   "The largest of the pyramids is completed for the pharaoh Khufu.": {
     timeScale: 160,
   },
-  "A Khmer king begins what will become the largest religious monument on earth.":
+  "Suryavarman II begins what will become the largest religious monument on earth.":
     { spaceScale: 1900, timeScale: 70 },
   "Ptolemy completes his Geography.": { timeScale: 110 },
   "Murasaki Shikibu writes The Tale of Genji.": { timeScale: 80 },
   "Dante completes the Divine Comedy.": { timeScale: 60 },
   "Chaucer begins The Canterbury Tales.": { timeScale: 60 },
-  "A Malian emperor’s pilgrimage caravan spends so much gold it depresses the local currency for years.":
+  "Mansa Musa’s pilgrimage caravan spends so much gold it depresses the local currency for years.":
     { spaceScale: 2200, timeScale: 70 },
   "Potato blight triggers the Great Famine in Ireland.": {
     spaceScale: 2600,
@@ -215,7 +215,7 @@ const ROWS: Row[] = [
     4,
   ],
   [
-    "A Malian emperor’s pilgrimage caravan spends so much gold it depresses the local currency for years.",
+    "Mansa Musa’s pilgrimage caravan spends so much gold it depresses the local currency for years.",
     1324,
     30.04,
     31.24,
@@ -224,7 +224,7 @@ const ROWS: Row[] = [
     3,
   ],
   [
-    "An Ottoman sultan’s cannon breach the walls of the thousand-year-old Byzantine capital.",
+    "Mehmed II’s cannon breach the walls of the thousand-year-old Byzantine capital.",
     1453,
     41.01,
     28.98,
@@ -233,7 +233,7 @@ const ROWS: Row[] = [
     5,
   ],
   [
-    "A successful slave revolt founds the world’s first Black republic.",
+    "Jean-Jacques Dessalines proclaims the world’s first Black republic after a successful slave revolt.",
     1804,
     19.45,
     -72.68,
@@ -314,7 +314,7 @@ const ROWS: Row[] = [
     4,
   ],
   [
-    "A Zulu army annihilates a British column beneath a rocky hill.",
+    "King Cetshwayo’s Zulu army annihilates a British column beneath a rocky hill.",
     1879,
     -28.36,
     30.65,
@@ -350,7 +350,7 @@ const ROWS: Row[] = [
     3,
   ],
   [
-    "A pharaoh abandons the old gods and builds a new capital for his sun disc.",
+    "Akhenaten abandons the old gods and builds a new capital for the sun disc Aten.",
     -1346,
     27.65,
     30.9,
@@ -377,7 +377,7 @@ const ROWS: Row[] = [
     2,
   ],
   [
-    "European powers convene to carve up Africa among themselves.",
+    "Otto von Bismarck convenes the European powers to carve up Africa among themselves.",
     1884,
     52.52,
     13.4,
@@ -386,7 +386,7 @@ const ROWS: Row[] = [
     5,
   ],
   [
-    "The first successful smallpox vaccination is administered.",
+    "Edward Jenner administers the first successful smallpox vaccination.",
     1796,
     51.71,
     -2.5,
@@ -472,7 +472,7 @@ const ROWS: Row[] = [
     { spaceScale: 800, timeScale: 20 },
   ],
   [
-    "The world’s oldest tennis championship is played for the first time.",
+    "Spencer Gore wins the first championship at the world’s oldest tennis tournament.",
     1877,
     51.43,
     -0.21,
@@ -564,7 +564,7 @@ const ROWS: Row[] = [
     { timeScale: 120, spaceScale: 1500 },
   ],
   [
-    "An ancient king has his law code carved onto a basalt stele.",
+    "Hammurabi has his law code carved onto a basalt stele.",
     -1754,
     32.54,
     44.42,
@@ -594,7 +594,7 @@ const ROWS: Row[] = [
     { timeScale: 60 },
   ],
   [
-    "Outnumbered Athenians rout a Persian landing force on a coastal plain.",
+    "Miltiades and his outnumbered Athenians rout a Persian landing force on a coastal plain.",
     -490,
     38.15,
     23.97,
@@ -669,7 +669,7 @@ const ROWS: Row[] = [
     3,
   ],
   [
-    "A volcanic eruption buries two Roman towns under ash and pumice.",
+    "Pliny the Elder dies as a volcanic eruption buries two Roman towns under ash and pumice.",
     79,
     40.75,
     14.49,
@@ -697,7 +697,7 @@ const ROWS: Row[] = [
     { timeScale: 60 },
   ],
   [
-    "Bishops gather at an imperial summons to settle the nature of Christ.",
+    "Bishops gather at the summons of emperor Constantine to settle the nature of Christ.",
     325,
     40.43,
     29.72,
@@ -706,7 +706,7 @@ const ROWS: Row[] = [
     4,
   ],
   [
-    "Visigoths sack a city that had not fallen to a foreign enemy in eight centuries.",
+    "Alaric’s Visigoths sack a city that had not fallen to a foreign enemy in eight centuries.",
     410,
     41.9,
     12.48,
@@ -770,7 +770,7 @@ const ROWS: Row[] = [
     4,
   ],
   [
-    "A Frankish commander halts an Umayyad advance into western Europe.",
+    "Charles Martel halts an Umayyad advance into western Europe.",
     732,
     47.39,
     0.69,
@@ -788,7 +788,7 @@ const ROWS: Row[] = [
     2,
   ],
   [
-    "A pope crowns Charlemagne emperor on Christmas Day.",
+    "Pope Leo III crowns Charlemagne emperor on Christmas Day.",
     800,
     41.9,
     12.46,
@@ -845,7 +845,7 @@ const ROWS: Row[] = [
     5,
   ],
   [
-    "A pope calls on Christendom to march east and retake Jerusalem.",
+    "Pope Urban II calls on Christendom to march east and retake Jerusalem.",
     1095,
     45.78,
     3.08,
@@ -854,7 +854,7 @@ const ROWS: Row[] = [
     4,
   ],
   [
-    "Crusaders storm the holy city after a five-week siege.",
+    "Godfrey of Bouillon’s crusaders storm the holy city after a five-week siege.",
     1099,
     31.78,
     35.23,
@@ -863,7 +863,7 @@ const ROWS: Row[] = [
     3,
   ],
   [
-    "A Khmer king begins what will become the largest religious monument on earth.",
+    "Suryavarman II begins what will become the largest religious monument on earth.",
     1113,
     13.41,
     103.87,
@@ -882,7 +882,7 @@ const ROWS: Row[] = [
     4,
   ],
   [
-    "Mongol armies destroy the Abbasid capital and throw its libraries into the river.",
+    "Hulagu Khan’s Mongols destroy the Abbasid capital and throw its libraries into the river.",
     1258,
     33.34,
     44.4,
@@ -965,7 +965,7 @@ const ROWS: Row[] = [
     3,
   ],
   [
-    "English longbowmen destroy a far larger French army in the mud.",
+    "Henry V’s longbowmen destroy a far larger French army in the mud.",
     1415,
     50.46,
     2.14,
@@ -1130,7 +1130,7 @@ const ROWS: Row[] = [
     4,
   ],
   [
-    "English colonists plant their first lasting settlement in North America.",
+    "John Smith and his colonists plant England’s first lasting settlement in North America.",
     1607,
     37.21,
     -76.78,
@@ -1148,7 +1148,7 @@ const ROWS: Row[] = [
     4,
   ],
   [
-    "Bohemian nobles throw imperial officials from a castle window, igniting a thirty-year war.",
+    "Bohemian nobles throw Vilém Slavata and two fellow imperial officials from a castle window, igniting a thirty-year war.",
     1618,
     50.09,
     14.4,
@@ -1157,7 +1157,7 @@ const ROWS: Row[] = [
     3,
   ],
   [
-    "The Mayflower’s passengers land after a sixty-six-day crossing.",
+    "William Bradford and the Mayflower’s passengers land after a sixty-six-day crossing.",
     1620,
     41.96,
     -70.66,
@@ -1229,7 +1229,7 @@ const ROWS: Row[] = [
     4,
   ],
   [
-    "A bakery fire destroys most of a great European capital.",
+    "A fire in Thomas Farriner’s bakery destroys most of a great European capital.",
     1666,
     51.51,
     -0.09,
@@ -1238,7 +1238,7 @@ const ROWS: Row[] = [
     4,
   ],
   [
-    "A Polish-led relief army breaks an Ottoman siege of a Habsburg capital.",
+    "John III Sobieski’s relief army breaks an Ottoman siege of a Habsburg capital.",
     1683,
     48.21,
     16.37,
@@ -1265,7 +1265,7 @@ const ROWS: Row[] = [
     3,
   ],
   [
-    "A tsar founds a new capital on marshland to face westward.",
+    "Tsar Peter the Great founds a new capital on marshland to face westward.",
     1703,
     59.94,
     30.31,
@@ -1301,7 +1301,7 @@ const ROWS: Row[] = [
     3,
   ],
   [
-    "A British company victory hands its shareholders the revenues of Bengal.",
+    "Robert Clive’s victory hands the East India Company the revenues of Bengal.",
     1757,
     23.8,
     88.25,
@@ -1392,7 +1392,7 @@ const ROWS: Row[] = [
     3,
   ],
   [
-    "A crowd storms a royal fortress and prison.",
+    "A crowd storms the royal fortress held by Bernard-René de Launay and kills him.",
     1789,
     48.85,
     2.37,
@@ -1582,7 +1582,7 @@ const ROWS: Row[] = [
     3,
   ],
   [
-    "The first women’s rights convention issues a declaration of sentiments.",
+    "Elizabeth Cady Stanton reads her Declaration of Sentiments to the first women’s rights convention.",
     1848,
     42.91,
     -76.8,
@@ -1609,7 +1609,7 @@ const ROWS: Row[] = [
     2,
   ],
   [
-    "A British light cavalry brigade charges the wrong guns.",
+    "Lord Cardigan leads a light cavalry brigade against the wrong guns.",
     1854,
     44.5,
     33.6,
@@ -1627,7 +1627,7 @@ const ROWS: Row[] = [
     2,
   ],
   [
-    "The first transatlantic telegraph cable is completed.",
+    "Cyrus West Field completes the first transatlantic telegraph cable.",
     1858,
     47.6,
     -52.7,
@@ -1708,7 +1708,7 @@ const ROWS: Row[] = [
     4,
   ],
   [
-    "A golden spike joins the first American transcontinental railroad.",
+    "Leland Stanford drives a golden spike joining the first American transcontinental railroad.",
     1869,
     41.62,
     -112.55,
@@ -1726,7 +1726,7 @@ const ROWS: Row[] = [
     3,
   ],
   [
-    "The German Empire is proclaimed in a palace hall of mirrors.",
+    "Wilhelm I is proclaimed German emperor in a palace hall of mirrors.",
     1871,
     48.8,
     2.12,
@@ -1789,7 +1789,7 @@ const ROWS: Row[] = [
     2,
   ],
   [
-    "The first fascicle of a monumental English dictionary is published.",
+    "James Murray publishes the first fascicle of a monumental English dictionary.",
     1884,
     51.75,
     -1.26,
@@ -1807,7 +1807,7 @@ const ROWS: Row[] = [
     3,
   ],
   [
-    "A bomb thrown at a labour rally leads to a notorious trial of anarchists.",
+    "A bomb thrown at a labour rally leads to the trial of August Spies and seven fellow anarchists.",
     1886,
     41.88,
     -87.64,
@@ -1870,7 +1870,7 @@ const ROWS: Row[] = [
     3,
   ],
   [
-    "An Ethiopian army destroys an Italian invasion force.",
+    "Emperor Menelik II’s army destroys an Italian invasion force.",
     1896,
     14.16,
     38.9,
@@ -1916,7 +1916,7 @@ const ROWS: Row[] = [
     4,
   ],
   [
-    "A Japanese fleet annihilates a Russian squadron that had sailed halfway round the world.",
+    "Admiral Tōgō Heihachirō annihilates a Russian squadron that had sailed halfway round the world.",
     1905,
     34.5,
     129.6,
@@ -1980,7 +1980,7 @@ const ROWS: Row[] = [
     5,
   ],
   [
-    "Republicans seize a post office and proclaim an Irish republic.",
+    "Patrick Pearse seizes a post office and proclaims an Irish republic.",
     1916,
     53.35,
     -6.26,
@@ -2133,7 +2133,7 @@ const ROWS: Row[] = [
     2,
   ],
   [
-    "German and Italian aircraft bomb a Basque market town.",
+    "Wolfram von Richthofen’s Condor Legion bombs a Basque market town.",
     1937,
     43.31,
     -2.68,
@@ -2151,7 +2151,7 @@ const ROWS: Row[] = [
     3,
   ],
   [
-    "A German airship bursts into flames while mooring.",
+    "The airship Hindenburg bursts into flames while mooring.",
     1937,
     40.03,
     -74.35,
@@ -2178,7 +2178,7 @@ const ROWS: Row[] = [
     2,
   ],
   [
-    "Delegates from forty-four nations fix a postwar monetary order at a mountain resort.",
+    "John Maynard Keynes and delegates from forty-four nations fix a postwar monetary order at a mountain resort.",
     1944,
     44.26,
     -71.44,
@@ -2196,7 +2196,7 @@ const ROWS: Row[] = [
     3,
   ],
   [
-    "The first atomic bomb used in war is dropped on a city.",
+    "Paul Tibbets drops the first atomic bomb used in war.",
     1945,
     34.39,
     132.45,
@@ -2214,7 +2214,7 @@ const ROWS: Row[] = [
     4,
   ],
   [
-    "An international tribunal opens the trial of surviving Nazi leaders.",
+    "An international tribunal opens the trial of Hermann Göring and other surviving Nazi leaders.",
     1945,
     49.45,
     11.05,
@@ -2241,7 +2241,7 @@ const ROWS: Row[] = [
     3,
   ],
   [
-    "A shepherd finds ancient scrolls in desert caves above a salt sea.",
+    "The shepherd Muhammed edh-Dhib finds ancient scrolls in desert caves above a salt sea.",
     1947,
     31.74,
     35.46,
@@ -2259,7 +2259,7 @@ const ROWS: Row[] = [
     4,
   ],
   [
-    "Allied aircraft begin supplying a blockaded city entirely by air.",
+    "General Lucius Clay orders Allied aircraft to supply a blockaded city entirely by air.",
     1948,
     52.47,
     13.4,
@@ -2358,7 +2358,7 @@ const ROWS: Row[] = [
     4,
   ],
   [
-    "Overnight, barbed wire and concrete seal a divided city in two.",
+    "Walter Ulbricht has barbed wire and concrete seal a divided city in two overnight.",
     1961,
     52.52,
     13.4,
@@ -2466,7 +2466,7 @@ const ROWS: Row[] = [
     3,
   ],
   [
-    "The southern capital falls and helicopters lift the last evacuees from an embassy roof.",
+    "Dương Văn Minh surrenders as helicopters lift the last evacuees from an embassy roof.",
     1975,
     10.78,
     106.7,
@@ -2484,7 +2484,7 @@ const ROWS: Row[] = [
     2,
   ],
   [
-    "Egypt and Israel agree a framework for peace at an American presidential retreat.",
+    "Anwar Sadat and Menachem Begin agree a framework for peace at an American presidential retreat.",
     1978,
     39.65,
     -77.47,
@@ -2492,7 +2492,15 @@ const ROWS: Row[] = [
     "Diplomacy",
     2,
   ],
-  ["The Shah flees Iran.", 1979, 35.69, 51.39, "Tehran, Iran", "Revolution", 4],
+  [
+    "Shah Mohammad Reza Pahlavi flees into exile.",
+    1979,
+    35.69,
+    51.39,
+    "Tehran, Iran",
+    "Revolution",
+    4,
+  ],
   [
     "Solidarity is born in the Gdańsk shipyard.",
     1980,
@@ -2512,7 +2520,7 @@ const ROWS: Row[] = [
     3,
   ],
   [
-    "A reactor explodes during a safety test and scatters fallout across Europe.",
+    "A reactor supervised by Anatoly Dyatlov explodes during a safety test and scatters fallout across Europe.",
     1986,
     51.39,
     30.1,
@@ -2566,7 +2574,7 @@ const ROWS: Row[] = [
     3,
   ],
   [
-    "The Soviet Union is dissolved.",
+    "Mikhail Gorbachev resigns and the Soviet Union is dissolved.",
     1991,
     55.75,
     37.62,
@@ -2611,7 +2619,7 @@ const ROWS: Row[] = [
     2,
   ],
   [
-    "Britain hands its last major Asian colony back to China.",
+    "Governor Chris Patten hands Britain’s last major Asian colony back to China.",
     1997,
     22.28,
     114.16,
@@ -2684,7 +2692,7 @@ const ROWS: Row[] = [
     4,
   ],
   [
-    "A street vendor’s self-immolation sparks protests that topple a North African president.",
+    "Mohamed Bouazizi’s self-immolation sparks protests that topple president Zine El Abidine Ben Ali.",
     2011,
     36.81,
     10.17,
@@ -2807,7 +2815,7 @@ const EXPANDED_ROWS: Row[] = [
     2,
   ],
   [
-    "A stable fire grows into the Great Chicago Fire.",
+    "A fire starting in Catherine O’Leary’s barn destroys much of a great American city.",
     1871,
     41.881,
     -87.63,
@@ -2852,7 +2860,7 @@ const EXPANDED_ROWS: Row[] = [
     2,
   ],
   [
-    "A catastrophic earthquake strikes the Haitian capital.",
+    "A catastrophic earthquake levels a Caribbean capital.",
     2010,
     18.54,
     -72.34,
@@ -3009,7 +3017,7 @@ const EXPANDED_ROWS: Row[] = [
     2,
   ],
   [
-    "The Sydney Opera House opens.",
+    "Jørn Utzon’s sail-shelled opera house opens after fourteen years of work.",
     1973,
     -33.856,
     151.215,
@@ -3156,7 +3164,7 @@ export const FOCUSES: Focus[] = [
         "European theater",
       ),
       e(
-        "The first atomic bomb used in war is dropped on a city.",
+        "Paul Tibbets drops the first atomic bomb used in war.",
         1945,
         34.39,
         132.45,
