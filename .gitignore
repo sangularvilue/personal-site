@@ -4,3 +4,6 @@ node_modules/
 .vercel
 .DS_Store
 *.tsbuildinfo
+
+# transient TS transpile output for scripts/thenthere-decks.cjs
+.tmp-decks/

@@ -79,6 +79,8 @@ const SCHEDULED_LENSES: ScheduledLens[] = [
         "Mathematics",
         "Philosophy",
         "Political thought",
+        "Astronomy",
+        "Reformation",
       ).has(event.field),
   },
   {
@@ -117,6 +119,8 @@ const SCHEDULED_LENSES: ScheduledLens[] = [
         "Legal history",
         "Religious history",
         "Constitutional history",
+        "Ancient history",
+        "Medieval history",
       ).has(event.field),
   },
   {
@@ -167,6 +171,7 @@ const SCHEDULED_LENSES: ScheduledLens[] = [
         "Computing",
         "Aviation",
         "Political history",
+        "Social history",
       ).has(event.field),
   },
 ];
