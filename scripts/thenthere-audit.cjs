@@ -180,7 +180,11 @@ for (let i = 0; i < rows.length; i++) {
     const shared = contentWords(b[0])
       .map((w) => w.toLowerCase())
       .filter((w) => wa.has(w));
-    if (sharedProper.length >= 1 || new Set(shared).size >= 2)
+    // Two shared content words is a strong signal at any distance. A single
+    // shared name is not: the Emancipation Proclamation and the Gettysburg
+    // Address share only "Lincoln" and are 104 km apart, so require the two to
+    // be practically on top of each other before a bare name counts.
+    if (new Set(shared).size >= 2 || (sharedProper.length >= 1 && km < 25))
       near.push({
         a: a[0],
         b: b[0],
