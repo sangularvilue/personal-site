@@ -1,6 +1,5 @@
 import {
   EVENTS,
-  FOCUSES,
   type Event as ThenThereEvent,
   type Focus,
 } from "./events";
@@ -37,11 +36,6 @@ export const MAX_ROUND_POINTS = 500;
 // day; now every day draws from the whole bank so the six questions feel
 // unrelated to each other.
 const ROTATION_START = "2026-09-04";
-
-// A focus day -- a restricted map and timeline around one subject -- is a
-// deliberate change of pace, so it lands on a fixed cadence rather than at
-// random. One day in fourteen.
-const FOCUS_EVERY = 14;
 
 export function todayKey(date = new Date()) {
   return date.toISOString().slice(0, 10);
@@ -87,33 +81,6 @@ export function dailyGame(date = todayKey()): {
   questions: ThenThereEvent[];
 } {
   const index = dayIndex(date);
-
-  // Focus days are the exception: a fixed deck on a restricted map, cycling
-  // through the available subjects.
-  if (FOCUSES.length && index % FOCUS_EVERY === 0) {
-    const focus =
-      FOCUSES[
-        ((Math.floor(index / FOCUS_EVERY) % FOCUSES.length) + FOCUSES.length) %
-          FOCUSES.length
-      ];
-    if (focus.deck.length >= ROUNDS_PER_GAME) {
-      let seed = (Math.imul(index + 7, 2246822519) ^ 0x85ebca6b) >>> 0;
-      const rand = () => {
-        seed ^= seed << 13;
-        seed ^= seed >>> 17;
-        seed ^= seed << 5;
-        return (seed >>> 0) / 4294967296;
-      };
-      return {
-        focus,
-        questions: [...focus.deck]
-          .map((event) => ({ event, rank: rand() }))
-          .sort((a, b) => a.rank - b.rank)
-          .slice(0, ROUNDS_PER_GAME)
-          .map((x) => x.event),
-      };
-    }
-  }
 
   // One fixed shuffle of the whole bank, dealt six a day and wrapping round.
   //

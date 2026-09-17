@@ -88,7 +88,7 @@ const avgFields =
 const singleSubjectDays = fieldsPerDay.filter((n) => n <= 2).length;
 
 console.log(`days checked: ${DAYS}`);
-console.log(`focus days: ${focusDays} (1 in ${Math.round(DAYS / (focusDays || 1))})`);
+console.log(`focus days: ${focusDays}`);
 console.log(
   `distinct fields per day: ${avgFields.toFixed(2)} of ${want} on average`,
 );
@@ -99,6 +99,10 @@ console.log(
     : "no question repeated in the window checked",
 );
 
+if (focusDays > 0) {
+  console.error(`\nFAIL: ${focusDays} themed days remain in the schedule.`);
+  bad++;
+}
 if (minGap < 60) {
   console.error(`\nFAIL: a question came round again after only ${minGap} days.`);
   bad++;
