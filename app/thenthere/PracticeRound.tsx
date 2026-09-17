@@ -64,7 +64,7 @@ export default function PracticeRound({
               onGuess={(point) => !result && setGuess(point)}
             />
             {!guess && (
-              <p className="tt-globe-hint">Drag to rotate · click to mark</p>
+              <p className="tt-globe-hint">Drag to rotate · click to place a dot · scroll or pinch to zoom</p>
             )}
             <div className="tt-globe-key">
               <span className="guess-dot" /> guess{" "}

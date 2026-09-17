@@ -336,8 +336,7 @@ function ThenThere() {
             />
             {!guess && (
               <p className="tt-globe-hint">
-                Place pin: drag it under your finger · use Rotate to turn the
-                globe · scroll or +/− to zoom
+                Drag to rotate · click to place a dot · scroll or pinch to zoom
               </p>
             )}
             <div className="tt-globe-key">

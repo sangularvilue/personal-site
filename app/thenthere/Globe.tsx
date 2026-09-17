@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
@@ -31,8 +31,7 @@ export default function Globe({
   const mountRef = useRef<HTMLDivElement>(null),
     onGuessRef = useRef(onGuess),
     controlsRef = useRef<OrbitControls | null>(null),
-    modeRef = useRef<"place" | "rotate">("place");
-  const [mode, setMode] = useState<"place" | "rotate">("place");
+    lockedRef = useRef(locked);
   const markers = useRef<{
     guess?: THREE.Mesh;
     answer?: THREE.Mesh;
@@ -40,6 +39,7 @@ export default function Globe({
     scene?: THREE.Scene;
   }>({});
   onGuessRef.current = onGuess;
+  lockedRef.current = locked;
   useEffect(() => {
     const mount = mountRef.current;
     if (!mount) return;
@@ -74,11 +74,14 @@ export default function Globe({
     controls.zoomSpeed = 0.8;
     controls.rotateSpeed = 0.3;
     controls.enableDamping = false;
-    controls.enableRotate = false;
+    controls.enableRotate = true;
+    controls.touches.ONE = THREE.TOUCH.ROTATE;
+    controls.touches.TWO = THREE.TOUCH.DOLLY_PAN;
     controlsRef.current = controls;
     const raycaster = new THREE.Raycaster(),
       pointer = new THREE.Vector2();
-    let markingPointer: number | null = null;
+    const activePointers = new Set<number>();
+    let tap: { id: number; x: number; y: number } | null = null;
     const markAt = (e: PointerEvent) => {
       const rect = renderer.domElement.getBoundingClientRect();
       pointer.set(
@@ -96,26 +99,35 @@ export default function Globe({
         });
     };
     const pointerDown = (e: PointerEvent) => {
-      if (modeRef.current !== "place" || e.button !== 0) return;
-      e.preventDefault();
-      markingPointer = e.pointerId;
-      renderer.domElement.setPointerCapture(e.pointerId);
-      markAt(e);
+      activePointers.add(e.pointerId);
+      tap = activePointers.size === 1 && e.button === 0 && !lockedRef.current
+        ? { id: e.pointerId, x: e.clientX, y: e.clientY }
+        : null;
     };
     const pointerMove = (e: PointerEvent) => {
-      if (markingPointer === e.pointerId) markAt(e);
+      if (tap?.id === e.pointerId &&
+          Math.hypot(e.clientX - tap.x, e.clientY - tap.y) > 5) tap = null;
     };
-    const stopMarking = (e: PointerEvent) => {
-      if (markingPointer !== e.pointerId) return;
-      markAt(e);
-      markingPointer = null;
-      if (renderer.domElement.hasPointerCapture(e.pointerId))
-        renderer.domElement.releasePointerCapture(e.pointerId);
+    const pointerUp = (e: PointerEvent) => {
+      pointerMove(e);
+      const shouldMark = tap?.id === e.pointerId && !lockedRef.current;
+      tap = null;
+      activePointers.delete(e.pointerId);
+      if (shouldMark) markAt(e);
     };
-    renderer.domElement.addEventListener("pointerdown", pointerDown);
-    renderer.domElement.addEventListener("pointermove", pointerMove);
-    renderer.domElement.addEventListener("pointerup", stopMarking);
-    renderer.domElement.addEventListener("pointercancel", stopMarking);
+    const pointerCancel = (e: PointerEvent) => {
+      tap = null;
+      activePointers.delete(e.pointerId);
+    };
+    const cancelTap = () => { tap = null; };
+    // Observe gestures before OrbitControls releases pointer capture. A drag,
+    // pinch, wheel zoom, or canceled gesture must never place a dot.
+    renderer.domElement.addEventListener("pointerdown", pointerDown, true);
+    renderer.domElement.addEventListener("pointermove", pointerMove, true);
+    renderer.domElement.addEventListener("pointerup", pointerUp, true);
+    renderer.domElement.addEventListener("pointercancel", pointerCancel, true);
+    renderer.domElement.addEventListener("lostpointercapture", pointerCancel, true);
+    renderer.domElement.addEventListener("wheel", cancelTap, { passive: true });
     const resize = () => {
       const { width, height } = mount.getBoundingClientRect();
       renderer.setSize(width, height, false);
@@ -135,10 +147,12 @@ export default function Globe({
     return () => {
       cancelAnimationFrame(frame);
       observer.disconnect();
-      renderer.domElement.removeEventListener("pointerdown", pointerDown);
-      renderer.domElement.removeEventListener("pointermove", pointerMove);
-      renderer.domElement.removeEventListener("pointerup", stopMarking);
-      renderer.domElement.removeEventListener("pointercancel", stopMarking);
+      renderer.domElement.removeEventListener("pointerdown", pointerDown, true);
+      renderer.domElement.removeEventListener("pointermove", pointerMove, true);
+      renderer.domElement.removeEventListener("pointerup", pointerUp, true);
+      renderer.domElement.removeEventListener("pointercancel", pointerCancel, true);
+      renderer.domElement.removeEventListener("lostpointercapture", pointerCancel, true);
+      renderer.domElement.removeEventListener("wheel", cancelTap);
       controls.dispose();
       if (controlsRef.current === controls) controlsRef.current = null;
       texture.dispose();
@@ -157,11 +171,6 @@ export default function Globe({
       mount.replaceChildren();
     };
   }, []);
-  useEffect(() => {
-    modeRef.current = mode;
-    const controls = controlsRef.current;
-    if (controls) controls.enableRotate = mode === "rotate";
-  }, [mode]);
   useEffect(() => {
     const s = markers.current;
     if (!s.scene) return;
@@ -259,28 +268,8 @@ export default function Globe({
       <div
         ref={mountRef}
         className={`tt-globe ${locked ? "is-locked" : ""}`}
-        aria-label={`Interactive globe. ${
-          mode === "place" ? "Drag to move your pin." : "Drag to rotate."
-        }`}
+        aria-label={`Interactive globe. Drag to rotate. ${locked ? "" : "Click to place a dot. "}Scroll or pinch to zoom.`}
       />
-      <div className="tt-globe-tools" aria-label="Globe controls">
-        <button
-          type="button"
-          className={mode === "place" ? "is-active" : ""}
-          onClick={() => setMode("place")}
-          aria-pressed={mode === "place"}
-        >
-          Place pin
-        </button>
-        <button
-          type="button"
-          className={mode === "rotate" ? "is-active" : ""}
-          onClick={() => setMode("rotate")}
-          aria-pressed={mode === "rotate"}
-        >
-          Rotate
-        </button>
-      </div>
       <div className="tt-globe-zoom" aria-label="Globe zoom controls">
         <button
           type="button"
