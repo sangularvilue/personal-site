@@ -76,6 +76,11 @@ export async function middleware(request: NextRequest) {
 
   // admin.grannis.xyz → rewrite to /admin routes (with auth)
   if (hostname.startsWith("admin.")) {
+    // The scheduled game uses this public texture from the admin host too.
+    // Do not rewrite it to the nonexistent /admin/thenthere asset path.
+    if (pathname === "/thenthere/earth-natural.webp") {
+      return NextResponse.next();
+    }
     // Map subdomain paths to /admin/* paths
     // If already prefixed with /admin (e.g. after redirect), don't double-prefix
     const adminPath = pathname.startsWith("/admin")
