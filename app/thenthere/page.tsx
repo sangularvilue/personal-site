@@ -6,6 +6,7 @@ import Globe, { GlobePoint } from "./Globe";
 import { EVENT_CONTEXT, type Event } from "./events";
 import { dailyGame, scoreGuess, type Guess, type ScoreResult } from "./game";
 import PracticeRound from "./PracticeRound";
+import LeaderboardTab from "./LeaderboardTab";
 import TimePicker, { yearLabel } from "./TimePicker";
 
 type BoardRow = { name: string; score: number };
@@ -483,6 +484,7 @@ function Header({
             field notes
           </a>
         )}
+        {!previewDate && <LeaderboardTab />}
       </div>
       {round !== undefined ? (
         <div className="tt-rounds">

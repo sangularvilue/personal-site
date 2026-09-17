@@ -65,6 +65,33 @@
 .tt-history-link:hover {
   color: var(--mint);
 }
+.tt-shell .tt-leaderboard-tab {
+  padding: 5px 0;
+  border: 0;
+  background: transparent;
+  color: var(--fog);
+  font-size: 12px;
+  cursor: pointer;
+}
+.tt-leaderboard-tab:hover { color: var(--mint); }
+.tt-leaderboard-tab:focus-visible { outline: 2px solid var(--pollen); outline-offset: 4px; }
+.tt-leaderboard-dialog {
+  width: min(520px, calc(100vw - 32px));
+  max-height: calc(100dvh - 48px);
+  margin: auto;
+  padding: 0;
+  border: 1px solid #435979;
+  border-radius: 12px;
+  background: var(--ink);
+  color: #f7f9f5;
+  overflow: auto;
+}
+.tt-leaderboard-dialog::backdrop { background: #020711bb; }
+.tt-leaderboard-dialog .tt-leader { padding: 28px; border: 0; }
+@media (max-width: 560px) {
+  .tt-brand { flex-wrap: wrap; gap: 0 12px; }
+  .tt-brand .tt-mark { flex-basis: 100%; }
+}
 .tt-rounds {
   display: flex;
   gap: 8px;

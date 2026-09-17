@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import LeaderboardTab from "./LeaderboardTab";
 import type { Event } from "./events";
 import Globe, { type GlobePoint } from "./Globe";
 import { scoreGuess, type ScoreResult } from "./game";
@@ -32,11 +33,14 @@ export default function PracticeRound({
   return (
     <main className="tt-shell">
       <header className="tt-top">
+        <div className="tt-brand">
         <a href="/" className="tt-mark">
           <span>then</span>
           <i>/</i>
           <span>there</span>
         </a>
+        <LeaderboardTab />
+        </div>
         <div className="tt-practice-mark">practice</div>
         <button className="tt-skip-practice" onClick={onComplete}>
           Skip
