@@ -5,43 +5,6 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 export type GlobePoint = { lat: number; lon: number };
-const GREAT_LAKES: GlobePoint[][] = [
-  // Simplified shorelines retain the five lakes at the globe's viewing scale.
-  [
-    { lat: 46.35, lon: -92.1 }, { lat: 47.1, lon: -91.0 },
-    { lat: 47.85, lon: -89.7 }, { lat: 48.0, lon: -88.1 },
-    { lat: 47.7, lon: -86.6 }, { lat: 47.05, lon: -86.15 },
-    { lat: 46.48, lon: -87.0 }, { lat: 46.28, lon: -88.5 },
-    { lat: 46.42, lon: -90.15 }, { lat: 46.1, lon: -91.5 },
-  ],
-  [
-    { lat: 45.85, lon: -88.95 }, { lat: 46.2, lon: -88.15 },
-    { lat: 45.8, lon: -87.25 }, { lat: 44.8, lon: -86.8 },
-    { lat: 43.5, lon: -86.62 }, { lat: 42.28, lon: -86.92 },
-    { lat: 41.72, lon: -87.52 }, { lat: 42.0, lon: -88.18 },
-    { lat: 43.3, lon: -88.45 }, { lat: 44.65, lon: -88.7 },
-  ],
-  [
-    { lat: 45.9, lon: -84.95 }, { lat: 46.3, lon: -84.1 },
-    { lat: 45.95, lon: -83.0 }, { lat: 45.15, lon: -82.65 },
-    { lat: 44.3, lon: -82.75 }, { lat: 43.55, lon: -82.35 },
-    { lat: 43.18, lon: -82.58 }, { lat: 43.65, lon: -83.25 },
-    { lat: 44.45, lon: -83.75 }, { lat: 45.05, lon: -84.8 },
-  ],
-  [
-    { lat: 42.15, lon: -83.18 }, { lat: 42.55, lon: -82.5 },
-    { lat: 42.48, lon: -81.4 }, { lat: 42.3, lon: -80.25 },
-    { lat: 42.15, lon: -79.15 }, { lat: 41.8, lon: -79.1 },
-    { lat: 41.5, lon: -80.0 }, { lat: 41.45, lon: -81.45 },
-    { lat: 41.55, lon: -82.65 },
-  ],
-  [
-    { lat: 43.92, lon: -79.15 }, { lat: 44.22, lon: -78.2 },
-    { lat: 44.3, lon: -77.2 }, { lat: 44.05, lon: -76.65 },
-    { lat: 43.65, lon: -76.7 }, { lat: 43.45, lon: -77.45 },
-    { lat: 43.5, lon: -78.45 },
-  ],
-];
 const toVector = (p: GlobePoint, r = 1.018) => {
   const phi = ((p.lon + 180) * Math.PI) / 180,
     theta = ((90 - p.lat) * Math.PI) / 180;
@@ -99,25 +62,6 @@ export default function Globe({
       new THREE.MeshStandardMaterial({ map: texture, roughness: 0.88 }),
     );
     scene.add(globe);
-    const lakes = new THREE.Group();
-    for (const shoreline of GREAT_LAKES) {
-      const center = shoreline.reduce(
-        (sum, point) => sum.add(toVector(point, 1.003)),
-        new THREE.Vector3(),
-      ).normalize().multiplyScalar(1.003);
-      const vertices = [center, ...shoreline.map((point) => toVector(point, 1.003))];
-      const indices: number[] = [];
-      for (let i = 1; i <= shoreline.length; i++) {
-        indices.push(0, i, i === shoreline.length ? 1 : i + 1);
-      }
-      const geometry = new THREE.BufferGeometry().setFromPoints(vertices);
-      geometry.setIndex(indices);
-      lakes.add(new THREE.Mesh(
-        geometry,
-        new THREE.MeshBasicMaterial({ color: 0x3b78a5, transparent: true, opacity: 0.9, side: THREE.DoubleSide }),
-      ));
-    }
-    scene.add(lakes);
     scene.add(new THREE.HemisphereLight(0xd9efff, 0x071021, 2.1));
     const sun = new THREE.DirectionalLight(0xffffff, 2.6);
     sun.position.set(-3, 3, 4);
@@ -214,11 +158,6 @@ export default function Globe({
       texture.dispose();
       globe.geometry.dispose();
       (globe.material as THREE.Material).dispose();
-      lakes.traverse((object) => {
-        if (!(object instanceof THREE.Mesh)) return;
-        object.geometry.dispose();
-        (object.material as THREE.Material).dispose();
-      });
       [
         markers.current.guess,
         markers.current.answer,
