@@ -1156,13 +1156,14 @@ const ROWS: Row[] = [
     4,
   ],
   [
-    "A fire in Thomas Farriner’s bakery destroys most of a great European capital.",
-    1666,
-    51.51,
-    -0.09,
-    "London, England",
-    "Disaster",
+    "Disneyland opens to the public.",
+    1955,
+    33.8121,
+    -117.919,
+    "Anaheim, California",
+    "Popular culture",
     4,
+    { years: [1900, PRESENT], spaceScale: 700, timeScale: 8 },
   ],
   [
     "John III Sobieski’s relief army breaks an Ottoman siege of a Habsburg capital.",
@@ -1735,13 +1736,14 @@ const ROWS: Row[] = [
     2,
   ],
   [
-    "Zamenhof publishes the first book in Esperanto.",
-    1887,
-    52.23,
-    21.01,
-    "Warsaw, Poland",
-    "Linguistics",
-    1,
+    "Alexander Graham Bell makes the first successful telephone call.",
+    1876,
+    42.3601,
+    -71.0589,
+    "Boston, Massachusetts",
+    "Technology",
+    4,
+    { years: [1800, 1920], spaceScale: 700, timeScale: 10 },
   ],
   [
     "The Eiffel Tower is completed.",
@@ -2225,7 +2227,7 @@ const ROWS: Row[] = [
     4,
   ],
   [
-    "Walter Ulbricht has barbed wire and concrete seal a divided city in two overnight.",
+    "Walter Ulbricht orders the overnight construction of a wall.",
     1961,
     52.52,
     13.4,
@@ -2674,13 +2676,14 @@ const EXPANDED_ROWS: Row[] = [
     2,
   ],
   [
-    "An oil tanker runs aground on Bligh Reef.",
-    1989,
-    60.84,
-    -146.88,
-    "Prince William Sound, Alaska",
-    "Disaster",
-    2,
+    "The container ship Ever Given runs aground and blocks the Suez Canal.",
+    2021,
+    30.017,
+    32.58,
+    "Suez Canal, Egypt",
+    "Trade",
+    4,
+    { years: [1950, PRESENT], spaceScale: 500, timeScale: 3 },
   ],
   [
     "An earthquake kills over two hundred thousand people and topples the presidential palace of the poorest country in the Americas.",
@@ -2867,7 +2870,7 @@ const EXPANDED_ROWS: Row[] = [
     2,
   ],
   [
-    "The Boeing 707 makes its first flight.",
+    "The Boeing 707 takes off on its first flight.",
     1957,
     47.49,
     -122.22,
@@ -3338,13 +3341,14 @@ const ADDED_ROWS: Row[] = [
 
   // ── Cartography ─────────────────────────────────────────────────────────
   [
-    "Martin Waldseemüller’s map names a new continent after Amerigo Vespucci.",
-    1507,
-    48.2847,
-    6.9494,
-    "Saint-Dié, France",
-    "Cartography",
+    "The Statue of Liberty is dedicated.",
+    1886,
+    40.6892,
+    -74.0445,
+    "New York Harbor, USA",
+    "Architecture",
     4,
+    { years: [1800, 1920], spaceScale: 700, timeScale: 10 },
   ],
   [
     "Abraham Ortelius publishes the first modern atlas.",
@@ -3626,7 +3630,7 @@ const ADDED_ROWS: Row[] = [
 
   // ── Antiquity: the Aegean and the Levant ────────────────────────────────
   [
-    "Bronze Age warriors are buried with gold masks in deep shaft graves.",
+    "Early Mycenaean rulers are buried in Grave Circle A with gold funerary masks.",
     -1600,
     37.7306,
     22.7561,
@@ -3778,7 +3782,7 @@ const ADDED_ROWS: Row[] = [
     { years: [300, 1200], timeScale: 45 },
   ],
   [
-    "Charles the Bald and his brothers divide Charlemagne’s empire.",
+    "Charles the Bald and his brothers divide Charlemagne’s empire at Verdun.",
     843,
     49.1594,
     5.3833,
@@ -4545,7 +4549,7 @@ const ADDED_ROWS: Row[] = [
     3,
   ],
   [
-    "Charles Dickens begins serialising a novel about a workhouse orphan.",
+    "The first episode in a serialized publication about orphans by Charles Dickens is printed.",
     1837,
     51.5045,
     -0.0865,
@@ -5219,13 +5223,14 @@ const ADDED_ROWS: Row[] = [
 
   // ── Africa ───────────────────────────────────────────────────────────────
   [
-    "Henry Morton Stanley reaches the Atlantic after descending a great African river.",
-    1877,
-    -5.85,
-    13.06,
-    "Boma, Congo",
-    "Exploration",
-    3,
+    "The world’s first underground railway opens to passengers.",
+    1863,
+    51.5074,
+    -0.1278,
+    "London, England",
+    "Infrastructure",
+    4,
+    { years: [1800, 1920], spaceScale: 700, timeScale: 10 },
   ],
 
   // ── South America ────────────────────────────────────────────────────────
