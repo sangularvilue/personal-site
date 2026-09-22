@@ -72,11 +72,21 @@ export default function Globe({
     controls.minDistance = 1.08;
     controls.maxDistance = 5.2;
     controls.zoomSpeed = 0.8;
-    controls.rotateSpeed = 0.3;
     controls.enableDamping = false;
     controls.enableRotate = true;
     controls.touches.ONE = THREE.TOUCH.ROTATE;
     controls.touches.TWO = THREE.TOUCH.DOLLY_PAN;
+    const syncRotateSpeed = () => {
+      const distance = camera.position.distanceTo(controls.target);
+      const zoomFactor = THREE.MathUtils.clamp(
+        (distance - controls.minDistance) / (3.25 - controls.minDistance),
+        0,
+        1,
+      );
+      controls.rotateSpeed = THREE.MathUtils.lerp(0.055, 0.3, zoomFactor);
+    };
+    syncRotateSpeed();
+    controls.addEventListener("change", syncRotateSpeed);
     controlsRef.current = controls;
     const raycaster = new THREE.Raycaster(),
       pointer = new THREE.Vector2();
@@ -153,6 +163,7 @@ export default function Globe({
       renderer.domElement.removeEventListener("pointercancel", pointerCancel, true);
       renderer.domElement.removeEventListener("lostpointercapture", pointerCancel, true);
       renderer.domElement.removeEventListener("wheel", cancelTap);
+      controls.removeEventListener("change", syncRotateSpeed);
       controls.dispose();
       if (controlsRef.current === controls) controlsRef.current = null;
       texture.dispose();

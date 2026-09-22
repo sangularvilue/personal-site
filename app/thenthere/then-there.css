@@ -194,9 +194,9 @@
 }
 .tt-globe-wrap {
   position: relative;
-  flex: 1;
-  min-height: 340px;
-  width: min(61vh, 590px);
+  flex: 0 1 auto;
+  width: min(61vh, 590px, 100%);
+  max-width: 100%;
   aspect-ratio: 1;
   margin: 10px auto -11%;
   filter: drop-shadow(0 26px 28px #0008);
@@ -981,7 +981,7 @@
     min-height: 620px;
   }
   .tt-globe-wrap {
-    width: min(88vw, 540px);
+    width: min(88vw, 540px, 100%);
     margin-bottom: -18%;
   }
   .tt-time,
