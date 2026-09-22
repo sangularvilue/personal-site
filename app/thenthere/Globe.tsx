@@ -36,7 +36,7 @@ export default function Globe({
     guess?: THREE.Mesh;
     answer?: THREE.Mesh;
     route?: THREE.Line;
-    scene?: THREE.Scene;
+    scene?: THREE.Group;
   }>({});
   onGuessRef.current = onGuess;
   lockedRef.current = locked;
@@ -45,7 +45,9 @@ export default function Globe({
     if (!mount) return;
     const scene = new THREE.Scene(),
       camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
-    markers.current.scene = scene;
+    const globeGroup = new THREE.Group();
+    scene.add(globeGroup);
+    markers.current.scene = globeGroup;
     if (view) camera.position.copy(toVector(view, view.distance));
     else camera.position.set(0, 0.08, 3.25);
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -61,7 +63,7 @@ export default function Globe({
       new THREE.SphereGeometry(1, 256, 192),
       new THREE.MeshStandardMaterial({ map: texture, roughness: 0.88 }),
     );
-    scene.add(globe);
+    globeGroup.add(globe);
     scene.add(new THREE.HemisphereLight(0xd9efff, 0x071021, 2.1));
     const sun = new THREE.DirectionalLight(0xffffff, 2.6);
     sun.position.set(-3, 3, 4);
@@ -73,32 +75,33 @@ export default function Globe({
     controls.maxDistance = 5.2;
     controls.zoomSpeed = 0.8;
     controls.enableDamping = false;
-    controls.enableRotate = true;
-    controls.touches.ONE = THREE.TOUCH.ROTATE;
+    controls.enableRotate = false;
     controls.touches.TWO = THREE.TOUCH.DOLLY_PAN;
-    const syncRotateSpeed = () => {
-      const distance = camera.position.distanceTo(controls.target);
-      const zoomFactor = THREE.MathUtils.clamp(
-        (distance - controls.minDistance) / (3.25 - controls.minDistance),
-        0,
-        1,
-      );
-      controls.rotateSpeed = THREE.MathUtils.lerp(0.055, 0.3, zoomFactor);
-    };
-    syncRotateSpeed();
-    controls.addEventListener("change", syncRotateSpeed);
     controlsRef.current = controls;
     const raycaster = new THREE.Raycaster(),
       pointer = new THREE.Vector2();
+    const sphere = new THREE.Sphere(new THREE.Vector3(), 1);
     const activePointers = new Set<number>();
     let tap: { id: number; x: number; y: number } | null = null;
-    const markAt = (e: PointerEvent) => {
+    let drag: {
+      id: number;
+      anchor: THREE.Vector3;
+      quaternion: THREE.Quaternion;
+    } | null = null;
+    const setRayFromPointer = (e: PointerEvent) => {
       const rect = renderer.domElement.getBoundingClientRect();
       pointer.set(
         ((e.clientX - rect.left) / rect.width) * 2 - 1,
         -((e.clientY - rect.top) / rect.height) * 2 + 1,
       );
       raycaster.setFromCamera(pointer, camera);
+    };
+    const surfaceAt = (e: PointerEvent) => {
+      setRayFromPointer(e);
+      return raycaster.ray.intersectSphere(sphere, new THREE.Vector3());
+    };
+    const markAt = (e: PointerEvent) => {
+      setRayFromPointer(e);
       const hit = raycaster.intersectObject(globe)[0];
       if (hit?.uv)
         onGuessRef.current({
@@ -113,20 +116,40 @@ export default function Globe({
       tap = activePointers.size === 1 && e.button === 0 && !lockedRef.current
         ? { id: e.pointerId, x: e.clientX, y: e.clientY }
         : null;
+      const anchor = activePointers.size === 1 && e.button === 0
+        ? surfaceAt(e)
+        : null;
+      drag = anchor
+        ? {
+            id: e.pointerId,
+            anchor: anchor.normalize(),
+            quaternion: globeGroup.quaternion.clone(),
+          }
+        : null;
     };
     const pointerMove = (e: PointerEvent) => {
       if (tap?.id === e.pointerId &&
           Math.hypot(e.clientX - tap.x, e.clientY - tap.y) > 5) tap = null;
+      if (drag?.id !== e.pointerId || activePointers.size !== 1) return;
+      const target = surfaceAt(e);
+      if (!target) return;
+      const delta = new THREE.Quaternion().setFromUnitVectors(
+        drag.anchor,
+        target.normalize(),
+      );
+      globeGroup.quaternion.copy(delta.multiply(drag.quaternion)).normalize();
     };
     const pointerUp = (e: PointerEvent) => {
       pointerMove(e);
       const shouldMark = tap?.id === e.pointerId && !lockedRef.current;
       tap = null;
+      drag = null;
       activePointers.delete(e.pointerId);
       if (shouldMark) markAt(e);
     };
     const pointerCancel = (e: PointerEvent) => {
       tap = null;
+      drag = null;
       activePointers.delete(e.pointerId);
     };
     const cancelTap = () => { tap = null; };
@@ -163,7 +186,6 @@ export default function Globe({
       renderer.domElement.removeEventListener("pointercancel", pointerCancel, true);
       renderer.domElement.removeEventListener("lostpointercapture", pointerCancel, true);
       renderer.domElement.removeEventListener("wheel", cancelTap);
-      controls.removeEventListener("change", syncRotateSpeed);
       controls.dispose();
       if (controlsRef.current === controls) controlsRef.current = null;
       texture.dispose();
