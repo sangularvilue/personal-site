@@ -10,6 +10,8 @@ import LeaderboardTab from "./LeaderboardTab";
 import TimePicker, { yearLabel } from "./TimePicker";
 
 type BoardRow = { name: string; score: number };
+type RankedBoardRow = BoardRow & { rank: number };
+type PlayerPlacement = { rank: number; total: number; scores: RankedBoardRow[] };
 type EventContext = { summary: string; title: string; url: string };
 const NAME_KEY = "thenthere:name";
 const TUTORIAL_KEY = "thenthere:practice-complete";
@@ -46,6 +48,8 @@ function ThenThere() {
     [finished, setFinished] = useState(false);
   const [name, setName] = useState(""),
     [board, setBoard] = useState<BoardRow[]>([]),
+    [boardLoadError, setBoardLoadError] = useState(false),
+    [playerPlacement, setPlayerPlacement] = useState<PlayerPlacement | null>(null),
     [answers, setAnswers] = useState<Guess[]>([]),
     [posted, setPosted] = useState(false),
     [claimed, setClaimed] = useState(false),
@@ -70,13 +74,15 @@ function ThenThere() {
   }, [isPreview]);
   useEffect(() => {
     if (isPreview) return;
-    fetch("/api/thenthere/leaderboard")
+    fetch("/api/thenthere/leaderboard", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then((d) => {
+      .then((d: { scores: BoardRow[]; player: PlayerPlacement | null; submitted: boolean }) => {
         setBoard(d.scores);
-        setClaimed(Boolean(d.submitted));
+        setBoardLoadError(false);
+        setPlayerPlacement(d.player);
+        setClaimed(d.submitted);
       })
-      .catch(() => {});
+      .catch(() => setBoardLoadError(true));
   }, [isPreview]);
   useEffect(() => {
     try {
@@ -141,14 +147,7 @@ function ThenThere() {
     setSubmitError("");
     setShareState("");
   };
-  const rank = posted
-    ? (() => {
-        const i = board.findIndex(
-          (r) => r.name === name.trim() && r.score === Math.round(total),
-        );
-        return i === -1 ? null : i;
-      })()
-    : null;
+  const rank = playerPlacement?.rank ?? null;
   const submit = async () => {
     const entrant = name.trim();
     if (isPreview || !entrant || posted || claimed || answers.length !== 6)
@@ -163,13 +162,19 @@ function ThenThere() {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ name: entrant, answers }),
       });
-      const data = await r.json();
+      const data = await r.json() as {
+        error?: string;
+        scores: BoardRow[];
+        score: number;
+        player: PlayerPlacement | null;
+      };
       if (!r.ok) {
         setSubmitError(data.error || "Could not verify this run.");
         if (r.status === 409) setClaimed(true);
         return;
       }
       setBoard(data.scores);
+      setPlayerPlacement(data.player);
       setTotal(data.score);
       setPosted(true);
       setClaimed(true);
@@ -247,16 +252,10 @@ function ThenThere() {
                 <h2>♜ Today’s leaders</h2>
                 {board.length ? (
                   <ol>
-                    {board.slice(0, 5).map((row, i) => (
+                    {board.slice(0, 20).map((row, i) => (
                       <li
                         key={`${row.name}-${i}`}
-                        className={
-                          posted &&
-                          row.name === name.trim() &&
-                          row.score === Math.round(total)
-                            ? "is-you"
-                            : ""
-                        }
+                        className={playerPlacement?.rank === i + 1 ? "is-you" : ""}
                       >
                         <span>{i + 1}</span>
                         <b>{row.name}</b>
@@ -264,15 +263,30 @@ function ThenThere() {
                       </li>
                     ))}
                   </ol>
+                ) : boardLoadError ? (
+                  <p className="tt-empty-board" role="alert">
+                    The leaderboard couldn’t load. Refresh to try again.
+                  </p>
                 ) : (
                   <p className="tt-empty-board">
                     Be the first verified expedition today.
                   </p>
                 )}
-                {posted && rank !== null && rank > 4 && (
-                  <p className="tt-rank">
-                    You placed #{rank + 1} of {board.length} today.
-                  </p>
+                {playerPlacement && rank !== null && rank > 20 && (
+                  <div className="tt-player-placement">
+                    <p className="tt-rank">
+                      Your place · #{rank.toLocaleString()} of {playerPlacement.total.toLocaleString()} today
+                    </p>
+                    <ol>
+                      {playerPlacement.scores.map((row) => (
+                        <li key={`${row.rank}-${row.name}-${row.score}`} className={row.rank === rank ? "is-you" : ""}>
+                          <span>{row.rank.toLocaleString()}</span>
+                          <b>{row.name}</b>
+                          <strong>{row.score.toLocaleString()}</strong>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
                 )}
                 <label>
                   {posted || claimed ? "Verified run" : "Verify your score"}
