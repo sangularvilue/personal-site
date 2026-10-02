@@ -98,10 +98,43 @@ export async function swapCraftOrder(
   return true;
 }
 
+// Crafts added after the seed, each placed at `position` (0-based) once. A
+// marker key claims each, so one deleted in the admin stays deleted.
+const ADDITIONS = [
+  {
+    key: "clawd-quest",
+    position: 1,
+    craft: {
+      name: "Clawd Quest",
+      tag: "claude code · plugin · game",
+      desc: "An endless roguelike platformer you play inside Claude Code while Claude works. Mario meets Pac-Man meets Hades: stomp bugs, dodge hallucinations, and stack upgrades forever, while what your Claude does helps or hurts.",
+      href: "https://github.com/sangularvilue/clawd",
+    },
+  },
+];
+
+async function applyAdditions(existing: Craft[]): Promise<Craft[]> {
+  const redis = getRedis();
+  let crafts = existing;
+  for (const addition of ADDITIONS) {
+    const claimed = await redis.set(`crafts:addition:${addition.key}`, Date.now(), { nx: true });
+    if (!claimed) continue;
+    if (crafts.some((c) => c.name === addition.craft.name)) continue;
+    const craft = await createCraft(addition.craft);
+    const others = crafts.filter((c) => c.id !== craft.id);
+    const ordered = [...others.slice(0, addition.position), craft, ...others.slice(addition.position)];
+    for (let i = 0; i < ordered.length; i++) {
+      if (ordered[i].order !== i || ordered[i].id === craft.id) await updateCraft(ordered[i].id, { order: i });
+    }
+    crafts = await getAllCrafts();
+  }
+  return crafts;
+}
+
 // Seeds default crafts into Redis if none exist
 export async function seedCraftsIfEmpty(): Promise<Craft[]> {
   const existing = await getAllCrafts();
-  if (existing.length > 0) return existing;
+  if (existing.length > 0) return applyAdditions(existing);
 
   const defaults = [
     { name: "ForkLift", tag: "ios · swift", desc: "Workout tracker for iOS. Log sets, reps, and weight with minimal taps. Tracks personal records, visualizes progress over time, and builds routines you can reuse.", href: "https://apps.apple.com/us/app/forklift-workout-tracker/id6760603494" },
